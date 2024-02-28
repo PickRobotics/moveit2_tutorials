@@ -99,9 +99,9 @@ ROS 2 명령줄 도구를 사용하여 새 패키지를 만듭니다.:
 2.2 코드 살펴보기
 ~~~~~~~~~~~~~~~~~~~~
 
-The headers included at the top are just some standard C++ headers and the header for ROS and MoveIt that we will use later.
+코드의 첫 부분에 포함된 헤더는 표준 C++ header와 나중에 사용할 ROS 및 MoveIt 헤더입니다.
 
-After that, we have the normal call to initialize rclcpp, and then we create our Node.
+이후에 rclcpp를 초기화하고 Node를 생성합니다.
 
 .. code-block:: C++
 
@@ -110,15 +110,15 @@ After that, we have the normal call to initialize rclcpp, and then we create our
     rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true)
   );
 
-The first argument is a string that ROS will use to make a unique node.
-The second is needed for MoveIt because of how we use ROS Parameters.
+첫번째 인자는 문자열로서 ROS가 고유한 노드를 만들기 위해 사용된다.
+두번째 인자는 MoveIt에서 ROS 파라미터를 사용하는 방식 때문에 필요하다.
 
-Lastly, we have the code to shutdown ROS.
+마지막으로 ROS를 종료하는 코드이다.
 
-3 Plan and Execute using MoveGroupInterface
+3 MoveGroupInterface를 사용하는 Plan and Execute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In place of the comment that says "Next step goes here," add this code:
+``Next step goes here``라고 적힌 주석 대신에 다음 코드를 추가하십시오.:
 
 .. code-block:: C++
 
@@ -151,51 +151,51 @@ In place of the comment that says "Next step goes here," add this code:
     RCLCPP_ERROR(logger, "Planing failed!");
   }
 
-3.1 Build and Run
+3.1 Build 와 Run
 ~~~~~~~~~~~~~~~~~
 
-Just like before, we need to build the code before we can run it.
+전과 같이 코드를 실행하기 전에 코드를 빌드해야 합니다.
 
-In the workspace directory, ``ws_moveit2``, run this command:
+워크스페이스 디렉토리 ``ws_moveit2`` 에서 다음 명령을 실행하십시오.:
 
 .. code-block:: bash
 
   colcon build --mixin debug
 
-After this succeeds, we need to re-use the demo launch file from the previous tutorial to start RViz and the MoveGroup node.
-In a separate terminal, source the workspace and then execute this:
+이 명령이 성공하면, 이전 튜토리얼에서 사용한 데모 런치 파일을 재사용하여 RViz와 MoveGroup 노드를 시작해야 합니다.
+별도의 터미널에서 워크스페이스를 source하고 다음을 실행하십시오.:
 
 .. code-block:: bash
 
   ros2 launch moveit2_tutorials demo.launch.py
 
-Then in the ``Displays`` window under ``MotionPlanning/Planning Request``, uncheck the box ``Query Goal State``.
+``Displays`` 창에서 ``MotionPlanning/Planning Request`` 아래의 ``Query Goal State`` 상자를 선택 해제하십시오.
 
 .. image:: rviz_1.png
    :width: 300px
 
-In a third terminal, source the workspace and run your program.
+세 번째 터미널에서 워크스페이스를 source하고 프로그램을 실행하십시오.
 
 .. code-block:: bash
 
   ros2 run hello_moveit hello_moveit
 
-This should cause the robot in RViz to move and end up in this pose:
+이것은 RViz내에 로봇이 이 pose에 있도록 이동하고 종료해야 합니다.:
 
 .. image:: rviz_2.png
    :width: 300px
 
-Note that if you ran the node ``hello_moveit`` without launching the demo launch file first, it will wait for 10 seconds and then print this error and exit.
+만약 먼저 데모 런치 파일을 실행하지 않고 ``hello_moveit`` 노드를 실행했다면, 10초를 기다린 후 다음과 같은 오류가 출력되고 종료됩니다.
 
 .. code-block:: bash
 
   [ERROR] [1644181704.350825487] [hello_moveit]: Could not find parameter robot_description and did not receive robot_description via std_msgs::msg::String subscription within 10.000000 seconds.
 
-This is because the ``demo.launch.py`` launch is starting the ``MoveGroup`` node that provides the robot description.
-When ``MoveGroupInterface`` is constructed, it looks for a node publishing a topic with the robot description.
-If it fails to find that within 10 seconds, it prints this error and terminates the program.
+이것은 ``demo.launch.py`` 런치가 로봇 서술을 제공하는 ``MoveGroup`` 노드를 시작시키기 때문에 발생합니다.
+``MoveGroupInterface``이 생성될 때 로봇 서술과 함께 topic을 publish하는 노드를 찾습니다.
+10초 내에 찾지 못하면 이 오류를 출력하고 프로그램을 종료합니다.
 
-3.2 Examine the code
+3.2 코드 살펴보기
 ~~~~~~~~~~~~~~~~~~~~
 
 The first thing we do is create the MoveGroupInterface. This object will be used to interact with move_group, which allows us to plan and execute trajectories.
