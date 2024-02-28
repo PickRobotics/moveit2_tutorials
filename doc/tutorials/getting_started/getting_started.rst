@@ -12,50 +12,50 @@ ROS 2 설치 튜토리얼을 진행할 때 단계를 놓치기 쉽습니다. 다
 
   source /opt/ros/{DISTRO}/setup.bash
 
-.. note:: Unlike ROS 1 setup scripts, in ROS 2 the setup scripts do not attempt to switch what version of ROS you are using.  This means that if you have previously sourced a different version of ROS, including from within your ``.bashrc`` file, you will run into errors during the building step.  To fix this change what is sourced in your ``.bashrc`` and start a new terminal.
+.. note:: ROS 1 설정 스크립트와 달리 ROS 2 설정 스크립트는 사용 중인 ROS 버전을 전환하려고 시도하지 않습니다. 이는 이전에 다른 버전의 ROS를 소스했거나 ``.bashrc`` 파일 내에서 소스했을 경우 빌드 단계 중에 오류가 발생합니다. 이를 수정하려면 ``.bashrc``에서 소스하는 내용을 변경하고 새 터미널을 시작하십시오.
 
-Install `rosdep <http://wiki.ros.org/rosdep>`_ to install system dependencies : ::
+`rosdep <http://wiki.ros.org/rosdep>`_를 설치하여 시스템 종속성을 설치합니다.  : ::
 
   sudo apt install python3-rosdep
 
-Once you have ROS 2 installed, make sure you have the most up to date packages: ::
+일단 ROS 2가 설치되면 가장 최신 패키지를 가지고 있는지 확인하십시오: ::
 
   sudo rosdep init
   rosdep update
   sudo apt update
   sudo apt dist-upgrade
 
-Install :ros_documentation:`Colcon <Tutorials/Colcon-Tutorial.html#install-colcon>` the ROS 2 build system with `mixin <https://github.com/colcon/colcon-mixin-repository>`_: ::
+:ros_documentation:`Colcon <Tutorials/Colcon-Tutorial.html#install-colcon>` ROS 2 빌드 시스템으로 `mixin <https://github.com/colcon/colcon-mixin-repository>`_ 도 함께 설치 : ::
 
   sudo apt install python3-colcon-common-extensions
   sudo apt install python3-colcon-mixin
   colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
   colcon mixin update default
 
-Install `vcstool <https://index.ros.org/d/python3-vcstool/>`_ : ::
+`vcstool <https://index.ros.org/d/python3-vcstool/>`_ 설치 : ::
 
   sudo apt install python3-vcstool
 
-Create A Colcon Workspace and Download Tutorials
+Colcon 워크스페이스를 생성하고 ㅌ튜토리얼 다운로드하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For tutorials you will need to have a :ros_documentation:`colcon <Tutorials/Colcon-Tutorial.html#install-colcon>` workspace setup. ::
+:ros_documentation:`colcon <Tutorials/Colcon-Tutorial.html#install-colcon>` 워크스페이스 설정을 위해 다음이 필요합니다. ::
 
   mkdir -p ~/ws_moveit2/src
 
-Download Source Code of MoveIt and the Tutorials
+MoveIt의 소스 코드와 튜터리얼을 다운로드
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Move into your Colcon workspace and pull the MoveIt tutorials source: ::
+Colcon 워크스페이스로 이동해서 MoveIt 튜토리얼 소스를 다운로드합니다.: ::
 
   cd ~/ws_moveit2/src
   git clone --branch {DISTRO} https://github.com/ros-planning/moveit2_tutorials
 
-Next we will download the source code for the rest of MoveIt: ::
+다음으로 MoveIt의 나머지 소스 코드를 다운로드합니다.: ::
 
   vcs import < moveit2_tutorials/moveit2_tutorials.repos
 
-The import command may ask for your GitHub credentials. You can just press Enter until it moves on (ignore the "Authentication failed" error).
+import 명령은 GitHub 자격 증명을 요청할 수 있습니다. 그냥 Enter를 누르면 계속 진행할 수 있습니다 ("Authentication failed" 오류를 무시하십시오).
 
-Build your Colcon Workspace
+Colcon 워크스펭스 빌드하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The following will install from Debian any package dependencies not already in your workspace. This is the step that will install MoveIt and all of its dependencies: ::
 
