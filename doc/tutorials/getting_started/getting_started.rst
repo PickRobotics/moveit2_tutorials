@@ -1,14 +1,14 @@
 시작하기
 ===============
 
-Here we will setup your environment for best running the tutorials. This will create a Colcon workspace, download all of the latest MoveIt source code, and build everything from source to ensure you have the latest fixes and improvements.
+여기서 튜토리얼을 가장 잘 실행하기 위한 환경을 설정할 것입니다. Colcon 워크스페이스를 만들고, 모든 최신 MoveIt 소스 코드를 다운로드하고, 모든 것을 소스에서 빌드하여 최신 수정 사항과 개선 사항을 보장합니다.
 
-Building all the source code of MoveIt can take 20-30 minutes, depending on the CPU speed and available RAM of your computer. If you are on a less performant system, or generally just want to get started quicker, checkout our :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>`.
+MoveIt의 모든 소스 코드를 빌드하는 데는 20-30분이 걸릴 수 있습니다. 컴퓨터의 CPU 속도와 사용 가능한 RAM에 따라 다르지만, 성능이 떨어지는 시스템에서 시작하거나 일반적으로 빨리 시작하려는 경우 :doc:`Docker 가이드 </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>`를 확인하십시오.
 
-Install ROS 2 and Colcon
+ROS 2와 Colcon 설치하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 :ros_documentation:`Install ROS 2 {DISTRO_TITLE}<Installation.html>`.
-It is easy to miss steps when going through the ROS 2 installation tutorial. If you run into errors in the next few steps, a good place to start is to go back and make sure you have installed ROS 2 correctly.  One that users commonly forget is to source the ROS 2 install itself.  ::
+ROS 2 설치 튜토리얼을 진행할 때 단계를 놓치기 쉽습니다. 다음 단계에서 오류가 발생하면 ROS 2를 올바르게 설치했는지 확인하는 것이 좋은 시작점입니다. 사용자가 자주 잊어버리는 것 중 하나는 ROS 2 설치 자체를 소스하는 것입니다. ::
 
   source /opt/ros/{DISTRO}/setup.bash
 
