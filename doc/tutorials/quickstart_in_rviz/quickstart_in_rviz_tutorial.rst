@@ -1,36 +1,36 @@
-MoveIt Quickstart in RViz
+MoveIt RViz에서 바로 시작하기
 ==========================
 .. image:: rviz_plugin_head.png
    :width: 700px
 
-This tutorial will teach you how to create motion plans in MoveIt using RViz and the MoveIt Display plugin. Rviz is the primary visualizer in ROS and a very useful tool for debugging robotics. The MoveIt Display plugin allows you to setup virtual environments (planning scenes), create start and goal states for the robot interactively, test various motion planners, and visualize the output. Let's get started!
+이 튜터리얼은 RViz와 MoveIt Display 플러그인을 사용하여 MoveIt에서 motion plan을 생성하는 방법을 가르칠 것입니다. RViz는 ROS의 주요 시각화 도구이며 로봇공학에서 디버깅에 매우 유용한 도구입니다. MoveIt Display 플러그인을 사용하면 가상 환경 (planning scenes)을 설정하고 로봇을 대화식으로 시작 및 목표 상태를 생성하고 다양한 모션 플래너를 테스트하고 결과를 시각화할 수 있습니다. 시작해 봅시다!
 
-Getting Started
+시작하기
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` or our :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>`. As of Sep 26, 2022, ensure you have enabled Cyclone DDS as described there.
+아직 수행하지 않은 경우 :doc:`시작하기 </doc/tutorials/getting_started/getting_started>` 또는 :doc:`Docker 가이드 </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>`의 단계를 완료하십시오. 2022년 9월 26일 기준으로 Cyclone DDS를 활성화했는지 확인하십시오.
 
-Step 1: Launch the Demo and Configure the Plugin
+Step 1: 데모 런칭 및 Plugin 설정
 ------------------------------------------------
 
-* Launch the demo: ::
+* 데모 런칭: ::
 
    ros2 launch moveit2_tutorials demo.launch.py rviz_config:=panda_moveit_config_demo_empty.rviz
 
-* If you are doing this for the first time, you should see an empty world in RViz and will have to add the Motion Planning Plugin:
+* 이것을 처음으로 수행하는 경우, RViz에서 empty 환경을 볼 수 있으며 Motion Planning 플러그인을 추가해야합니다.:
 
-  * You should see an empty world in RViz:
+  * RViz내에서 emtpy world를 볼 수 있다.:
 
   |A|
 
-  * In the RViz Displays Tab, press *Add*:
+  * RViz Displays Tab에서 *Add* 누르기:
 
   |B|
 
-  * From the moveit_ros_visualization folder, choose "MotionPlanning" as the DisplayType. Press "Ok".
+  * moveit_ros_visualization 폴더에서 "MotionPlanning"을 DisplayType으로 선택하십시오. "Ok"를 누릅니다.
 
   |C|
 
-  * You should now see the Panda robot in RViz:
+  * 이제 RViz에 Panda robot이 나타난다.:
 
   |D|
 
@@ -46,27 +46,26 @@ Step 1: Launch the Demo and Configure the Plugin
 .. |D| image:: rviz_start.png
                :width: 700px
 
-* Once you have the Motion Planning Plugin loaded, we can configure it. In the "Global Options" tab of the "Displays" subwindow, set the **Fixed Frame** field to ``/panda_link0``
+* 일단 Motion Planning 플러그인을 로드하면 설정할 수 있습니다. "Displays" 하위 창의 "Global Options" 탭에서 **Fixed Frame** 필드를 ``/panda_link0``로 설정하십시오.
 
-* Now, you can start configuring the Plugin for your robot (the Panda in this case). Click on "MotionPlanning" within "Displays".
+* 이제 로봇 (이 경우 Panda)을 위한 플러그인을 구성하기 시작할 수 있습니다. "Displays"에서 "MotionPlanning"을 클릭하십시오.
 
-  * Make sure the **Robot Description** field is set to ``robot_description``.
+  * **Robot Description** 필드가 ``robot_description``로 설정되어 있는지 확인하십시오.
 
-  * Make sure the **Planning Scene Topic** field is set to ``/monitored_planning_scene``.
-    Click on topic name to expose topic-name drop-down.
+  * **Planning Scene Topic** 필드가 ``/monitored_planning_scene``로 설정되어 있는지 확인하십시오. 토픽 이름을 클릭하여 토픽 이름 드롭다운을 노출시킵니다.
 
-  * Make sure the **Trajectory Topic** under **Planned Path** is set to ``/display_planned_path``.
+  * **Planned Path** 아래 **Trajectory Topic** 필드가 ``/display_planned_path``로 설정되어 있는지 확인하십시오.
 
-  * In **Planning Request**, change the **Planning Group** to ``panda_arm``. You can also see this in the MotionPlanning panel in the bottom left.
+  * **Planning Request**에서 **Planning Group**를 ``panda_arm``으로 변경하십시오. 이것은 MotionPlanning 패널의 하단 왼쪽에도 볼 수 있습니다.
 
 
 .. image:: rviz_plugin_start.png
    :width: 700px
 
 
-Step 2: Play with the Visualized Robots
+Step 2: 시각화된 로봇과 Play
 ---------------------------------------
-There are four different overlapping visualizations:
+4가지 서로 다른 겹치는 시각화가 있습니다:
 
 #. The robot's configuration in the ``/monitored_planning_scene`` planning environment (active by default).
 

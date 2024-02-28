@@ -1,29 +1,29 @@
-Your First C++ MoveIt Project
+첫번째 C++ MoveIt 프로젝트
 =============================
 
-This tutorial will step you through writing your first C++ application with MoveIt.
+이 튜터리얼은 MoveIt를 사용하여 첫번째 C++ 애플리케이션을 작성하는 방법을 안내합니다.
 
-Prerequisites
+사전 요구 사항
 -------------
 
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+:doc:`시작하기 튜토리얼 </doc/tutorials/getting_started/getting_started>`에서 설명한 단계를 완료했는지 확인하십시오.
 
-This tutorial assumes you understand the basics of ROS 2.
-To prepare yourself for this please complete the `Official ROS 2 Tutorials <https://docs.ros.org/en/{DISTRO}/Tutorials.html>`_ up until "Writing a simple publisher and Subscriber (C++)".
+이 튜터리얼은 여러분이 ROS 2의 기본을 이해하고 있다고 가정합니다.
+이를 위해 `공식 ROS 2 튜토리얼 <https://docs.ros.org/en/{DISTRO}/Tutorials.html>`_을 "Writing a simple publisher and Subscriber (C++)"까지 완료하십시오.
 
 Steps
 -----
 
-1 Create a package
+1 패키지 생성하기
 ^^^^^^^^^^^^^^^^^^
 
-Open a terminal and `source your ROS 2 installation <https://docs.ros.org/en/{DISTRO}/Tutorials/Configuring-ROS2-Environment.html>`_ so that ``ros2`` commands will work.
+터미널을 열고 `ROS 2 설치를 source <https://docs.ros.org/en/{DISTRO}/Tutorials/Configuring-ROS2-Environment.html>`_하여 ``ros2`` 명령이 작동하도록 합니다.
 
-Navigate to your ``ws_moveit2`` directory you created in the :doc:`Getting Started Tutorial </doc/tutorials/getting_started/getting_started>`.
+:doc:`Getting Started Tutorial </doc/tutorials/getting_started/getting_started>`에서 생성한 ``ws_moveit2`` 디렉토리로 이동합니다.
 
-Change directory into the ``src`` directory, as that is where we put our source code.
+``src`` 디렉토리로 이동하십시오. 이 디렉토리에 소스 코드를 넣을 것입니다.
 
-Create a new package with the ROS 2 command line tools:
+ROS 2 명령줄 도구를 사용하여 새 패키지를 만듭니다.:
 
 .. code-block:: bash
 
@@ -32,17 +32,17 @@ Create a new package with the ROS 2 command line tools:
    --dependencies moveit_ros_planning_interface rclcpp \
    --node-name hello_moveit hello_moveit
 
-The output of this will show that it created some files in a new directory.
+이 명령의 출력으로 새 디렉토리에 몇 개의 파일을 만들었다는 것을 보여줍니다.
 
-Note that we added ``moveit_ros_planning_interface`` and ``rclcpp`` as dependencies.
-This will create the necessary changes in the ``package.xml`` and ``CMakeLists.txt`` files so that we can depend on these two packages.
+``moveit_ros_planning_interface``와 ``rclcpp``를 의존성으로 추가했다는 것에 주목하십시오.
+이렇게 하면 이 두 패키지에 의존할 수 있도록 ``package.xml`` 및 ``CMakeLists.txt`` 파일에 필요한 변경 사항이 생성됩니다.
 
-Open the new source file created for you at ``ws_moveit2/src/hello_moveit/src/hello_moveit.cpp`` in your favorite editor.
+``ws_moveit2/src/hello_moveit/src/hello_moveit.cpp``에 생성된 새 소스 파일을 좋아하는 편집기로 엽니다.
 
-2 Create a ROS Node and Executor
+2 ROS Node와 Executor를 생성하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This first block of code is a bit of boilerplate but you should be used to seeing this from the ROS 2 tutorials.
+코드의 첫번째 블록은 약간의 boilerplate이지만 ROS 2 튜토리얼에서 이것을 보는 것에 익숙해져 있어야 합니다.
 
 .. code-block:: C++
 
@@ -70,7 +70,7 @@ This first block of code is a bit of boilerplate but you should be used to seein
     return 0;
   }
 
-2.1 Build and Run
+2.1 Build와 Run
 ~~~~~~~~~~~~~~~~~
 
 We will build and run the program to see that everything is right before we move on.
