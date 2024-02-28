@@ -1,4 +1,4 @@
-Getting Started
+시작하기
 ===============
 
 Here we will setup your environment for best running the tutorials. This will create a Colcon workspace, download all of the latest MoveIt source code, and build everything from source to ensure you have the latest fixes and improvements.
@@ -94,6 +94,6 @@ As of Sep 26, 2022, the default ROS 2 middleware (RMW) implementation has an iss
   # You may want to add this to ~/.bashrc to source it automatically
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
-Next Step
+다음 단계
 ^^^^^^^^^
 Nice job! Next we will :doc:`Visualize a robot with the interactive motion planning plugin for RViz </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>`
