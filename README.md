@@ -1,56 +1,55 @@
-# MoveIt 2 Tutorials
+# MoveIt 2 튜터리얼
 
-This is the primary documentation for the MoveIt project.
+MoveIt 프로젝트에 대한 문서입니다.
 
 ## Build Status
 
-This repository is currently built automatically by Github Actions:
+이 repository는 현재 Github Actions에 의해 자동으로 빌드됩니다:
 
 - main: [![CI](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/ci.yaml?query=branch%3Amain)
 - main: [![Format](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/format.yml/badge.svg?branch=main)](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/format.yml?query=branch%3Amain)
 - humble: [![CI](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/ci.yaml/badge.svg?branch=humble)](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/ci.yaml?query=branch%3Ahumble)
 - humble: [![Format](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/format.yml/badge.svg?branch=humble)](https://github.com/ros-planning/moveit2_tutorials/actions/workflows/format.yml?query=branch%3Ahumble)
 
-## Contributing
+## 기여하기
 
-We strongly encourage you to help improve MoveIt's documentation. Please consider helping improve the tutorials, port old ones from ROS 1, and write new tutorials. We recommend you  read the quality standards below as well as the [How to Write a MoveIt Tutorial](https://moveit.picknik.ai/main/doc/how_to_contribute/how_to_write_tutorials.html) page.
+여러분이 참여하여 MoveIt의 문서를 개선하는 것을 권장합니다. 이 튜토리얼을 개선하는 데 도움을 주시기 바랍니다. ROS 1의 이전 튜토리얼을 포팅하고 새로운 튜토리얼을 작성하는 방식으로 이 튜터리얼을 개선하는데 도움을 주세요. 아래의 품질 기준을 읽어보시고 [MoveIt 튜터리얼 작성하기](https://moveit.picknik.ai/main/doc/how_to_contribute/how_to_write_tutorials.html) 페이지를 참조하십시오.
 
-If you find an issue with the tutorials you are not able to fix yourself, please [open an issue on GitHub](https://github.com/ros-planning/moveit2_tutorials/issues/new) or open a PR with proposed changes.
+이 튜터리얼에서 이슈를 발견했는데 여러분이 수정하기 어렵다면 [GitHub에 이슈를 오픈]((https://github.com/ros-planning/moveit2_tutorials/issues/new) 혹은 PR을 제안해 주세요.
 
-## Helping with Porting Tutorials to ROS 2
+## ROS 2로 튜터리얼 포팅 도움주기
 
-An issue has been created for each tutorial to be ported to ROS 2. At the top of each tutorial there is a tag: ":moveit1:", remove the tag
-after the tutorial has been successfully updated.
+각 튜터리얼을 ROS 2로 포팅하는데 이슈가 발생합니다. 각 튜터리얼의 맨 위에 ":moveit1:" 태그를 제거하면 튜터리얼이 성공적으로 업데이트된 것입니다.
 
-Below are some links to help with the ports.
+아래에 포팅하는데 도움이 되는 링크가 있습니다.
 
 * [colcon](https://colcon.readthedocs.io/en/released/user/how-to.html)
 * [ament](https://index.ros.org/doc/ros2/Tutorials/Ament-CMake-Documentation/)
 * [rclcpp](https://docs.ros2.org/latest/api/rclcpp/index.html)
 
 
-## MoveIt 2 Tutorials Source Build
+## MoveIt 2 튜터리얼 소스 빌드
 
-Follow the [MoveIt 2 Source Build](https://moveit.ros.org/install-moveit2/source/) instructions to setup a colcon workspace with moveit2 from source.
+[MoveIt 2 소스 빌드](https://moveit.ros.org/install-moveit2/source/) 지침을 따라 moveit2를 소스로부터 colcon 워크스페이스를 설정하세요.
 
-Open a command line to your your moveit2 colcon workspace:
+moveit2 colcon 워크스페이스에서 command line을 열어주세요:
 
     cd $COLCON_WS/src
 
-Download the MoveIt Tutorials source code:
+MoveIt 튜터리얼 소스 코드를 다운로드하세요:
 
     git clone https://github.com/ros-planning/moveit2_tutorials.git
     vcs import < moveit2_tutorials/moveit2_tutorials.repos
     rosdep install -r --from-paths . --ignore-src --rosdistro humble -y
 
-Configure and build the workspace:
+workspace를 설정하고 빌드하세요:
 
     cd $COLCON_WS
     colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-## Build HTML Pages Locally
+## HTML 페이지 로컬로 빌드하기
 
-If you want to test the tutorials by generating the html pages locally on your machine, you can use the ``build_locally`` script by issuing the following commands in the root of the moveit2_tutorials package:
+여러분의 장치에서 로컬로 html 페이지를 생성해서 튜터리얼을 테스트하고자 한다면, ``build_locally`` 스크립트를 사용하여 moveit2_tutorials 패키지의 루트에서 다음 명령어를 사용하여 실행하세요:
 
     export ROS_DISTRO=humble  # 20.04
 
@@ -58,14 +57,14 @@ If you want to test the tutorials by generating the html pages locally on your m
     source /opt/ros/$ROS_DISTRO/setup.bash
     ./build_locally.sh
 
-The local website ``<LOCAL_PACKAGE_PATH>/build/html/index.html`` should automatically open in your web browser.
+로컬 웹사이트 ``<LOCAL_PACKAGE_PATH>/build/html/index.html``이 자동으로 웹 브라우저에서 열릴 것입니다.
 
-### Optional build_locally Settings
+### 옵션 build_locally 설정
 
  - *noinstall* skip the dependencies install step to speed up the script
  - *loop* automatically rebuild the html if a change is detected
 
-### Formatting and Style
+### 포맷 및 스타일
 
 These tutorials use the [reStructuredText](http://www.sphinx-doc.org/en/stable/rest.html) format commonly used in the Sphinx "Python Documentation Generator". This unfortunately differs from the common Markdown format, but its advantage is that it supports embedding code directly from source files for inline code tutorials.
 
