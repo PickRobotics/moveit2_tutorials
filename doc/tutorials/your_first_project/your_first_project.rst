@@ -73,30 +73,30 @@ ROS 2 명령줄 도구를 사용하여 새 패키지를 만듭니다.:
 2.1 Build와 Run
 ~~~~~~~~~~~~~~~~~
 
-We will build and run the program to see that everything is right before we move on.
+우리가 작성한 코드를 빌드하고 실행하여 모든 것이 올바른지 확인해야 합니다.
 
-Change directory back to the workspace directory ``ws_moveit2`` and run this command:
+먼저, ``ws_moveit2`` 디렉토리로 돌아가서 다음 명령을 실행하십시오.:
 
 .. code-block:: bash
 
   colcon build --mixin debug
 
-After this succeeds, **open a new terminal**, then source the workspace environment script in that new terminal so that we can run our program.
+이 명령이 성공하면 **새 터미널을 열고** 작업 공간 환경 스크립트를 그 새 터미널에서 source하여 프로그램을 실행할 수 있습니다.
 
 .. code-block:: bash
 
   cd ~/ws_moveit2
   source install/setup.bash
 
-Run your program and see the output.
+이제 프로그램을 실행하고 출력을 확인하십시오.
 
 .. code-block:: bash
 
   ros2 run hello_moveit hello_moveit
 
-The program should run and exit without error.
+프로그램은 오류 없이 실행되고 종료해야 합니다.
 
-2.2 Examine the code
+2.2 코드 살펴보기
 ~~~~~~~~~~~~~~~~~~~~
 
 The headers included at the top are just some standard C++ headers and the header for ROS and MoveIt that we will use later.
