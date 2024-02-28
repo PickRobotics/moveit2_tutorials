@@ -198,10 +198,10 @@ ROS 2 명령줄 도구를 사용하여 새 패키지를 만듭니다.:
 3.2 코드 살펴보기
 ~~~~~~~~~~~~~~~~~~~~
 
-The first thing we do is create the MoveGroupInterface. This object will be used to interact with move_group, which allows us to plan and execute trajectories.
-Note that this is the only mutable object that we create in this program.
-Another thing to take note of is the second interface to the ``MoveGroupInterface`` object we are creating here: ``"panda_arm"``.
-That is the group of joints as defined in the robot description that we are going to operate on with this ``MoveGroupInterface``.
+첫번째로  ``MoveGroupInterface``를 생성합니다. 이 객체는 move_group과 상호작용할 수 있도록 해줍니다. 이것은 우리가 Trajectories를 plan and execute할 수 있게 해줍니다.
+이 프로그램에서 생성하는 유일한 mutable 객체임을 주목하십시오.
+주목해야할 또 다른 것은 여기서 우리가 생성한 ``MoveGroupInterface`` 객체에 대한 두번째 인터페이스입니다: ``"panda_arm"``.
+이것은 로봇 서술에서 정의된 관절 그룹으로, 이 ``MoveGroupInterface``를 사용하여 작동할 것입니다.
 
 .. code-block:: C++
 
