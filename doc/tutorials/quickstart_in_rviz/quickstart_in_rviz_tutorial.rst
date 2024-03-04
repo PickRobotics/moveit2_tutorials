@@ -63,68 +63,68 @@ Step 1: 데모 런칭 및 Plugin 설정
    :width: 700px
 
 
-Step 2: 시각화된 로봇과 Play
+Step 2: 시각화된 로봇 조작하기
 ---------------------------------------
 4가지 서로 다른 겹치는 시각화가 있습니다:
 
-#. The robot's configuration in the ``/monitored_planning_scene`` planning environment (active by default).
+#. ``/monitored_planning_scene`` 계획 확경에서의 로봇 구성(기본적으로 활성화)
 
-#. The planned path for the robot (active by default).
+#. 로봇의 계획 경로(기본적으로 활성화)
 
-#. Green: The start state for motion planning (disabled by default).
+#. Green: 모션 계획 시작 상태(기본적으로 활성화)
 
-#. Orange: The goal state for motion planning (active by default).
+#. Orange: 모션 계획 목표도달 상태(기본적으로 활성화)
 
-The display states for each of these visualizations can be toggled on and off using checkboxes:
+각 시각화의 표시 상태는 다음과 같은 체크박스를 사용하여 켜거나 끌 수 있습니다. :
 
-#. The planning scene robot using the **Show Robot Visual** checkbox in the **Scene Robot** tree menu.
+#. **Scene Robot** 트리 메뉴의 **Show Robot Visual** 체크박스를 사용하여 scene 로봇 계획하기
 
-#. The planned path using the **Show Robot Visual** checkbox in the **Planned Path** tree menu.
+#. **Planned Path** 트리 메뉴의 **Show Robot Visual** 체크박스를 사용하여 계획된 경로
 
-#. The start state using the **Query Start State** checkbox in the **Planning Request** tree menu.
+#. **Planning Request** 트리 메뉴의 **Query Start State** 체크박스를 사용하여 시작 상태
 
-#. The goal state using the **Query Goal State** checkbox in the **Planning Request** tree menu.
+#. **Planning Request** 트리 메뉴의 **Query Goal State** 체크박스를 사용하여 목표 상태
 
-* Play with all these checkboxes to switch on and off different visualizations.
+* 다른 시각화를 켜거나 끄기 위해 이 모든 체크박스를 사용해 보세요
 
 .. image:: rviz_plugin_visualize_robots.png
    :width: 700px
 
-Step 3: Interact with the Panda
+Step 3: Panda와 상호작용
 -------------------------------
 
-For the next steps we will want only the scene robot, start state and goal state:
+다음 단계에서는 scene robot, 시작 상태, 목표 상태만 필요합니다:
 
-#. Check the **Show Robot Visual** checkbox in the **Planned Path** tree menu
+#. **Planned Path** 트리 메뉴에서 **Show Robot Visual** 체크박스를 선택합니다.
 
-#. Un-check the **Show Robot Visual** checkbox in the **Scene Robot** tree menu
+#. **Scene Robot** 트리 메뉴에서 **Show Robot Visual** 체크박스를 선택 해제합니다.
 
-#. Check the **Query Goal State** checkbox in the **Planning Request** tree menu.
+#. **Query Goal State** 트리 메뉴에서 **Planning Request** 체크박스를 선택합니다.
 
-#. Check the **Query Start State** checkbox in the **Planning Request** tree menu.
+#. **Query Start State** 트리 메뉴에서 **Planning Request** 체크박스를 선택합니다.
 
-There should now be two interactive markers. One marker corresponding to the orange colored arm will be used to set the "Goal State" for motion planning and the other marker corresponding to a green colored arm are used to set the "Start State" for motion planning. If you don't see the interactive markers press **Interact** in the top menu of RViz (Note: some tools may be hidden, press **"+"** in the top menu to add the **Interact** tool as shown below).
+이제 두 개의 상호 작용 마커가 있어야 합니다. 오렌지색 팔과 해당하는 한 마커는 모션 플래닝의 "목표 상태(Goal State)"를 설정하는 데 사용되고, 녹색 팔과 해당하는 다른 마커는 모션 플래닝의 "시작 상태(Start State)"를 설정하는 데 사용됩니다. 상호 작용 마커가 보이지 않으면 RViz 상단 메뉴에서 **Interact**을 누르십시오(참고: 일부 도구가 숨겨져 있을 수 있습니다. 아래 표시된 것처럼 상단 메뉴에서 **"+"**를 눌러 **Interact** 도구를 추가하십시오).
 
 .. image:: rviz_plugin_interact.png
    :width: 700px
 
-You should now be able to use these markers to drag the arm around and change its orientation. Try it!
+이제 마커를 사용하여 팔을 드래그하고 방향을 변경할 수 있습니다. 직접 시도해 보세요!
 
 Moving into collision
 +++++++++++++++++++++
 
 For this section, hide the planned path and the goal state:
 
-#. Un-check the **Show Robot Visual** checkbox in the **Planned Path** tree menu
+#. **Planned Path** 트리 메뉴에서 **Show Robot Visual** 체크 상자를 해제합니다.
 
-#. Un-check the **Query Goal State** checkbox in the **Planning Request** tree menu.
+#. **Planning Request** 트리 메뉴에서 **Query Goal State** 체크 상자를 해제합니다.
 
-Now, only the Start State (the green colored arm) should be visible.  Try to move the arm into a configuration where two of its links are in collision with each other.  (If you find this difficult, make sure the "Use Collision-Aware IK" checkbox under the Planning tab of the MotionPlanning plugin is un-checked.)  Once you do this, the links that are in collision will turn red.
+이제 시작 상태(녹색 팔)만 표시되어야 합니다. 팔의 두 link가 서로 충돌하는 구성으로 이동해보세요. (이 작업이 어려운 경우 모션 플래닝 플러그인의 Planning 탭 아래 있는 "Use Collision-Aware IK" 체크 상자가 해제되어 있는지 확인하십시오.) 이 작업을 수행하면 충돌하는 links가 빨강색으로 변합니다.
 
 .. image:: rviz_plugin_collision.png
    :width: 700px
 
-Now, check the "Use Collision-Aware IK" checkbox, and try again to move two of the links into collision with each other.  When the checkbox is ticked, the IK solver will keep attempting to find a collision-free solution for the desired end-effector pose. When it is not checked, the solver will allow collisions to happen in the solution. The links in collision will always still be visualized in red, regardless of the state of the checkbox.
+이제 "Use Collision-Aware IK" 체크 상자를 선택하고 두 links를 다시 충돌하도록 움직여보세요. 이 체크 상자가 선택되어 있으면 IK 솔버는 원하는 end-effector 포즈에 대한 충돌 없는 해결책을 찾기 위해 계속 시도합니다. 체크 상자가 선택되어 있지 않으면 솔버는 해당 솔루션에서 충돌 발생을 허용합니다. 충돌하는 링크는 항상 체크 상자 상태에 관계없이 빨강색으로 표시됩니다.
 
 .. image:: rviz_plugin_collision_aware_ik_checkbox.png
    :width: 700px
