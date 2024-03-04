@@ -208,11 +208,11 @@ ROS 2 명령줄 도구를 사용하여 새 패키지를 만듭니다.:
   using moveit::planning_interface::MoveGroupInterface;
   auto move_group_interface = MoveGroupInterface(node, "panda_arm");
 
-Then, we set our target pose and plan. Note that only the target pose is set (via ``setPoseTarget``. The starting pose is implicitly the position published by joint state publisher, which could be changed using the ``MoveGroupInterface::setStartState*`` family of functions (but is not in this tutorial).
+그런 다음, 목표 포즈와 계획을 설정합니다. 목표 pose는 오직 ``setPoseTarget``을 통해서만 설정된다는 점에 유의하십시오. 시작 포즈는 현재 로봇의 joint state publisher에 의해 publish된 위치이며, ``MoveGroupInterface::setStartState*`` 함수군을 사용하여 변경할 수 있지만 하지만 여기서는 다루지 않습니다.
 
-One more thing to note about this next section is the use of lambdas for constructing the message type ``target_pose`` and planning.
-This is a pattern you'll find in modern C++ codebases that enables writing in a more declarative style.
-For more information about this pattern there is a couple of links at the end of this tutorial.
+다음 섹션에서 유의해야 할 또 다른 사항은 ``target_pose`` 및 planning의 메시지 타입을 구성하기 위해 lambdas를 사용하는 것입니다.
+이것은 현대 C++ 코드베이스에서 더 선언적인 스타일로 작성할 수 있도록 하는 패턴입니다.
+이 패턴에 대한 자세한 내용은 이 튜터리얼의 끝에 몇개의 링크를 제공합니다.
 
 .. code-block:: C++
 
@@ -234,7 +234,8 @@ For more information about this pattern there is a couple of links at the end of
     return std::make_pair(ok, msg);
   }();
 
-Finally, we execute our plan if planning was successful, otherwise we log an error:
+
+마지막으로, 계획이 성공적으로 수립되었으면 계획을 실행하고, 그렇지 않으면 다음과 같은 오류를 기록합니다.
 
 .. code-block:: C++
 
@@ -248,17 +249,17 @@ Finally, we execute our plan if planning was successful, otherwise we log an err
 Summary
 -------
 
-* You created a ROS 2 package and wrote your first program using MoveIt.
-* You learned about using the MoveGroupInterface to plan and execute moves.
-* :codedir:`Here is a copy of the full hello_moveit.cpp source at the end of this tutorial<tutorials/your_first_project/hello_moveit.cpp>`.
+* ROS 2 패키지를 만들고 MoveIt을 사용하는 첫 번째 프로그램을 작성했습니다.
+* MoveGroupInterface를 사용하여 이동 계획 및 실행 방법에 대해 배웠습니다.
+* :codedir:`이 튜터리얼<tutorials/your_first_project/hello_moveit.cpp> 끝에는 전체 hello_moveit.cpp 소스 코드 사본이 있습니다.`.
 
 Further Reading
 ---------------
 
-- We used lambdas to be able to initialize objects as constants. This is known as a technique called IIFE.  `Read more about this pattern from C++ Stories <https://www.cppstories.com/2016/11/iife-for-complex-initialization/>`_.
-- We also declared everything we could as const.  `Read more about the usefulness of const here <https://www.cppstories.com/2016/12/please-declare-your-variables-as-const/>`_.
+- 람다 함수를 사용하여 객체를 상수로 초기화할 수 있었습니다. 이 기술은 IIFE라고 불립니다. `이 패턴과 관련된 참고는 C++ Stories <https://www.cppstories.com/2016/11/iife-for-complex-initialization/>`_
+- 또한 가능한 모든 것을 const로 선언했습니다. const의 유용성에 대해서는 `C++ Stories:  <https://www.cppstories.com/2016/12/please-declare-your-variables-as-const/>`_
 
 Next Step
 ---------
 
-In the next tutorial :doc:`Visualizing in RViz </doc/tutorials/visualizing_in_rviz/visualizing_in_rviz>`, you will expand on the program you built here to create visual markers that make it easier to understand what MoveIt is doing.
+다음 튜토리얼 :doc:`Visualizing in RViz </doc/tutorials/visualizing_in_rviz/visualizing_in_rviz>`에서 여기서 작성한 프로그램을 확장하여 MoveIt이 무엇을 하는지 이해하기 쉽게 하는 visual marker를 만들 것입니다.

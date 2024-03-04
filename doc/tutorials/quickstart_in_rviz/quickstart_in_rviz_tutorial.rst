@@ -131,20 +131,20 @@ For this section, hide the planned path and the goal state:
 
 Moving out of Reachable Workspace
 +++++++++++++++++++++++++++++++++
-Note what happens when you try to move an end-effector out of its reachable workspace.
+end-effector를 도달 가능한 작업 공간 밖으로 이동하려고 시도할 때 어떤 일이 발생하는지 살펴봅시다.
 
 .. image:: rviz_plugin_invalid.png
    :width: 700px
 
-Before moving onto the next section, re-enable the planned path and the goal state:
+다음 섹션으로 이동하기 전에 계획된 경로(planned path) 및 목표 상태(goal state)를 다시 활성화하십시오.:
 
-#. Check the **Show Robot Visual** checkbox in the **Planned Path** tree menu
+#. **Planned Path** 트리 메뉴에서 **Show Robot Visual** 체크박스를 선택합니다.
 
-#. Check the **Query Goal State** checkbox in the **Planning Request** tree menu.
+#. **Planning Request** 트리 메뉴에서 **Query Goal State** 체크박스를 선택합니다.
 
 Moving Joints or in Null Space
 ++++++++++++++++++++++++++++++
-You can use the **Joints** tab to move single joints and the redundant joints of 7-DOF robots. Try moving the "null space exploration" slider as shown in the animation below.
+**Joints** 탭을 사용하여 단일 관절과 7자유도 로봇의 여분 관절을 이동시킬 수 있습니다. 아래 애니메이션과 같이 "null space exploration" 슬라이더를 이동해 보세요.
 
 .. raw:: html
 
@@ -156,19 +156,17 @@ You can use the **Joints** tab to move single joints and the redundant joints of
 Step 4: Use Motion Planning with the Panda
 -------------------------------------------
 
-* Now, you can start motion planning with the Panda in the MoveIt RViz Plugin.
+* 이제 Panda에서 모브잇 RViz 플러그인을 사용하여 모션 플래닝 시작하기
 
-  * Move the Start State to a desired location.
+  * 시작 상태(Start State)를 원하는 위치로 이동합니다.
 
-  * Move the Goal State to another desired location.
+  * 목표 상태(Goal State)를 다른 원하는 위치로 이동합니다.
 
-  * Make sure both states are not in collision with the robot itself.
+  * 두 상태 모두 로봇 자체와 충돌하지 않도록 확인합니다.
 
-  * Make sure the Planned Path is being visualized. Also check the
-    **Show Trail** checkbox in the **Planned Path** tree menu.
+  * Planned Path가 나타나는지 확인합니다. **Planned Path** 트리 메뉴에서 **Show Trail** 체크박스도 체크합니다.
 
-* In the **MotionPlanning** window under the **Planning** tab, press the **Plan** button. You
-  should be able to see a visualization of the arm moving and a trail.
+* **MotionPlanning** 창의 **Planning** 탭 아래에서 **Plan** 버튼을 누릅니다.
 
 .. image:: rviz_plugin_planned_path.png
    :width: 700px
@@ -176,15 +174,15 @@ Step 4: Use Motion Planning with the Panda
 Introspecting Trajectory Waypoints
 ++++++++++++++++++++++++++++++++++
 
-You can visually introspect trajectories point by point in RViz.
+RViz에서 포인트별로 경로를 시각적으로 검토할 수 있습니다.
 
-* From "*Panels*" menu, select "*Trajectory - Trajectory Slider*". You'll see a new Slider panel on RViz.
+* "*Panels*" 메뉴에서 "*Trajectory - Trajectory Slider*"를 선택하십시오. RViz에 새 슬라이더 패널이 표시됩니다.
 
-* Set your goal pose, then run *Plan*.
+* 목표 포즈를 설정한 다음 *Plan*을 실행하십시오.
 
-* Play with the "*Slider*" panel, e.g. move the slider, push "*Play*" button.
+* "*Slider*" 패널을 조작하십시오(예: 슬라이더 이동, "*Play*" 버튼 누름).
 
-NOTE: Once you placed your EEF to a new goal, be sure to run *Plan* before running *Play* -- otherwise you'll see the waypoints for the previous goal if available.
+참고: EEF를 새 목표 위치로 이동시킨 후 *Play*을 실행하기 전에 반드시 *Plan*을 실행해야 합니다. 그렇지 않으면 이전 목표 지점에 대한 waypoints가 표시됩니다.
 
 .. image:: rviz_plugin_slider.png
    :width: 700px
@@ -192,7 +190,7 @@ NOTE: Once you placed your EEF to a new goal, be sure to run *Plan* before runni
 Plan Cartesian motions
 ++++++++++++++++++++++
 
-If the "Use Cartesian Path" checkbox is activated, the robot will attempt to move the end effector linearly in cartesian space.
+"Use Cartesian Path" 체크박스가 활성화되면 로봇은 end-effector를 카테시안 공간에서 직선으로 이동하려고 시도합니다.
 
 .. image:: rviz_plan_free.png
    :width: 700px
@@ -204,9 +202,9 @@ If the "Use Cartesian Path" checkbox is activated, the robot will attempt to mov
 Executing Trajectories, Adjusting Speed
 +++++++++++++++++++++++++++++++++++++++
 
-Clicking "Plan & Execute" or "Execute" after a successful plan will send the trajectory to the robot - in this tutorial, since you used ``demo.launch``, the robot is only simulated.
+성공적인 계획 후에 "Plan & Execute" 또는 "Execute"을 클릭하면 로봇에게 궤적이 전송됩니다. 이 튜토리얼에서는 ``demo.launch``를 사용했기 때문에 로봇은 단지 시뮬레이션만 됩니다.
 
-Initially, the default velocity and acceleration are scaled to 10% (``0.1``) of the robot's maximum. You can change these scaling factors in the Planning tab shown below, or change these default values in the ``moveit_config`` of your robot (in ``joint_limits.yaml``).
+초기에 기본 속도와 가속도는 로봇의 최대 속도의 10% (``0.1``)으로 조정됩니다. 이러한 스케일링 요소는 아래 표시된 계획 탭에서 변경하거나 로봇의 ``moveit_config`` (joint_limits.yaml에 있음)에서 기본값을 변경할 수 있습니다.
 
 .. image:: rviz_plugin_collision_aware_ik_checkbox.png
    :width: 700px
@@ -217,9 +215,9 @@ Next Steps
 
 RViz Visual Tools
 +++++++++++++++++
-Many of the tutorials use ``moveit_visual_tools`` to step through a demo. Before continuing on to the next tutorials it is a good idea to enable the **RvizVisualToolsGui**.
+많은 튜토리얼은 ``moveit_visual_tools`` 패키지를 사용하여 데모를 단계별로 진행합니다. 다음 튜토리얼로 넘어가기 전에 **RvizVisualToolsGui**를 활성화하는 것이 좋습니다.
 
-From "*Panels*" menu, select "*Add New Panels*". From the menu, select "*RvizVisualToolsGui*" and click OK. You'll see the new panel added to RViz.
+"*Panels*" 메뉴에서 "*Add New Panels*" 를 선택하세요. 메뉴에서 "*RvizVisualToolsGui*" 를 선택하고 OK를 클릭합니다. 새로운 패널이 RViz에 추가된 것을 확인할 수 있습니다.
 
 .. image:: rviz_add_rviz_visual_tools.png
    :width: 400px
@@ -229,14 +227,14 @@ From "*Panels*" menu, select "*Add New Panels*". From the menu, select "*RvizVis
 
 Saving Your Configuration
 +++++++++++++++++++++++++
-RViz enables you to save your configuration under ``File->Save Config``. You should do this before continuing on to the next tutorials. If you choose to save your configuration under a new name, you can use ``File->Save Config As`` and refer to your configuration file using: ::
+RViz에서는 ``File->Save Config``을 통해 설정을 저장할 수 있습니다. 다음 과정으로 넘어가기 전에 반드시 이 작업을 수행해야 합니다. 만약 설정을 새 이름으로 저장하고 싶다면 ``File->Save Config As``을 사용하고 다음과 같이 설정 파일을 참조할 수 있습니다. : ::
 
    ros2 launch moveit2_tutorials demo.launch.py rviz_config:=your_rviz_config.rviz
 
-Replace ``your_rviz_config.rviz`` with the name of the file you saved to ``moveit2_tutorials/doc/tutorials/quickstart_in_rviz/launch/`` and build the workspace so it can be found.
+``your_rviz_config.rviz``를 ``moveit2_tutorials/doc/tutorials/quickstart_in_rviz/launch/`` 폴더에 저장한 파일 이름으로 바꾸고 해당 workspace를 빌드하여 검색될 수 있도록 하세요.
 
 
 Next Tutorial
 +++++++++++++
 
-In :doc:`Your First MoveIt Project </doc/tutorials/your_first_project/your_first_project>`, you will create a C++ program using MoveIt to plan and execute moves.
+In :doc:`Your First MoveIt Project </doc/tutorials/your_first_project/your_first_project>`, MoveIt을 사용하여 로봇 이동 계획과 실행을 위한 C++ 프로그램을 만들게 됩니다.
