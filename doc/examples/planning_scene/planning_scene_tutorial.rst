@@ -7,29 +7,28 @@ will explore the C++ interface to this class.
 
 Getting Started
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+아직 완료하지 않았다면, :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 단계를 완료하세요.
 
 The entire code
 ---------------
-The entire code can be seen :codedir:`here in the MoveIt GitHub project<examples/planning_scene>`.
+전체 코드는 :codedir:`here in the MoveIt GitHub project<examples/planning_scene>`.
 
 .. tutorial-formatter:: ./src/planning_scene_tutorial.cpp
 
 The launch file
 ---------------
-The entire launch file is :codedir:`here <examples/planning_scene/launch/planning_scene_tutorial.launch.py>` on GitHub. All the code in this tutorial can be compiled and run from the moveit_tutorials package.
+launch 파일은 :codedir:`here <examples/planning_scene/launch/planning_scene_tutorial.launch.py>` on GitHub. All the code in this tutorial can be compiled and run from the moveit_tutorials package.
 
 Running the code
 ----------------
-Roslaunch the launch file to run the code directly from moveit_tutorials: ::
+moveit_tutorials 패키지에서 직접 코드를 실행하도록 launch 파일을 roslaunch로 실행하세요.: ::
 
  ros2 launch moveit2_tutorials planning_scene_tutorial.launch.py
 
 Expected Output
 ---------------
 
-The output should look something like this, though we are using random
-joint values so some things may be different. ::
+출력은 다음과 같은 형태입니다. 임의의 joint 값을 사용하고 있으므로 실제 결과와 다소 차이가 있을 수 있습니다. ::
 
  moveit2_tutorials: Test 1: Current state is in self collision
  moveit2_tutorials: Test 2: Current state is not in self collision
@@ -46,4 +45,4 @@ joint values so some things may be different. ::
  moveit2_tutorials: Test 11: Random state is feasible
  moveit2_tutorials: Test 12: Random state is not valid
 
-**Note:** Don't worry if your output has different ROS console format. You can customize your ROS console logger by following :ros_documentation:`this tutorial <Tutorials/Logging-and-logger-configuration.html#console-output-formatting>`.
+**Note:** 여러분의 콘솔에서 ROS 콘솔 출력 형식이 다르게 나타나더라도 걱정하지 마십시오. 다음 문서를 참고하여 ROS console logger를 사용자 정의할 수 있습니다. :ros_documentation:`this tutorial <Tutorials/Logging-and-logger-configuration.html#console-output-formatting>`
