@@ -25,17 +25,15 @@ Getting Started
 
 Running the Code
 ----------------
-All the code in this tutorial can be compiled and run from the
-``moveit2_tutorials`` package that you have as part of your MoveIt
-setup.
+이 튜터리얼내에 있는 모든 코드는 여러분이 가지고 있는 ``moveit2_tutorials`` 패키지에서 컴파일 및 실행할 수 있습니다.
 
-Roslaunch the launch file to run the code directly from moveit2_tutorials::
+moveit2_tutorials에서 코드를 직접 실행하려면 launch 파일을 roslaunch 하세요::
 
  ros2 launch moveit2_tutorials robot_model_and_robot_state_tutorial.launch.py
 
 Expected Output
 ---------------
-The expected output will be in the following form. The numbers will not match since we are using random joint values: ::
+예상 출력은 다음과 같은 형식입니다. 임의의 joint 값들을 사용하기 때문에 숫자는 일치하지 않을 수 있습니다.: ::
 
 
  ... [robot_model_and_state_tutorial]: Model frame: world
@@ -74,7 +72,7 @@ The expected output will be in the following form. The numbers will not match si
            1  4.89664e-12     0.536419     0.761708     0.415688  -0.00121099     0.962317
 
 
-**Note:** Don't worry if your output has different ROS console format.
+**Note:** 출력물이 다른 ROS 콘솔 형식이더라도 걱정하지 마세요.
 
 The Entire Code
 ---------------
