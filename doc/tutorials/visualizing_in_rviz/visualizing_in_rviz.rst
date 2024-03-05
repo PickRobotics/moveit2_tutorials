@@ -1,13 +1,13 @@
 Visualizing In RViz
 ===================
 
-This tutorial will introduce you to a tool that can help you more easily understand what your MoveIt application is doing by rendering visualizations in RViz.
+이 튜터리얼은 RViz에서 시각화를 렌더링하여 MoveIt 응용 프로그램이 수행하는 작업을 더 쉽게 이해하는 데 도움이 되는 도구를 소개합니다.
 
 Prerequisites
 -------------
 
-If you haven't already done so, make sure you've completed the steps in :doc:`Your First Project </doc/tutorials/your_first_project/your_first_project>`.
-This project assumes you are starting with the ``hello_moveit`` project, where the previous tutorial left off.
+이미 완료하지 않았다면, :doc:`Your First Project </doc/tutorials/your_first_project/your_first_project>`을 완료하세요.
+이 프로젝트는 이전 튜토리얼이 중단된 부분에서 시작하는 ``hello_moveit`` 프로젝트를 사용한다고 가정합니다.
 
 Steps
 -----
@@ -15,19 +15,19 @@ Steps
 1 Add the dependency moveit_visual_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add this line to your ``package.xml`` in the ``hello_moveit`` project after the other ``<depend>`` statements:
+``hello_moveit`` 프로젝트의 ``package.xml`` 파일에서 다른 ``<depend>`` 구문 뒤에 다음 줄을 추가하십시오.:
 
 .. code-block:: xml
 
   <depend>moveit_visual_tools</depend>
 
-Then in your ``CMakeLists.txt`` add this line to the section of ``find_package`` statements:
+다음으로 ``CMakeLists.txt`` 파일에서 find_package 구문의 섹션에 다음 줄을 추가합니다.:
 
 .. code-block:: cmake
 
   find_package(moveit_visual_tools REQUIRED)
 
-Further down in the file extend the ``ament_target_dependencies`` macro call to include the new dependency like this:
+파일 하단 부분에서 ``ament_target_dependencies`` 매크로 호출을 다음과 같이 확장하여 새로운 dependency 항목을 포함하세요:
 
 .. code-block:: cmake
 
@@ -38,13 +38,13 @@ Further down in the file extend the ``ament_target_dependencies`` macro call to 
     "rclcpp"
   )
 
-To verify that you added the dependency correctly, add the required include to your source file ``hello_moveit.cpp``:
+의존 관계가 제대로 추가되었는지 확인하려면 소스 파일 ``hello_moveit.cpp``에 다음과 같은 헤더 파일 포함을 추가하십시오:
 
 .. code-block:: C++
 
   #include <moveit_visual_tools/moveit_visual_tools.h>
 
-To test that this all worked, open a terminal in the workspace directory (remembering to source your ROS install in opt) and then build with colcon:
+모든 작업이 정상적으로 이루어졌는지 테스트하기 위해 workspace 디렉토리에서 터미널을 열고 (opt 디렉토리에 설치된 ROS를 source하는 것을 잊지 마세요) 다음 colcon 명령으로 빌드하세요:
 
 .. code-block:: bash
 
@@ -54,8 +54,8 @@ To test that this all worked, open a terminal in the workspace directory (rememb
 2 Create a ROS executor and spin the node on a thread
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Before we can initialize MoveItVisualTools, we need to have a executor spinning on our ROS node.
-This is necessary because of how MoveItVisualTools interacts with ROS services and topics.
+MoveItVisualTools를 초기화하기 전에 ROS 노드에서 실행자(executor)가 작동 중이어야 합니다.
+이는 MoveItVisualTools가 ROS 서비스 및 토픽과 상호 작용하는 방식 때문에 필요합니다.
 
 .. code-block:: C++
 
@@ -80,12 +80,12 @@ This is necessary because of how MoveItVisualTools interacts with ROS services a
     return 0;
   }
 
-After each one of these changes, you should rebuild your workspace to make sure you don't have any syntax errors.
+이러한 변경 사항을 하나씩 적용한 후, workspace을 다시 빌드하여 문법 오류가 없는지 확인하세요.
 
 3 Create and Initialize MoveItVisualTools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Next, we will construct and initialize MoveItVisualTools after the construction of MoveGroupInterface.
+다음으로 MoveGroupInterface를 생성한 후 MoveItVisualTools를 생성하고 초기화합니다.
 
 .. code-block:: C++
 
@@ -100,15 +100,14 @@ Next, we will construct and initialize MoveItVisualTools after the construction 
     moveit_visual_tools.deleteAllMarkers();
     moveit_visual_tools.loadRemoteControl();
 
-We pass the following into the constructor: the ROS node, the base link of the robot, the marker topic to use (more on this later), and the robot model (which we get from the move_group_interface).
-Next, we make a call to delete all the markers. This clears any rendered state out of RViz that we have left over from previous runs.
-Lastly, we load remote control.
-Remote control is a really simple plugin that lets us have a button in RViz to interact with our program.
+ROS node, 로봇의 base link, 사용할 marker topic (나중에 자세히 설명), robot model (move_group_interface에서 얻음)을 constructor(생성자)에 넘겨줍니다.
+다음으로 모든 마커를 삭제하는 호출을 합니다. 이렇게 하면 이전 실행에서 남은 RViz의 렌더링된 상태가 모두 지워집니다.마지막으로 원격 제어기를 로드합니다.
+원격 제어기는 매우 간단한 plugin으로, RViz에서 버튼을 사용하여 프로그램과 상호 작용할 수 있게 해줍니다.
 
 4 Write closures for visualizations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After we've constructed and initialized, we now create some closures (function objects that have access to variables in our current scope) that we can use later in our program to help render visualizations in RViz.
+우리가 생성 및 초기화를 마치고 나서 이제 현재 scope의 변수에 액세스할 수 있는 closures(함수 객체) 몇 개를 생성하는데, 이것은 나중에 프로그램에서 RViz로 시각화를 렌더링하는 데 도움을 줄 수 있습니다.
 
 .. code-block:: C++
 
@@ -131,26 +130,23 @@ After we've constructed and initialized, we now create some closures (function o
              "panda_arm")](auto const trajectory) {
           moveit_visual_tools.publishTrajectoryLine(trajectory, jmg);
         };
+3개의 closures의 각각은 moveit_visual_tools 객체를 참조(reference)로 캡처하고, 마지막 closures는 planning에 사용하고 있는 joint model group 객체에 대한 포인터를 캡처합니다.
+각 closure는 ``moveit_visual_tools`` 객체의 함수를 호출하여 RViz에서 무언가를 변경합니다.
+첫 번째 closure인 ``draw_title``는 로봇 base에서 1미터 위에 텍스트를 추가합니다.
+이는 프로그램의 상태 보여주는 유용한 방법입니다.
+두 번째 closure는 ``prompt``라는 함수를 호출합니다. 이 함수는 사용자가 RViz에서 ``next`` 버튼을 누를 때까지 프로그램을 차단합니다.
+이는 디버깅할 때 프로그램 단계별로 수행하는 데 도움이 됩니다.
+마지막 closure는 계획한 궤적의 도구 경로를 그립니다.
+이는 도구의 관점에서 계획한 궤적을 이해하는데 도움이 됩니다.
 
-Each of the three closures capture ``moveit_visual_tools`` by reference and the last one captures a pointer to the joint model group object we are planning with.
-Each of these call a function on ``moveit_visual_tools`` that changes something in RViz.
-The first one, ``draw_title`` adds text one meter above the base of the robot.
-This is a useful way to show the state of your program from a high level.
-The second one calls a function called ``prompt``.
-This function blocks your program until the user presses the ``next`` button in RViz.
-This is helpful for stepping through a program when debugging.
-The last one draws the tool path of a trajectory that we have planned.
-This is often helpful for understanding a planned trajectory from the perspective of the tool.
-
-You might be asking yourself why we would create lambdas like this, and the reason is simply to make the code that comes later easier to read and understand.
-As your write software, it is often helpful to break up your functionality into named functions which can be easily reused and tested on their own.
-You will see in the next section how we use these functions we created.
+"왜 이런 lambdas 함수를 만들까?" 하고 의문이 드실 수도 있지만, 코드를 더 읽기 쉽고 이해하기 쉽게 만들기 위한 것입니다.
+소프트웨어를 작성할 때 기능을 명명된 함수로 분할하면 쉽게 재사용 및 개별적으로 테스트할 수 있으므로 종종 유용합니다. 다음 섹션에서 생성한 함수를 어떻게 사용하는지 살펴볼 것입니다.
 
 5 Visualize the steps of your program
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now we'll augment the code in the middle of your program.
-Update your code for planning and executing to include these new features:
+이제 프로그램 중간에 코드를 보강하겠습니다.
+계획 및 실행을 위한 코드를 업데이트하여 다음과 같은 새로운 기능을 포함시키세요:
 
 .. code-block:: C++
 
@@ -189,10 +185,10 @@ Update your code for planning and executing to include these new features:
       RCLCPP_ERROR(logger, "Planing failed!");
     }
 
-One thing you'll quickly notice is that we have to call a method called ``trigger`` on ``moveit_visual_tools`` after each call to change something rendered in RViz.
-The reason for this is that messages sent to RViz are batched up and sent when you call ``trigger`` to reduce bandwidth of the marker topics.
+RViz에서 렌더링된 어떤 것을 변경하기 위한 각 호출 이후에 반드시 ``moveit_visual_tools`` 오브젝트에서 ``trigger``라는 메서드를 호출해야 한다는 것을 금방 알게 될 것입니다.
+그 이유는 RViz에 전송된 메시지가 일괄 처리되어 trigger를 호출할 때 marker topics의 대역폭을 줄이기 위해 한 번에 전송되기 때문입니다.
 
-Lastly, build your project again to make sure all the code additions are correct.
+마지막으로, 모든 코드 추가가 올바른지 확인하기 위해 프로젝트를 다시 빌드하십시오.
 
 .. code-block:: bash
 
@@ -203,7 +199,7 @@ Lastly, build your project again to make sure all the code additions are correct
 6 Enable visualizations in RViz
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Open a new terminal, source the workspace, and then start the demo launch file that opens RViz.
+새로운 터미널을 열고 workspace를 source한 다음, 데모 launch 파일을 구동시켜서 RViz를 시작하세요.
 
 .. code-block:: bash
 
@@ -211,43 +207,41 @@ Open a new terminal, source the workspace, and then start the demo launch file t
   source install/setup.bash
   ros2 launch moveit2_tutorials demo.launch.py
 
-Uncheck "MotionPlanning" in the "Displays" tab to hide it.
-We aren't going to be using the "MotionPlanning" plugin for this next part.
+"Displays" 탭에서 "MotionPlanning"의 선택을 해제하여 숨깁니다.
+다음 단계에서는 "MotionPlanning" 플러그인을 사용하지 않을 것입니다.
 
 .. image:: uncheck_motion_planning.png
 
 .. image:: unchecked_motion_planning.png
 
-To add the buttons to interact with the prompts we added to our program open the dialog with the "Panels/Add New Panel" menu:
+우리가 프로그램에 추가했던 프롬프트와 상호 작용하기 위한 버튼을 추가하려면 "Panels/Add New Panel" 메뉴를 사용하여 대화 상자를 열어야 합니다.:
 
 .. image:: panel_menu.png
 
-Then select ``RvizVisualToolsGui`` and click OK.
-This will create a new panel on the bottom left with a ``Next`` button we'll use later.
+그런 다음 ``RvizVisualToolsGui``를 선택하고 OK를 클릭하십시오. 이렇게 하면 나중에 사용할 ``Next`` 버튼이 있는 새로운 패널이 왼쪽 하단에 생성됩니다.
 
 .. image:: add_rviz_tools_gui.png
 
 .. image:: next_button.png
 
-Finally, we need to add a ``Marker Array`` to render the visualizations we've added.
-Click on the "Add" Button in the "Displays" panel.
+마지막으로 추가한 시각화를 렌더링하기 위해 ``Marker Array``을 추가해야 합니다. "Displays" 패널의 "Add" 버튼을 클릭하십시오.
 
 .. image:: add_button.png
 
-Select ``Marker Array`` and click ``OK``.
+``Marker Array`` 를 선택하고 ``OK``를 클릭하세요.
 
 .. image:: marker_array.png
 
-Scroll to the bottom of the items in the Displays panel and edit the topic that the new Marker Array is using to ``/rviz_visual_tools``.
+Displays 패널내에 아이템의 목록 하단으로 스크롤하고 새로 만든 Marker Array가 사용하는 토픽을 ``/rviz_visual_tools``로 수정하세요.
 
 .. image:: marker_array_topic.png
 
-You are now ready to run your new program with visualizations.
+이제 시각화와 함께 프로그램을 실행할 수 있게 준비되었습니다.
 
 7 Run the Program
 ^^^^^^^^^^^^^^^^^
 
-In a new terminal, go to the workspace, source the workspace, and run ``hello_moveit``:
+새 터미널을 열고 workspace로 이동한 후, workspace를 source 및 ``hello_moveit`` 실행:
 
 .. code:: bash
 
@@ -255,18 +249,18 @@ In a new terminal, go to the workspace, source the workspace, and run ``hello_mo
   source install/setup.bash
   ros2 run hello_moveit hello_moveit
 
-You'll notice that your program has stopped with a log that looks like this:
+다음과 같은 로그가 표시되면서 프로그램이 일시 정지되었음을 확인할 수 있습니다.:
 
 .. code::
 
   [INFO] [1652822889.492940200] [hello_moveit.remote_control]: Waiting to continue: Press 'Next' in the RvizVisualToolsGui window to plan
 
-Click the ``Next`` button in RViz and see your application advance.
+RViz에서 ``Next`` 버튼을 클릭하면 응용 프로그램이 진행되는 것을 확인할 수 있습니다.
 
 .. image:: planning.png
 
-You'll see after you clicked the next button, your application planned, added a title above the robot, and drew a line representing the tool path.
-To continue, press ``Next`` again to see your robot execute the plan.
+next 버튼을 클릭한 후에는 응용 프로그램이 계획을 수행하고 로봇 위에 제목을 추가하며 도구 경로를 나타내는 선을 그렸음을 확인할 수 있습니다.
+계속하려면 다시 ``Next`` 버튼을 누르면 로봇이 계획을 실행하는 것을 볼 수 있습니다.
 
 .. image:: executing.png
 
@@ -274,16 +268,16 @@ To continue, press ``Next`` again to see your robot execute the plan.
 Summary
 -------
 
-You extended the program you wrote with MoveIt to interact with the Gui in RViz, allowing you to step through your program with a button, render some text above the robot, and display the tool path that you planned.
+MoveIt을 사용하여 작성한 프로그램을 RViz의 Gui와 상호 작용하도록 확장하여, 버튼을 사용하여 프로그램 단계를 거치고 로봇 위에 텍스트를 렌더링하고 계획한 도구 경로를 표시할 수 있게 되었습니다.
 
 Further Reading
 ---------------
 
-- MoveItVisualTools has many more useful features for visualizing robot motions. `You can read more about it here <https://github.com/ros-planning/moveit_visual_tools/tree/ros2>`_.
-- There are also more examples of using ``MoveItVisualTools`` in :doc:`MoveItCpp Tutorial </doc/examples/moveit_cpp/moveitcpp_tutorial>`.
-- :codedir:`Here is a copy of the full hello_moveit.cpp source<tutorials/visualizing_in_rviz/hello_moveit.cpp>`.
+- MoveItVisualTools는 로봇 동작 시각화를 위한 더 많은 유용한 기능을 제공합니다. 추가 정보는 `You can read more about it here <https://github.com/ros-planning/moveit_visual_tools/tree/ros2>`_
+- MoveItVisualTools 사용과 관련된 더 많은 예시는 :doc:`MoveItCpp Tutorial </doc/examples/moveit_cpp/moveitcpp_tutorial>`
+- :codedir:`전체 코드 hello_moveit.cpp source<tutorials/visualizing_in_rviz/hello_moveit.cpp>`.
 
 Next Step
 ---------
 
-In the next tutorial :doc:`Planning Around Objects </doc/tutorials/planning_around_objects/planning_around_objects>`, you will expand on the program you built here to add to the collision environment and see the robot plan with these changes.
+다음 튜터리얼인 :doc:`Planning Around Objects </doc/tutorials/planning_around_objects/planning_around_objects>`에서는 여기에서 우리가 작성한 프로그램을 확장하여 충돌 환경에 추가하고 이러한 변경 사항을 반영한 로봇 계획을 수행하는 방법을 다룰 것입니다.
