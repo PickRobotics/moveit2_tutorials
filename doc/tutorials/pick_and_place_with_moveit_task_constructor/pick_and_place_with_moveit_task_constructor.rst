@@ -7,16 +7,16 @@ Pick and Place with MoveIt Task Constructor
         MoveIt Task Constructor Pick and Place example
     </video>
 
-This tutorial will walk you through creating a package that plans a pick and place operation using `MoveIt Task Constructor <https://github.com/ros-planning/moveit_task_constructor/tree/ros2/>`_. MoveIt Task Constructor provides a way to plan for tasks that consist of multiple different subtasks (known as stages). If you just want to run the tutorial, you can follow the :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>` to start a container with the completed tutorial. This tutorial is intended for those who have a basic understanding of MoveIt and the MoveIt Task Constructor :ref:`concepts <moveit_task_constructor_concepts>`. To learn more about these, read the  :doc:`MoveIt examples </doc/examples/examples>`, including the example page for :doc:`MoveIt Task Constructor </doc/examples/moveit_task_constructor/moveit_task_constructor_tutorial>`.
+이 안내 문서는 `MoveIt Task Constructor <https://github.com/ros-planning/moveit_task_constructor/tree/ros2/>`_ 사용하여 pick and place 작업을 계획하는 패키지 생성 과정을 소개합니다. MoveIt Task Constructor는 여러 개의 subtasks(stages라고 함)으로 구성된 작업을 계획하는 방법을 제공합니다. 튜토리얼만 실행하고 싶다면 :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>`를 따라 완성된 튜토리얼이 있는 컨테이너를 시작할 수 있습니다. 이 튜토리얼은 MoveIt과 MoveIt Task Constructor :ref:`concepts <moveit_task_constructor_concepts>`에 대한 기본적인 이해가 있는 사용자를 대상으로 합니다. 이에 대한 자세한 내용은 :doc:`MoveIt examples </doc/examples/examples>`를 읽고, :doc:`MoveIt Task Constructor </doc/examples/moveit_task_constructor/moveit_task_constructor_tutorial>` 예시 페이지를 포함한 관련 문서를 참조하십시오.
 
 Getting Started
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+아직 완료하지 않았다면, :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`의 단계를 완료하세요.
 
 Download MoveIt Task Constructor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Move into your colcon workspace and pull the MoveIt Task Constructor source: ::
+colcon workspace으로 이동하여 MoveIt Task Constructor 소스를 가져옵니다: ::
 
     cd ~/ws_moveit2/src
     git clone https://github.com/ros-planning/moveit_task_constructor.git -b ros2
@@ -24,11 +24,11 @@ Move into your colcon workspace and pull the MoveIt Task Constructor source: ::
 Create a New Package
 ^^^^^^^^^^^^^^^^^^^^
 
-Create a new package with the following command: ::
+다음 명령으로 새로운 패키지를 만듭니다: ::
 
     ros2 pkg create --build-type ament_cmake --node-name mtc_tutorial mtc_tutorial
 
-This will create a new folder called ``mtc_tutorial`` with a hello world example in ``src/mtc_node``. Next, add the dependencies to ``package.xml``. It should look similar to this: ::
+이 명령은 ``src/mtc_node``에 hello world 예제가 있는 ``mtc_tutorial``이라는 새 폴더를 생성합니다. 다음으로, ``package.xml``에 의존성을 추가합니다. 다음과 비슷한 형태입니다.: ::
 
     <?xml version="1.0"?>
     <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
@@ -52,7 +52,7 @@ This will create a new folder called ``mtc_tutorial`` with a hello world example
     </export>
     </package>
 
-Also, add the dependencies to ``CMakeLists.txt``. The file should look similar to this: ::
+또한, ``CMakeLists.txt``에 대한 종속성을 추가하세요. 파일은 다음과 같은 형태입니다.: ::
 
     cmake_minimum_required(VERSION 3.8)
     project(mtc_tutorial)
@@ -96,12 +96,12 @@ Also, add the dependencies to ``CMakeLists.txt``. The file should look similar t
 Setting up a Project with MoveIt Task Constructor
 -------------------------------------------------
 
-This section walks through the code required to build a minimal task using MoveIt Task Constructor.
+이 섹션에서는 MoveIt Task Constructor를 사용하여 최소 작업을 빌드하는 데 필요한 코드를 안내합니다.
 
 The Code
 ^^^^^^^^
 
-Open ``mtc_tutorial.cpp`` in your editor of choice, and paste in the following code.
+편집기에서 ``mtc_tutorial.cpp``를 열고 다음 코드를 붙여넣으십시오.
 
 .. code-block:: c++
 
@@ -273,14 +273,14 @@ Open ``mtc_tutorial.cpp`` in your editor of choice, and paste in the following c
 Code Breakdown
 ^^^^^^^^^^^^^^
 
-The top of the code includes the ROS and MoveIt Libraries that this package uses.
+코드 상단에는 이 패키지가 사용하는 ROS 및 MoveIt 라이브러리를 포함합니다.
 
- * ``rclcpp/rclcpp.hpp`` includes core ROS2 functionality
- * ``moveit/planning_scene/planning_scene.h`` and ``moveit/planning_scene_interface/planning_scene_interface.h`` includes functionality to interface with the robot model and collision objects
- * ``moveit/task_constructor/task.h``, ``moveit/task_constructor/solvers.h``, and ``moveit/task_constructor/stages.h`` include different components of MoveIt Task Constructor that are used in the example
- * ``tf2_geometry_msgs/tf2_geometry_msgs.hpp`` and ``tf2_eigen/tf2_eigen.hpp`` won't be used in this initial example, but they will be used for pose generation when we add more stages to the MoveIt Task Constructor task.
+ * ``rclcpp/rclcpp.hpp``에는 ROS2 코어 기능이 포함합니다.
+ * ``moveit/planning_scene/planning_scene.h`` 와 ``moveit/planning_scene_interface/planning_scene_interface.h``에는 robot model과 충돌 객체와 인터페이스하는 기능을 포함합니다.
+ * ``moveit/task_constructor/task.h``, ``moveit/task_constructor/solvers.h``, ``moveit/task_constructor/stages.h``에는 예제에서 사용되는 MoveIt Task Constructor의 여러 구성 요소가 포함합니다.
+ * ``tf2_geometry_msgs/tf2_geometry_msgs.hpp`` 와 ``tf2_eigen/tf2_eigen.hpp``는 초기 예제에서 사용되지 않지만, MoveIt Task Constructor 작업에 더 많은 단계를 추가할 때 pose 생성을 위해 사용됩니다.
 
-The next line gets a logger for your new node. We also create a namespace alias for ``moveit::task_constructor`` for convenience.
+다음 라인에서 새 node에 대한 logger를 얻습니다. 편의를 위해 ``moveit::task_constructor``에 대한 namespace alias도 생성합니다.
 
 .. code-block:: c++
 
@@ -304,7 +304,7 @@ The next line gets a logger for your new node. We also create a namespace alias 
     static const rclcpp::Logger LOGGER = rclcpp::get_logger("mtc_tutorial");
     namespace mtc = moveit::task_constructor;
 
-We start by defining a class that will contain the main MoveIt Task Constructor functionality.  We also declare the MoveIt Task Constructor task object as a member variable for our class: this isn't strictly necessary for a given application, but it helps save the task for later visualization purposes. We will explore each function individually below.
+우리는 MoveIt Task Constructor의 주요 기능을 포함하는 클래스를 정의하는 것으로 시작합니다. 또한 클래스의 멤버 변수로 MoveIt Task Constructor 작업 객체를 선언합니다. 이는 해당 응용 프로그램에 반드시 필요하지는 않지만, 뒷날 시각화를 위한 작업을 저장하는데 도움이 됩니다. 각 함수는 아래에서 개별적으로 살펴볼 것입니다.
 
 .. code-block:: c++
 
@@ -326,7 +326,7 @@ We start by defining a class that will contain the main MoveIt Task Constructor 
       rclcpp::Node::SharedPtr node_;
     };
 
-These lines define a getter function to get the node base interface, which will be used for the executor later.
+이 코드는 나중에 executor에 사용될 node base interface를 가져오는 getter 함수를 정의합니다.
 
 .. code-block:: c++
 
@@ -335,7 +335,7 @@ These lines define a getter function to get the node base interface, which will 
       return node_->get_node_base_interface();
     }
 
-These next lines initialize the node with specified options.
+다음 코드는 지정된 옵션으로 node를 초기화합니다.
 
 .. code-block:: c++
 
@@ -344,7 +344,7 @@ These next lines initialize the node with specified options.
     {
     }
 
-This class method is used to set up the planning scene that is used in the example. It creates a cylinder with dimensions specified by ``object.primitives[0].dimensions`` and position specified by ``pose.position.z`` and ``pose.position.x``. You can try changing these numbers to resize and move the cylinder around. If you move the cylinder out of the robot's reach, planning will fail.
+이 클래스 method는 예제에서 사용되는 planning scene을 설정하는 데 사용됩니다. ``object.primitives[0].dimensions``에 의해 지정된 치수와 ``pose.position.z`` 와 ``pose.position.x``에 의해 지정된 위치를 가진 실린더를 생성합니다. 이러한 숫자를 변경하여 cylinder의 크기를 조정하고 cylinder를 이동시킬 수 있습니다. cylinder를 로봇이 닿을 수 없는 위치로 이동하면 계획이 실패합니다.
 
 .. code-block:: c++
 
@@ -366,7 +366,7 @@ This class method is used to set up the planning scene that is used in the examp
       psi.applyCollisionObject(object);
     }
 
-This function interfaces with the MoveIt Task Constructor task object. It first creates a task, which includes setting some properties and adding stages. This will be discussed further in the ``createTask`` function definition. Next, ``task.init()`` initializes the task and ``task.plan(5)`` generates a plan, stopping after 5 successful plans are found. The next line publishes the solution to be visualized in RViz - this line can be removed if you don't care for visualization. Finally, ``task.execute()`` executes the plan. Execution occurs via an action server interface with the RViz plugin.
+이 함수는 MoveIt Task Constructor task 객체와 상호 작용합니다. 먼저 하나의 task를 생성하는데, 여기에는 일부 속성 설정과 stages 추가를 포함하고 있습니다. 이에 대한 자세한 내용은 ``createTask`` 함수 정의에서 설명합니다. 다음으로, ``task.init()``은 작업을 초기화하고, ``task.plan(5)``은 하나의 계획을 생성하는데 5개의 성공적인 계획이 발견된 후에 중지하는 것이다. 다음 줄은 RViz에서 시각화하기 위해서 해당 솔루션을 publish합니다. - 시각화를 원하지 않으면 이 줄을 제거할 수 있습니다. 마지막으로, ``task.execute()``는 해당 계획을 실행합니다. RViz 플러그인과 함께 action server interface를 통해서 execution이 발생합니다.
 
 .. code-block:: c++
 
@@ -401,7 +401,7 @@ This function interfaces with the MoveIt Task Constructor task object. It first 
       return;
     }
 
-As mentioned above, this function creates a MoveIt Task Constructor object and sets some initial properties. In this case, we set the task name to "demo_task", load the robot model, define the names of some useful frames, and set those frame names as properties of the task with ``task.setProperty(property_name, value)``. The next few code blocks will fill out this function body.
+위에서 설명된 대로, 이 함수는 MoveIt Task Constructor 객체를 생성하고 몇 가지 초기 속성을 설정합니다. 이 예시에서는 작업 이름을 "demo_task"로 설정하고, robot model을 로드하며, 몇 가지 유용한 프레임의 이름을 정의하고 이러한 프레임 이름을 ``task.setProperty(property_name, value)``를 사용하여 작업 속성으로 설정합니다. 다음 몇 개의 코드 블록에서는 이 함수 본문을 채울 것입니다.
 
 .. code-block:: c++
 
@@ -420,7 +420,7 @@ As mentioned above, this function creates a MoveIt Task Constructor object and s
       task.setProperty("eef", hand_group_name);
       task.setProperty("ik_frame", hand_frame);
 
-Now, we add an example stage to the node. The first line sets ``current_state_ptr`` to ``nullptr``; this creates a pointer to a stage such that we can re-use stage information in specific scenarios. This line is not used at this moment, but will be used later when more stages are added to the task. Next, we make a ``current_state`` stage (a generator stage) and add it to our task - this starts the robot off in its current state. Now that we've created the ``CurrentState`` stage, we save a pointer to it in the ``current_state_ptr`` for later use.
+이제 node에 예제 stage를 추가합니다. 첫 번째 줄은 ``current_state_ptr``를  ``nullptr``로 설정합니다. 이는 특정 시나리오에서 stage 정보를 재사용할 수 있도록 stage를 가리키는 포인터를 만듭니다. 이 라인은 현재 사용되지는 않지만 나중에 작업에 더 많은 stages가 추가될 때 사용됩니다. 다음으로 ``current_state`` stage (generator stage)를 만들어 작업에 추가합니다. - 이렇게 하면 로봇이 현재 상태에서 시작됩니다. ``CurrentState`` stage를 만들었으므로 나중에 사용할 수 있도록 ``current_state_ptr``에 대한 포인터를 저장합니다.
 
 .. code-block:: c++
 
@@ -429,13 +429,13 @@ Now, we add an example stage to the node. The first line sets ``current_state_pt
       current_state_ptr = stage_state_current.get();
       task.add(std::move(stage_state_current));
 
-In order to plan any robot motions, we need to specify a solver. MoveIt Task Constructor has three options for solvers:
+로봇 motion을 계획하려면 솔버를 지정해야 합니다. MoveIt Task Constructor는 세 가지 솔버 옵션을 제공합니다.:
 
- * ``PipelinePlanner`` uses MoveIt's planning pipeline, which typically defaults to OMPL.
- * ``CartesianPath`` is used to move the end effector in a straight line in Cartesian space.
- * ``JointInterpolation`` is a simple planner that interpolates between the start and goal joint states. It is typically used for simple motions as it computes quickly but doesn't support complex motions.
+ * ``PipelinePlanner``은 MoveIt의 planning pipeline을 사용하며 일반적으로 OMPL로 기본값이 설정됩니다.
+ * ``CartesianPath``는 end-effector를 데카르트 공간내에서 직선으로 이동하는 데 사용됩니다.
+ * ``JointInterpolation``는 시작 및 목표 joint stages 사이를 보간하는 간단한 planner입니다. 일반적으로 간단한 motion에 대해서 빠른 연산을 수행하지만 복잡한 motion은 지원하지 않는다.
 
-We also set some properties specific for to the Cartesian planner.
+우리는 데카르트 planner에 맞게 일부 속성을 설정한다.
 
 .. code-block:: c++
 
@@ -447,7 +447,7 @@ We also set some properties specific for to the Cartesian planner.
       cartesian_planner->setMaxAccelerationScalingFactor(1.0);
       cartesian_planner->setStepSize(.01);
 
-Now that we added in the planners, we can add a stage that will move the robot. The following lines use a ``MoveTo`` stage (a propagator stage). Since opening the hand is a relatively simple movement, we can use the joint interpolation planner. This stage plans a move to the "open hand" pose, which is a named pose defined in the :moveit_resources_codedir:`SRDF<panda_moveit_config/config/panda.srdf>` for the panda robot. We return the task and finish with the createTask() function.
+이제 planner에 추가했으므로, 이제 로봇을 이동시키는 stage를 추가할 수 있습니다. 다음 코드는 ``MoveTo`` stage (propagator stage)를 사용합니다. 손을 펴는 것은 비교적 간단한 동작이므로 관절 보간 플래너(joint interpolation planner)를 사용할 수 있습니다. 이 stage는 "open hand" pose로 움직임을 plan하는 것으로서, panda robot을 위해 :moveit_resources_codedir:`SRDF<panda_moveit_config/config/panda.srdf>` 파일에 정의된 pose 이름이다. 우리는 task를 반환하고 createTask() 함수를 사용하여 작업을 완료합니다.
 
 .. code-block:: c++
 
@@ -460,7 +460,7 @@ Now that we added in the planners, we can add a stage that will move the robot. 
       return task;
     }
 
-Finally, we have ``main``: the following lines create a node using the class defined above, and calls the class methods to set up and execute a basic MTC task. In this example, we do not cancel the executor once the task has finished executing to keep the node alive to inspect the solutions in RViz.
+마지막으로 ``main`` 부분이 있습니다. 다음 코드는 위에서 정의한 클래스를 사용하여 node를 만들고 클래스 메서드를 호출하여 기본 MTC 작업을 설정하고 실행합니다. 이 예제에서는 task 실행이 완료되면 ececutor를 취소하지 않고 RViz에서 해당 솔루션을 검사하기 위해 node를 살아 있는 상태로 유지합니다.
 
 .. code-block:: c++
 
@@ -495,9 +495,9 @@ Running the Demo
 Launch files
 ^^^^^^^^^^^^
 
-We will need a launch file to launch ``move_group``, ``ros2_control``, ``static_tf``, ``robot_state_publisher``, and ``rviz``. :codedir:`Here <tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc_demo.launch.py>` is the launch file we use in the tutorials package. Put this in the launch directory of your package.
+``move_group``, ``ros2_control``, ``static_tf``, ``robot_state_publisher``, ``rviz`` 를 실행하려면 launch 파일이 필요합니다. :codedir:`Here <tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc_demo.launch.py>` 는 튜토리얼 패키지에서 사용하는 launch 파일입니다. 이 파일을 여러분의 패키지의 launch 디렉토리에 넣으세요.
 
-To run the MoveIt Task Constructor node, we need a second launch file to start the ``mtc_tutorial`` executable with the proper parameters. Either load your URDF, SRDF, and OMPL parameters, or use MoveIt Configs Utils to do so. Your launch file should look something like this:
+MoveIt Task Constructor node를 실행하려면, 적절한 파라미터를 가지고 ``mtc_tutorial`` 실행자를 구동시킬 수 있는 2번째 launch 파일이 필요합니다. URDF, SRDF, OMPL 파라미터를 직접 로딩하거나 MoveIt Configs Utils를 사용하여 로딩하십시오. launch 파일은 다음과 형태입니다.:
 
 .. code-block:: python
 
@@ -520,34 +520,34 @@ To run the MoveIt Task Constructor node, we need a second launch file to start t
 
         return LaunchDescription([pick_place_demo])
 
-Save this file as ``pick_place_demo.launch.py`` in your package's launch directory. Make sure to add the following line to your ``CMakeLists.txt`` so that the launch files are properly installed. ::
+패키지의 launch 디렉토리에 이 파일을 ``pick_place_demo.launch.py``라는 이름으로 저장하십시오. launch 파일이 올바르게 설치되도록 ``CMakeLists.txt`` 파일에 다음 행을 추가하십시오. ::
 
    install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
-Now build and source your colcon workspace. ::
+이제 colcon workspace를 빌드하고 소스하십시오. ::
 
     cd ~/ws_moveit2
     colcon build --mixin release
     source ~/ws_moveit2/install/setup.bash
 
-Start by launching your first launch file. If you want to use the one provided by the tutorials: ::
+첫 번째 launch 파일을 실행하는 것부터 시작하십시오. 튜토리얼에서 제공하는 것을 사용하려면: ::
 
     ros2 launch moveit2_tutorials mtc_demo.launch.py
 
-RViz should load. If you're using your own launch file, before we can see anything, we will need to configure RViz. If you're using the launch file from the tutorials package, this will already be configured for you.
+RViz가 로드되어야 합니다. 자체 launch 파일을 사용하는 경우 아무것도 볼 수 없기 전에 RViz를 구성해야 합니다. 튜토리얼 패키지의 launch 파일을 사용하는 경우 이것은 이미 설정되어 있습니다.
 
 RViz Configuration
 ^^^^^^^^^^^^^^^^^^
 
-In order to see your robot and the MoveIt Task Constructor solutions in RViz, we'll have to make some changes to the RViz configuration. First, start RViz. The following steps will cover how to set up RViz for MoveIt Task Constructor solution visualization.
+RViz에서 여러분의 robot과 MoveIt Task Constructor 솔루션을 확인하려면 RViz 설정을 약간 변경해야 합니다. 먼저 RViz를 시작하십시오. 다음 단계에서는 MoveIt Task Constructor 솔루션 시각화를 위해 RViz를 어떻게 설정하는지 방법을 설명합니다.
 
-1. If the **MotionPlanning** display is active, uncheck it to hide it for now.
-2. Under **Global Options**, change the **Fixed Frame** from ``map`` to ``panda_link0`` if not already done.
-3. On the bottom left of the window, click the **Add** button.
-4. Under ``moveit_task_constructor_visualization`` select **Motion Planning Tasks** and click OK. The **Motion Planning Tasks** display should appear on the bottom left.
-5. In the **Displays**, under **Motion Planning Tasks**,  change **Task Solution Topic** to ``/solution``
+1. **MotionPlanning** 표시가 활성화되어 있으면 지금은 숨기려면 체크를 해제하세요.
+2. **Global Options** 아래에 있는 **Fixed Frame**을 ``map``에서 ``panda_link0``으로 변경하십시오.(아직 설정되어 있지 않은 경우)
+3. 창 하단 왼쪽에서 **Add** 버튼을 클릭하십시오.
+4. ``moveit_task_constructor_visualization`` 아래에서 **Motion Planning Tasks**을 선택하고 OK를 클릭하십시오. **Motion Planning Tasks** 표시가 왼쪽 하단에 나타납니다.
+5. **Displays**에서 **Motion Planning Tasks** 아래에서 **Task Solution Topic**을 ``/solution``으로 변경하십시오
 
-You should see the panda arm in the main view with Motion Planning Tasks display open in the bottom left and nothing in it. Your MTC task will show up in this panel once you launch the ``mtc_tutorial`` node. If you're using ``mtc_demo.launch.py`` from the tutorials, jump back in here.
+메인 뷰에서 Motion Planning Tasks 표시가 하단 왼쪽에 열려 있고 그 안에 아무것도 없는 panda arm이 표시되어야 합니다. ``mtc_tutorial`` node를 실행하면 MTC task가 이 패널에 표시됩니다. 튜토리얼에 있는 ``mtc_demo.launch.py``를 사용하는 경우 여기로 다시 돌아가십시오.
 
 Launching the Demo
 ^^^^^^^^^^^^^^^^^^
