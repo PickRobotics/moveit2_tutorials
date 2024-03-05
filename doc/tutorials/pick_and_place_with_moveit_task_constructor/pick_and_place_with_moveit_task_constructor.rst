@@ -552,28 +552,28 @@ RViz에서 여러분의 robot과 MoveIt Task Constructor 솔루션을 확인하�
 Launching the Demo
 ^^^^^^^^^^^^^^^^^^
 
-Launch your ``mtc_tutorial`` node with  ::
+다음 명령으로 ``mtc_tutorial`` node를 실행 ::
 
     ros2 launch mtc_tutorial pick_place_demo.launch.py
 
-You should see the arm execute the task with the single stage to open the hand, with the cylinder in green in front of it. It should look something like this:
+실린더가 arm 앞에 녹색으로 표시되어 있고, arm은 손을 펴서 단일 stage로 작업을 수행하는 것을 확인할 수 있습니다. 다음과 같이 보입니다.:
 
 .. image:: first_stages.png
    :width: 700px
 
-If you haven't made your own package, but still want to see what this looks like, you can launch this file from the tutorials: ::
+여러분이 패키지를 별도로 만들지 않았지만 어떻게 동작하는지 보고싶다면 다음 명령을 사용하여 튜토리얼에서 이 파일을 실행할 수 있습니다: ::
 
     ros2 launch moveit2_tutorials mtc_demo_minimal.launch.py
 
 Adding Stages
 -------------
 
-So far, we've walked through creating and executing a simple task, which runs but does not do much. Now, we will start adding the pick-and-place stages to the task. The image below shows an outline of the stages we will use in our task. To understand more about the concepts behind MoveIt Task Constructor and the different stage types, see the :doc:`example page for MoveIt Task Constructor </doc/examples/moveit_task_constructor/moveit_task_constructor_tutorial>`.
+지금까지 우리는 별다른 일을 수행하지 않는 간단한 task을 만들고 실행하는 과정을 살펴보았습니다. 이제는 pick-and-place stages를 task에 추가하는 것을 시작할 것입니다. 아래 이미지는 task에서 사용할 stages의 개요를 보여줍니다. MoveIt Task Constructor의 개념과 다양한 stage type에 대해 더 자세히 알아보려면 다음 문서를 참조하십시오. :doc:`example page for MoveIt Task Constructor </doc/examples/moveit_task_constructor/moveit_task_constructor_tutorial>`.
 
 .. image:: stages.png
    :width: 700px
 
-We will start adding stages after our existing open hand stage here:
+기존 open hand stage 뒤에 다음과 같은 단계를 추가를 시작할 것입니다.:
 
 .. code-block:: c++
 
@@ -587,7 +587,7 @@ We will start adding stages after our existing open hand stage here:
 Pick Stages
 ^^^^^^^^^^^
 
-We need to move the arm to a position where we can pick up our object. This is done with a ``Connect`` stage, which as its name implies, is a Connector stage. This means that it tries to bridge between the results of the stage before and after it. This stage is initialized with a name, ``move_to_pick``, and a ``GroupPlannerVector`` that specifies the planning group and the planner. We then set a timeout for the stage, set the properties for the stage, and add it to our task.
+arm을 물건을 집었던 위치로 이동시켜야 합니다. 이것은 ``Connect`` stage로 수행하는데, 이 단계는 이름에서 알 수 있듯이 이전 stage와 다음 stage의 결과를 연결하는 Connector stage입니다. 이 stage는 이름 (``move_to_pick``)과 계획 그룹 및 계획자를 지정하는 ``GroupPlannerVector``로 초기화됩니다. 그 다음, 단계의 시간 제한을 설정하고 stage에 대한 속성을 설정한 다음 작업에 추가합니다.
 
 .. code-block:: c++
 
@@ -598,15 +598,14 @@ We need to move the arm to a position where we can pick up our object. This is d
       stage_move_to_pick->properties().configureInitFrom(mtc::Stage::PARENT);
       task.add(std::move(stage_move_to_pick));
 
-
-Next, we create a pointer to a MoveIt Task Constructor stage object, and set it to ``nullptr`` for now. Later, we will use this to save a stage.
+다음으로, MoveIt Task Constructor stage 객체에 대한 포인터를 만들고 현재로서는 "nullptr"로 설정합니다. 나중에 이를 사용하여 stage를 저장할 것입니다.
 
 .. code-block:: c++
 
       mtc::Stage* attach_object_stage =
           nullptr;  // Forward attach_object_stage to place pose generator
 
-This next block of code creates a ``SerialContainer``. This is a container that can be added to our task and can hold several substages. In this case, we create a serial container that will contain the stages relevant to the picking action. Instead of adding the stages to the task, we will add the relevant stages to the serial container. We use ``exposeTo`` to declare the task properties from the parent task in the new serial container, and use configureInitFrom() to initialize them. This allows the contained stages to access these properties.
+다음 코드 블록은 ``SerialContainer``를 만듭니다. 이 컨테이너는 우리 task에 추가될 수 있으며 여러 substages를 포함할 수 있습니다. 이 경우, 컨테이너는 픽킹 작업과 관련된 단계를 포함하는 직렬 컨테이너를 만듭니다. stage를 task에 추가하는 대신 관련 stage를 직렬 컨테이너에 추가합니다. ``exposeTo``를 사용하여 parent task의 task 속성을 새로운 직렬 컨테이너내에 선언하고, configureInitFrom()을 사용하여 초기화합니다. 이렇게 하면 contained stages가 이런 속성들에 액세스할 수 있습니다.
 
 .. code-block:: c++
 
@@ -617,8 +616,7 @@ This next block of code creates a ``SerialContainer``. This is a container that 
                                               { "eef", "group", "ik_frame" });
 
 
-
-We then create a stage to approach the object. This stage is a ``MoveRelative`` stage, which allows us to specify a relative movement from our current position. ``MoveRelative`` is a propagator stage: it receives the solution from its neighbouring stages and propagates it to the next or previous stage. Using ``cartesian_planner`` finds a solution that involves moving the end effector in a straight line. We set the properties, and set the minimum and maximum distance to move. Now we create a ``Vector3Stamped`` message to indicate the direction we want to move - in this case, in the Z direction from the hand frame. Finally, we add this stage to our serial container
+그런 다음, 객체에 접근하는 하나의 stage를 만듭니다. 이 stage는 ``MoveRelative`` stage로서, 현재 위치에서 상대적인 이동을 지정할 수 있습니다. ``MoveRelative``은 propagator stage입니다: 즉, 이웃 stages로부터 솔루션을 받아 다음 단계 또는 이전 stages로 전파합니다. ``cartesian_planner``를 사용하면 end-effector를 직선으로 이동시키는 솔루션을 찾습니다. 속성을 설정하고 이동할 최소 및 최대 거리를 설정합니다. 이제 이동하려는 방향(이 경우 hand frame에서 Z 방향)을 나타내는 ``Vector3Stamped`` 메시지를 만들고 이 stage를 직렬 컨테이너에 추가합니다.
 
 .. code-block:: c++
 
@@ -638,7 +636,7 @@ We then create a stage to approach the object. This stage is a ``MoveRelative`` 
           grasp->insert(std::move(stage));
         }
 
-Now, create a stage to generate the grasp pose. This is a generator stage, so it computes its results without regard to the stages before and after it. The first stage, ``CurrentState`` is a generator stage as well - to connect the first stage and this stage, a connecting stage must be used, which we already created above. This code sets the stage properties, sets the pose before grasping, the angle delta, and the monitored stage. Angle delta is a property of the ``GenerateGraspPose`` stage that is used to determine the number of poses to generate; when generating solutions, MoveIt Task Constructor will try to grasp the object from many different orientations, with the difference between the orientations specified by the angle delta. The smaller the delta, the closer together the grasp orientations will be. When defining the current stage, we set ``current_state_ptr``, which is now used to forward information about the object pose and shape to the inverse kinematic solver. This stage won't be directly added to the serial container like previously, as we still need to do inverse kinematics on the poses it generates.
+이제 grasp pose(물체 잡기)를 생성하는 stage를 만들어 보겠습니다. 이 stage는 generator stage이므로 이전이나 이후의 stages와 상관없이 결과를 계산합니다. 첫 번째 단계인 ``CurrentState``도 마찬가지로 generator stage입니다. 첫 번째 stage와 이 stage를 연결하려면 이미 만들어 놓은 연결 stage를 사용해야 합니다. 이 코드는 stage 속성, 잡기 전 pose, 각도 변화량(angle delta), 모니터링된 stage를 설정합니다. 각도 변화량(angle delta)은 ``GenerateGraspPose`` stage의 속성이며 생성할 poses의 수를 결정하는 데 사용됩니다. MoveIt Task Constructor가 솔루션을 생성할 때, 각도 변화량으로 지정한 차이를 가진 여러 방향에서 물체를 잡으려고 시도합니다. delta 값이 작을수록 그립 방향이 더 가까워집니다. 현재 stage를 정의할 때, 현재 물체 자세 및 모양에 대한 정보를 역 운동학 솔버(inverse kinematic solver)에 전달하는 데 사용되는 ``current_state_ptr``을 설정합니다. 이 stage는 이전처럼 직렬 컨테이너에 직접 추가되지 않으며, 생성된 poses에 대해서 역 운동학(inverse kinematics)을 수행해야 합니다.
 
 .. code-block:: c++
 
@@ -653,8 +651,7 @@ Now, create a stage to generate the grasp pose. This is a generator stage, so it
           stage->setMonitoredStage(current_state_ptr);  // Hook into current state
 
 
-
-Before we compute inverse kinematics for the poses generated above, we first need to define the frame. This can be done with a ``PoseStamped`` message from ``geometry_msgs`` or in this case, we define the transform using Eigen transformation matrix and the name of the relevant link. Here, we define the transformation matrix.
+위에서 생성한 pose에 대한 역 운동학(inverse kinematics)을 계산하기 전에, 먼저 프레임을 정의해야 합니다. 이 작업은 ``geometry_msgs`` 패키지의 ``PoseStamped`` 메시지를 사용하거나, 이 경우와 같이 Eigen 변환 행렬과 관련 link 이름을 사용하여 변환을 정의할 수 있습니다. 여기에서는 변환 행렬을 정의합니다.
 
 .. code-block:: c++
 
@@ -665,7 +662,7 @@ Before we compute inverse kinematics for the poses generated above, we first nee
           grasp_frame_transform.linear() = q.matrix();
           grasp_frame_transform.translation().z() = 0.1;
 
-Now, we create the ``ComputeIK`` stage, and give it the name ``generate pose IK`` as well as the ``generate grasp pose`` stage defined above. Some robots have multiple inverse kinematics solutions for a given pose - we set the limit on the amount of solutions to solve for up to 8. We also set the minimum solution distance, which is a threshold on how different solutions must be: if the joint positions in a solution are too similar to a previous solution, it will be marked as invalid. Next, we configure some additional properties, and add the ``ComputeIK`` stage to the serial container.
+이제 ``generate pose IK``이라는 이름의 ``ComputeIK`` stage를 만들고, 위에서 정의한 ``generate grasp pose`` stage 스테이지를 연결합니다. 일부 로봇은 주어진 pose에 대해서 여러 역 운동학 해를 가질 수 있습니다. 우리는 최대 8개까지 해를 푸는 제한을 설정합니다. 또한 최소 해 거리를 설정합니다. 이는 solution이 얼마나 차이가 나는지 정도를 나타내는 임계값입니다. 만약 solution내에 joint positions가 이전 해와 너무 유사하면 해당 해는 유효하지 않은 것으로 표시됩니다. 다음으로 몇 가지 추가 속성을 구성하고 ``ComputeIK`` stage를 연속 컨테이너에 추가합니다.
 
 .. code-block:: c++
 
@@ -680,7 +677,9 @@ Now, we create the ``ComputeIK`` stage, and give it the name ``generate pose IK`
           grasp->insert(std::move(wrapper));
         }
 
-In order to pick up the object, we must allow collision between the hand and the object. This can be done with a ``ModifyPlanningScene`` stage. The ``allowCollisions`` function lets us specify which collisions to disable.
+물체를 집어 들기 위해서는 hand와 물체 사이의 충돌을 허용해야만 합니다. 이 작업은 ``ModifyPlanningScene`` stage를 사용하여 수행할 수 있습니다.``allowCollisions`` 함수를 사용하여 어떤 충돌을 비활성화시킬지 지정할 수 있습니다.``allowCollisions``은 이름 컨테이너와 함께 사용할 수 있으므로,``getLinkModelNamesWithCollisionGeometry`` 함수를 사용하여 hand 그룹내에서 충돌 형상을 가지고 있는 links의 모든 이름을 얻을 수 있습니다.
+
+In order to pick up the object, we must allow collision between the hand and the object. This can be done with a ``ModifyPlanningScene`` stage. The ``allowCollisions`` function lets us specify which colㅍlisions to disable.
 ``allowCollisions`` can be used with a container of names, so we can use ``getLinkModelNamesWithCollisionGeometry`` to get all the names of links with collision geometry in the hand group.
 
 .. code-block:: c++
