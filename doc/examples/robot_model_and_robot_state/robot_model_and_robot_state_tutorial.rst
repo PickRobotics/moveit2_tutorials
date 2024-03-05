@@ -5,23 +5,23 @@ Robot Model and Robot State
    :width: 700px
    :alt: "That is a sweet robot" you might say.
 
-In this section, we will walk you through the C++ API for using kinematics in MoveIt.
+이 섹션에서는 MoveIt에서 C++ API을 통해서 kinematics을 사용하는 방법을 설명합니다.
 
 The RobotModel and RobotState Classes
 -------------------------------------
-The :moveit_codedir:`RobotModel<moveit_core/robot_model/include/moveit/robot_model/robot_model.h>` and :moveit_codedir:`RobotState<moveit_core/robot_state/include/moveit/robot_state/robot_state.h>` classes are the core classes that give you access to a robot's kinematics.
+:moveit_core: 네임스페이스의 :moveit_codedir:`RobotModel<moveit_core/robot_model/include/moveit/robot_model/robot_model.h>` 클래스와 :moveit_codedir:`RobotState<moveit_core/robot_state/include/moveit/robot_state/robot_state.h>` 클래스는 로봇의 운동학에 접근할 수 있는 핵심 클래스들입니다.
 
-The :moveit_codedir:`RobotModel<moveit_core/robot_model/include/moveit/robot_model/robot_model.h>` class contains the relationships between all links and joints including their joint limit properties as loaded from the URDF. The RobotModel also separates the robot's links and joints into planning groups defined in the SRDF. A separate tutorial on the URDF and SRDF can be found here: :doc:`URDF and SRDF Tutorial </doc/examples/urdf_srdf/urdf_srdf_tutorial>`
+:moveit_codedir:`RobotModel<moveit_core/robot_model/include/moveit/robot_model/robot_model.h>`클래스는 URDF 파일에서 모든 로봇의 links와 joints 사이의 관계를 포함하고 각 조인트의 제약 값 속성들도 포함되며 URDF에서 로딩된다. 또한 RobotModel 클래스는 SRDF 파일에서 정의된 로봇의 links와 joints를 planning groups으로 분리합니다. URDF와 SRDF에 대한 자세한 내용은 다음 문서에서 확인하실 수 있습니다. :doc:`URDF and SRDF Tutorial </doc/examples/urdf_srdf/urdf_srdf_tutorial>`
 
-The :moveit_codedir:`RobotState<moveit_core/robot_state/include/moveit/robot_state/robot_state.h>` contains information about the robot at a certain point in time, storing vectors of joint positions and optionally velocities and accelerations. This information can be used to obtain kinematic information about the robot that depends on its current state, such as the Jacobian of an end effector.
+:moveit_codedir:`RobotState<moveit_core/robot_state/include/moveit/robot_state/robot_state.h>` 클래스는 특정 시점에서 로봇의 정보를 담고 있으며, joint 위치의 벡터(선택적으로 속도 및 가속도)를 저장합니다. 이 정보는 end-effector의 야코비안 행렬과 같이 로봇의 현재 상태에 따라 변하는 운동학 정보를 얻는 데 사용할 수 있습니다.
 
-RobotState also contains helper functions for setting the arm location based on the end effector location (Cartesian pose) and for computing Cartesian trajectories.
+또한 RobotState 클래스는 end-effector 위치 (카테시안 좌표계)를 기반으로 로봇 팔의 위치를 설정하고 카테시안 경로를 계산하는데 필요한 함수들을 제공합니다.
 
-In this example, we will walk through the process of using these classes with the Panda.
+이 예제에서는 Panda를 사용하여 이 클래스들을 사용하는 과정을 소개합니다.
 
 Getting Started
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+아직 완료하지 않았다면 :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 튜토리얼의 단계를 먼저 완료하세요.
 
 Running the Code
 ----------------
