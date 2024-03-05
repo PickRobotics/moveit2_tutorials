@@ -677,10 +677,7 @@ arm을 물건을 집었던 위치로 이동시켜야 합니다. 이것은 ``Conn
           grasp->insert(std::move(wrapper));
         }
 
-물체를 집어 들기 위해서는 hand와 물체 사이의 충돌을 허용해야만 합니다. 이 작업은 ``ModifyPlanningScene`` stage를 사용하여 수행할 수 있습니다.``allowCollisions`` 함수를 사용하여 어떤 충돌을 비활성화시킬지 지정할 수 있습니다.``allowCollisions``은 이름 컨테이너와 함께 사용할 수 있으므로,``getLinkModelNamesWithCollisionGeometry`` 함수를 사용하여 hand 그룹내에서 충돌 형상을 가지고 있는 links의 모든 이름을 얻을 수 있습니다.
-
-In order to pick up the object, we must allow collision between the hand and the object. This can be done with a ``ModifyPlanningScene`` stage. The ``allowCollisions`` function lets us specify which colㅍlisions to disable.
-``allowCollisions`` can be used with a container of names, so we can use ``getLinkModelNamesWithCollisionGeometry`` to get all the names of links with collision geometry in the hand group.
+물체를 집어 들기 위해서는 hand와 물체 사이의 충돌을 허용해야만 합니다. 이 작업은 ``ModifyPlanningScene`` stage를 사용하여 수행할 수 있습니다. ``allowCollisions`` 함수를 사용하여 어떤 충돌을 비활성화시킬지 지정할 수 있습니다 ``allowCollisions``은 이름들의 컨테이너와 함께 사용할 수 있으므로 ``getLinkModelNamesWithCollisionGeometry`` 함수를 사용하여 hand 그룹내에서 충돌 형상을 가지고 있는 모든 links의 이름을 얻을 수 있습니다.
 
 .. code-block:: c++
 
@@ -695,7 +692,7 @@ In order to pick up the object, we must allow collision between the hand and the
           grasp->insert(std::move(stage));
         }
 
-With collisions allowed, we now can close the hand. This is done with a ``MoveTo`` stage, similarly to the ``open hand`` stage from above, except moving to the ``close`` position as defined in the SRDF.
+충돌이 허용되므로 이제 손을 오므릴 수 있습니다. 이 작업은 SRDF에서 정의된 ``close`` position으로 이동시키는 것만 제외하고는 위에서의 "open hand" stage와 유사한 ``MoveTo`` stage로 수행된다.
 
 .. code-block:: c++
 
@@ -706,7 +703,7 @@ With collisions allowed, we now can close the hand. This is done with a ``MoveTo
           grasp->insert(std::move(stage));
         }
 
-We now use a ``ModifyPlanningScene`` stage again, this time to attach the object to the hand using ``attachObject``. Similarly to what we did with the ``current_state_ptr``, we get a pointer to this stage for later use when generating the place pose for the object.
+이제 다시 한 번 ``ModifyPlanningScene`` stage를 사용하며, 이번에는 ``attachObject``를 사용하여 물체를 손에 부착시킵니다. ``current_state_ptr``과 유사하게 이 stage에 대한 포인터를 얻어 나중에 물체에 대한 위치 포즈를 생성할 때 사용합니다.
 
 .. code-block:: c++
 
@@ -717,7 +714,7 @@ We now use a ``ModifyPlanningScene`` stage again, this time to attach the object
           grasp->insert(std::move(stage));
         }
 
-Next, we lift the object with a ``MoveRelative`` stage, similarly to the ``approach_object`` stage.
+다음으로, ``approach_object`` stage와 유사하게 ``MoveRelative`` stage로 물체를 들어 올립니다.
 
 .. code-block:: c++
 
@@ -737,7 +734,7 @@ Next, we lift the object with a ``MoveRelative`` stage, similarly to the ``appro
           grasp->insert(std::move(stage));
         }
 
-With this, we have all the stages needed to pick the object. Now, we add the serial container (with all its substages) to the task. If you build the package as-is, you can see the robot plan to pick up the object.
+이렇게 하면 객체를 집기 위한 모든 stages를 갖게 되었다. 이제 직렬 컨테이너(모든 substages 포함하여)를 task에 추가합니다. package를 그대로 빌드하면 로봇이 물체를 집는 계획을 볼 수 있습니다.
 
 .. code-block:: c++
 
@@ -748,7 +745,7 @@ With this, we have all the stages needed to pick the object. Now, we add the ser
 Place Stages
 ^^^^^^^^^^^^
 
-Now that the stages that define the pick are complete, we move on to defining the stages for placing the object. We start with a ``Connect`` stage to connect the two, as we will soon be using a generator stage to generate the pose for placing the object.
+이제 집기(pick)를 정의하는 stage가 완료되었으므로, 물체를 내려놓기를 위한 stages 정의하기로 넘어갑니다. 2개 stages를 연결하는 ``Connect`` stage부터 시작합니다. 물체를 내려놓기 위한 pose를 생성하는 generator stage를 곧 사용할 것입니다.
 
 .. code-block:: c++
 
@@ -762,7 +759,7 @@ Now that the stages that define the pick are complete, we move on to defining th
         task.add(std::move(stage_move_to_place));
       }
 
-We also create a serial container for the place stages. This is done similarly to the pick serial container. The next stages will be added to the serial container rather than the task.
+또한 place stage를 위한 직렬 컨테이너를 만듭니다. 이는 집기 직렬 컨테이너(pick serial container)와 유사하게 수행됩니다. 다음 stages는 task라기 보다는 serial container에 추가됩니다.
 
 .. code-block:: c++
 
@@ -772,14 +769,12 @@ We also create a serial container for the place stages. This is done similarly t
         place->properties().configureInitFrom(mtc::Stage::PARENT,
                                               { "eef", "group", "ik_frame" });
 
-
-This next stage generates the poses used to place the object and compute the inverse kinematics for those poses - it is somewhat similar to the ``generate grasp pose`` stage from the pick serial container.
-We start by creating a stage to generate the poses and inheriting the task properties.
-We specify the pose where we want to place the object with a ``PoseStamped`` message from ``geometry_msgs`` - in this case, we choose ``y = 0.5`` in the ``"object"`` frame.
-We then pass the target pose to the stage with ``setPose``.
-Next, we use ``setMonitoredStage`` and pass it the pointer to the ``attach_object`` stage from earlier.
-This allows the stage to know how the object is attached.
-We then create a ``ComputeIK`` stage and pass it our ``GeneratePlacePose`` stage - the rest follows the same logic as above with the pick stages.
+다음 stage는 물체를 놓는 데 사용되는 pose를 생성하고 해당 pose에 대한 역 운동학을 계산하는 것입니다. 이 단계는 픽업 시리얼 컨테이너(pick serial container)의 ``generate grasp pose`` stage와 다소 유사합니다. 우리는 pose를 생성하는 stage 생성 및 task 속성을 상속받는 것을 시작합니다.
+우리는 ``geometry_msgs`` 패키지의 ``PoseStamped`` 메시지를 사용하여 물체를 놓고 싶은 pose를 지정합니다. 이 경우, 우리는 ``"object"`` frame에서 ``y = 0.5``를 선택합니다.
+그런 다음 ``setPose``를 사용하여 target pose를 stage에 전달합니다.
+다음으로 ``setMonitoredStage``를 사용하여 이전의 ``attach_object`` stage에 대한 포인터를 전달합니다.
+이를 통해 stage는 물체가 어떻게 부착되는지를 알 수 있습니다.
+그런 다음 ``ComputeIK`` stage를 만들고 ``GeneratePlacePose`` stage를 전달합니다. - 나머지 과정은 위의 pick stages와 동일한 로직을 따라 진행됩니다.
 
 
 .. code-block:: c++
@@ -809,7 +804,7 @@ We then create a ``ComputeIK`` stage and pass it our ``GeneratePlacePose`` stage
           place->insert(std::move(wrapper));
         }
 
-Now that we're ready to place the object, we open the hand with ``MoveTo`` stage and the joint interpolation planner.
+이제 물체를 놓을 준비가 되었으므로 ``MoveTo`` stage와 joint interpolation planner를 사용하여 손을 펴게 됩니다.
 
 .. code-block:: c++
 
@@ -820,7 +815,7 @@ Now that we're ready to place the object, we open the hand with ``MoveTo`` stage
           place->insert(std::move(stage));
         }
 
-We also can re-enable collisions with the object now that we no longer need to hold it. This is done using ``allowCollisions`` almost exactly the same way as disabling collisions, except setting the last argument to ``false`` rather than``true``.
+더 이상 물체를 잡을 필요가 없으므로, 물체와의 충돌을 다시 활성화할 수 있습니다. 이 작업은 ``allowCollisions``를 사용하여 충돌 비활성화와 거의 동일한 방식으로 수행되지만, 마지막 인수를 ``true``가 아닌 ``false``로 설정합니다.
 
 .. code-block:: c++
 
@@ -835,7 +830,7 @@ We also can re-enable collisions with the object now that we no longer need to h
           place->insert(std::move(stage));
         }
 
-Now, we can detach the object using ``detachObject``.
+이제 ``detachObject``를 이용하여 물체를 분리할 수 있습니다.
 
 .. code-block:: c++
 
@@ -845,7 +840,7 @@ Now, we can detach the object using ``detachObject``.
           place->insert(std::move(stage));
         }
 
-We retreat from the object using a ``MoveRelative`` stage, which is done similarly to the ``approach object`` and ``lift object`` stages.
+``MoveRelative`` stage를 사용하여 물체로부터 물러납니다. 이는 ``approach object`` 와 ``lift object`` stages와 유사하게 수행됩니다.
 
 .. code-block:: c++
 
@@ -864,14 +859,14 @@ We retreat from the object using a ``MoveRelative`` stage, which is done similar
           place->insert(std::move(stage));
         }
 
-We finish our place serial container and add it to the task.
+우리는 장소 직렬 컨테이너(place serial container)를 완료하고 이를 task에 추가합니다.
 
 .. code-block:: c++
 
         task.add(std::move(place));
       }
 
-The final step is to return home: we use a ``MoveTo`` stage and pass it the goal pose of ``ready``, which is a pose defined in the panda SRDF.
+마지막 단계는 home으로 돌아가는 것입니다. ``MoveTo`` stage를 사용하여 panda SRDF에 정의된 pose인 ``ready``의 target pose를 전달합니다.
 
 .. code-block:: c++
 
@@ -891,50 +886,50 @@ All these stages should be added above these lines.
       return task;
     }
 
-Congratulations! You've now defined a pick and place task using MoveIt Task Constructor!
+축하합니다! 이제 MoveIt Task Constructor를 사용하여 pick and place task을 정의했습니다!
 
 Visualizing with RViz
 ---------------------
 
-The task with each comprising stage is shown in the Motion Planning Tasks pane. Click on a stage and additional information about the stage will show up to the right. The right pane shows different solutions as well as their associated costs. Depending on the stage type and the robot configuration, there may only be one solution shown.
+각 stage로 구성된 task은 Motion Planning Tasks pane에 표시됩니다. stage를 클릭하면 해당 stage에 대한 추가 정보가 오른쪽에 표시됩니다. 오른쪽 창에는 다른 솔루션과 관련 비용도 표시됩니다. stage 타입과 robot configuration에 따라 표시되는 솔루션이 하나만 있을 수도 있습니다.
 
-Click one of the solution costs to see an animation of the robot following the plan for that stage. Click the "Exec" button in the upper-right portion of the pane to execute the motion.
+해당 stage에 대한 plan을 따르는 로봇의 애니메이션을 보려면 solution cost 중 하나를 클릭하십시오. 해당 motion을 실행하려면 창 상단 오른쪽에 있는 "Exec" 버튼을 클릭하십시오.
 
-To run the complete MoveIt Task Constructor example included with the MoveIt tutorials: ::
+MoveIt 튜터리얼에 포함된 전체 MoveIt Task Constructor 예제를 실행하려면: ::
 
     ros2 launch moveit2_tutorials mtc_demo.launch.py
 
-And in a second terminal: ::
+그리고 2번째 터미널에서: ::
 
     ros2 launch moveit2_tutorials pick_place_demo.launch.py
 
 Debugging from terminal
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-When running MTC, it prints a diagram like this to terminal:
+MTC를 실행하면 터미널에 다음과 같은 다이어그램이 출력됩니다.:
 
 .. code-block:: bash
 
     [demo_node-1]     1  - ←   1 →   -  0 / initial_state
     [demo_node-1]     -  0 →   0 →   -  0 / move_to_home
 
-This example^ shows two stages. The first stage ("initial_state") is a ``CurrentState`` type of stage, which initializes a PlanningScene and captures any collision objects that are present at that moment. A pointer to this stage can be used to retrieve the state of the robot. Since CurrentState inherits from  ``Generator``, it propagates solutions both forward and backward. This is denoted by the arrows in both directions. The first ``1`` indicates that one solution was successfully propagated backwards to the previous stage. The second ``1``, between the arrows, indicates that one solution was generated. The ``0`` indicates that a solution was not propagated forward successfully to the next stage, because the next stage failed.
+위 예시는^ 두 stages를 보여줍니다. 첫 번째 stage("initial_state")는 PlanningScene을 초기화하고 현재 존재하는 모든 충돌 객체를 캡처하는 ``CurrentState`` 타입의 stage입니다. 이 stage에 대한 포인터를 사용하여 로봇의 상태를 검색할 수 있습니다. CurrentState는 ``Generator``를 상속하기 때문에 solution을 앞뒤로 모두 전파합니다. 이는 양방향 화살표로 표시됩니다. 첫 번째 ``1``은 하나의 solution이 이전 단계로 성공적으로 역전파되었음을 나타냅니다. 두 번째 화살표 사이의 ``1``은 하나의 solution이 생성되었음을 나타냅니다. ``0``은 다음 단계가 실패했기 때문에 solution이 다음 단계로 성공적으로 전달되지 않았음을 나타냅니다.
 
-The second stage ("move_to_home") is a ``MoveTo`` type of stage. It inherits its propagation direction from the previous stage, so both arrows point forward. The ``0``'s indicate that this stage failed completely. From left to right, the ``0``'s mean:
+두 번째 stage("move_to_home")는 ``MoveTo`` 타입의 stage입니다. 이 stage는 이전 stage의 전파 방향을 상속받기 때문에 두 화살표 모두 앞쪽을 가리킵니다. ``0``은 이 stage가 완전히 실패했음을 나타냅니다. 왼쪽부터 오른쪽으로, ``0``은 다음을 의미합니다.:
 
-- The stage did not receive a solution from the previous stage
-- The stage did not generate a solution
-- The stage did not propagate a solution forward to the next stage
+- 해당 stage가 이전 단계로부터 솔루션을 받지 못했습니다.
+- 해당 stage가 솔루션을 생성하지 못했습니다.
+- 해당 stage가 솔루션을 다음 단계로 전파하지 못했습니다.
 
-In this case, we could tell that "move_to_home" was the root cause of the failure. The problem was a home state that was in collision. Defining a new, collision-free home position fixed the issue.
+이 경우, "move_to_home"이 실패의 근본 원인이라고 말할 수 있습니다. 문제는 충돌하는 home state였습니다. 충돌 없는 새로운 home 위치를 정의하면 문제가 해결되었습니다.
 
 Various hints
 ^^^^^^^^^^^^^
 
-Information about individual stages can be retrieved from the task. For example, here we retrieve the unique ID for a stage: ::
+개별 stage에 대한 정보는 task에서 가져올 수 있습니다. 예를 들어, 다음과 같이 stage의 고유 ID를 가져옵니다: ::
 
     uint32_t const unique_stage_id = task_.stages()->findChild(stage_name)->introspectionId();
 
-A CurrentState type stage does not just retrieve the current state of the robot. It also initializes a PlanningScene object, capturing any collision objects that are present at that moment.
+CurrentState 타입의 stage는 단순히 로봇의 현재 상태만 가져오는 것이 아닙니다. 또한 PlanningScene 객체를 초기화하여 현재 존재하는 모든 충돌 객체를 캡처합니다.
 
-MTC stages can be propagated in forward and backward order. You can easily check which direction a stage propagates by the arrow in the RViz GUI. When propagating backwards, the logic of many operations is reversed. For example, to allow collisions with an object in a ``ModifyPlanningScene`` stage, you would call ``allowCollisions(false)`` rather than ``allowCollisions(true)``. There is a discussion to be read `here. <https://github.com/ros-planning/moveit_task_constructor/issues/349>`_
+MTC stage는 앞뒤 순서로 전파될 수 있습니다. RViz GUI에서 화살표를 통해 stage가 어떤 방향으로 전파되는지 쉽게 확인할 수 있습니다. 뒤로 전파될때, 많은 오퍼레이션의 로직이 반전됩니다. 예를 들어 ``ModifyPlanningScene`` stage에서 객체와의 충돌을 허용하려면 ``allowCollisions(false)``를 호출해야 하고 ``allowCollisions(true)``를 호출해서는 안 됩니다. 이에 대한 자세한 내용은: `here. <https://github.com/ros-planning/moveit_task_constructor/issues/349>`_
