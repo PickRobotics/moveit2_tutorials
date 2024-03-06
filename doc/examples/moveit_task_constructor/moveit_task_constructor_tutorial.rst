@@ -30,48 +30,48 @@ Generator Stage
 ^^^^^^^^^^^^^^^
 .. image:: ./_static/images/generating_stage.png
 
-| Generator stages get no input from adjacent stages. They compute results and pass them in both directions - forward and backward.
-| Execution of a MTC task starts with the Generator stages.
-| The most important generator stage is ``CurrentState``, which gets the current robot state as the starting point for a planning pipeline.
+| Generator stages는 인접 stages로부터 입력을 받지 않습니다. 이 stage들은 결과를 계산하여 양방향(전방향 및 후방향)으로 전달합니다.
+| MTC task 실행은 Generator stages에서 시작됩니다.
+| 가장 중요한 generator stage는 ``CurrentState``이며, 현재 로봇의 상태를 계획 파이프라인(planning pipeline)의 시작 지점으로 가져옵니다.
 
-| Monitoring Generator is a stage that monitors the solution of another stage (not adjacent) to use the solutions for planning.
-| Example of Monitoring Generator - ``GeneratePose``. It usually monitors a ``CurrentState`` or ``ModifyPlanningScene`` stage. By monitoring the solutions of ``CurrentState``, the ``GeneratePose`` stage can find the object or frame around which it should generate poses.
+| Monitoring Generator는 다른 stage(인접하지 않은 stage)의 해결책을 모니터링하여 계획에 해당 해결책을 사용하는 stage입니다.
+| Monitoring Generator의 예제 - ``GeneratePose``. 이 stage는 일반적으로 ``CurrentState`` 혹은 ``ModifyPlanningScene`` stage를 모니터링합니다. ``CurrentState``의 해결책을 모니터링하여 ``GeneratePose`` stage는 pose를 생성해야 하는 객체 또는 프레임을 찾을 수 있습니다.
 
-| More information on generator stages provided by MTC can be found here - :ref:`Generating Stages`.
+| MTC가 제공하는 generator stages에 대한 추가 정보는 여기에서 확인하세요 - :ref:`Generating Stages`
 
 Propagating Stage
 ^^^^^^^^^^^^^^^^^
 .. image:: ./_static/images/propagating_stage.png
 
-| Propagators receive solutions from one neighbor state, solve a problem and then propagate the result to the neighbor on the opposite side.
-| Depending on the implementation, this stage can pass solutions forward, backward, or in both directions.
-| Example of propagating stage - ``Move Relative`` to a pose. This stage is commonly used to approach close to an object to pick.
+| Propagators는 하나의 이웃 상태에서 해결 방법을 받고 문제를 해결한 다음 반대쪽 이웃에게 결과를 전파합니다.
+| 구현 방법에 따라 이 stage는 해결 방법을 앞으로, 뒤로 또는 양 방향으로 전달할 수 있습니다.
+| propagating stage 예시 - 포즈(pose)에 대한 ``Move Relative``. 이 stage는 일반적으로 물체를 집기 위해 가까이 다가갈 때 사용됩니다.
 
-| More information on propagating stages provided by MTC can be found here - :ref:`Propagating Stages`.
+| 전파 단계(propagating stages)에 대한 추가 정보는 여기에서 확인하세요 - :ref:`Propagating Stages`
 
 Connecting Stage
 ^^^^^^^^^^^^^^^^
 .. image:: ./_static/images/connecting_stage.png
 
-| Connectors do not propagate any results but attempt to connect the start and goal inputs provided by adjacent stages.
-| A connect stage often solves for a feasible trajectory between the start and goal states.
+| Connectors는 결과를 전파하지 않고 인접 stages에서 제공된 시작 입력과 목표 입력을 연결하려고 시도합니다.
+| connect stage는 종종 시작 상태와 목표 상태 사이의 실행 가능한 궤적을 해결합니다.
 
-| More information on connecting stages provided by MTC can be found here - :ref:`Connecting Stages`.
+| 연결 단계(connecting stages)에 대한 추가 정보는 여기에서 확인하세요 - :ref:`Connecting Stages`
 
 Wrapper
 ^^^^^^^
-| Wrappers encapsulate another stage to modify or filter the results.
-| Example of wrapper - ``Compute IK`` for ``Generate Grasp Pose`` stage. A ``Generate Grasp Pose`` stage will produce cartesian pose solutions. By wrapping an ``Compute IK`` stage around ``Generate Pose`` stage, the cartesian pose solutions from ``Generate Pose`` stage can be used to produce IK solutions (i.e) produce joint state configuration of robot to reach the poses.
+| Wrappers는 다른 stage를 캡슐화하여 결과를 수정 또는 필터링합니다.
+| wrapper 예시 - ``Generate Grasp Pose`` stage에 대한 ``Compute IK``입니다. 생성 집 ``Generate Grasp Pose`` stage는 카테시안 포즈 솔루션을 생성합니다. ``Generate Pose`` stage 주위에 ``Compute IK`` stage를 래핑하면 ``Generate Pose`` stage의 카테시안 포즈 솔루션을 사용하여 해당 pose가 되기 위한 IK 솔루션(즉, 로봇의 joint state configuration)을 생성할 수 있습니다.
 
-| More information on wrappers provided by MTC can be found here - :ref:`Wrappers`.
+| 래퍼(wrappers)에 대한 추가 정보는 여기에서 확인하세요 - :ref:`Wrappers`
 
 MTC Containers
 ---------------
-| The MTC framework enables the hierarchical organization of stages using containers, allowing for sequential as well as parallel compositions.
-| A MTC container helps organize the order of execution of the stages.
-| Programmatically, it is possible to add a container within another container.
+| MTC 프레임워크는 컨테이너를 사용하여 stage의 계층적 조직을 활성화하여 순차적 및 병렬 구성을 허용합니다.
+| MTC 컨테이너는 stage의 실행 순서를 조직하는데 도움이 됩니다.
+| 프로그램적으로 다른 컨테이너 내에 컨테이너를 추가할 수 있습니다.
 
-Currently available containers:
+현재 유효한 컨테이너들:
 
 * Serial
 
@@ -79,8 +79,8 @@ Currently available containers:
 
 Serial Container
 ^^^^^^^^^^^^^^^^
-| Serial containers organize stages linearly and only consider end-to-end solutions as results.
-| A MTC Task by default is stored as a serial container.
+| 직렬 컨테이너는 stage를 선형적으로 구성하며, 결과로 end-to-end 솔루션만 고려합니다.
+| MTC 태스크는 기본적으로 직렬 컨테이너로 저장됩니다.
 
 Parallel Container
 ^^^^^^^^^^^^^^^^^^
