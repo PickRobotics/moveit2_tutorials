@@ -90,15 +90,16 @@ Hybrid Planning Manager
    :width: 400px
    :align: center
 
-This component is “The Brain” of the architecture. Its main purpose is to process HybridPlanner action  requests and to coordinate the motion planning and execution process based on the planning logic plugin. The planning logic is implemented in the PlanningLogic plugin and is event-driven by design. Events are defined by string identifiers and may trigger action calls or cancellations targeting the global or local planners. An example event log for a simple planning logic is shown in the diagram below:
+이 component는 아키텍처의 "두뇌" 역할을 합니다. 주요 목적은 하이브리드 플래너  action request을 처리하고, 플래닝 로직 플러그인을 기반으로 모션 플래닝 및 실행 프로세스를 조정하는 것입니다. 플래닝 로직은 PlanningLogic 플러그인에 구현되어 있으며 이벤트 기반으로 설계되었습니다. 이벤트는 문자열 식별자로 정의되며 전역 또는 로컬 플래너를 대상으로 하는 작업 호출 또는 취소를 트리거할 수 있습니다. 간단한 플래닝 로직에 대한 예시 이벤트 로그가 아래 다이어그램에 표시됩니다.:
 
 .. image:: hybrid_planning_event_logic.png
    :width: 400px
    :align: center
 
-Events are triggered by the Hybrid Planning action request and by both of the global and local planners action feedback messages. In this example, the Hybrid Planning Manager starts the global planner after the hybrid planning request is received. Upon arrival of the global trajectory the local planner is started and when the local planner is finished the Hybrid Planning Manager returns a Hybrid Planning response. 
+이벤트는 트리거는 하이브리드 플래닝 acstion request와 전역 및 로컬 플래너 액션 피드백 메시지에 의해 동작한다. 이 예에서 Hybrid Planning Manager는 hybrid planning request을 받은 후 전역 플래너를 시작합니다. 전역 궤적이 도착하면 로컬 플래너가 시작되고 로컬 플래너가 완료되면 하이브리드 플래너 관리자가 Hybrid Planning response을 반환합니다.
+ 
 
-A custom implementation of the Planning Logic plugin supports mapping generic events to available actions provided by the architecture like “Start global planning”, “Stop trajectory execution”, or “Switch to local planner constraint x”. With this, the motion planning behavior becomes highly customizable and adaptable.
+Planning Logic 플러그인의 커스텀 구현은 “Start global planning(전역 플래닝 시작)”, “Stop trajectory execution(궤적 실행 중지)”, or “Switch to local planner constraint x(로컬 플래너 제약 x로 전환)”과 같이 아키텍처에서 제공하는 사용 가능한 actions에 일반 이벤트를 매핑하는 것을 지원합니다. 이를 통해 motion planning behavior은 매우 쉽게 사용자 정의 및 적응이 가능합니다.
 
 
 Global Planner
@@ -108,64 +109,64 @@ Global Planner
    :width: 500px
    :align: center
 
-The Global Planner is the simplest component of the architecture. It provides an action server which processes GlobalPlanner requests which include the common MotionPlanRequests which are processed by the Global Planner plugin. By default, this is simply MoveIt’s planning pipeline, but any kind of planner or even MTC could technically be used here. The planning result is reported using the action feedback and the solution trajectory is published to the Local Planner for further processing.
+글로벌 플래너는 전체 아키텍처에서 가장 간단한 component입니다. 이 플래너는 액션 서버를 제공하며, 이 서버는 Global Planner plugin에서 처리하는 일반적인 모션 플랜 요청(MotionPlanRequests)을 포함하는 GlobalPlanner requests을 처리합니다. 기본적으로 이는 MoveIt의 planning pipeline이지만 기술적으로는 모든 종류의 플래너 또는 MTC를 여기에서 사용할 수 있습니다. 플래닝 결과는 액션 피드백을 사용하여 보고되고, 솔루션 궤적은 Local Planner에게 publish되어 추가적인 처리를 수행합니다.됩니다.
 
 
 Local Planner
 ^^^^^^^^^^^^^
 
-The Local Planner also runs an action server that handles requests from the Hybrid Planning Manager. The action is used for starting and stopping execution and may also configure runtime parameters like constraints or solver types.
+Local Planner는 Hybrid Planning Manager로부터의 요청을 처리하는 액션 서버도 실행합니다. 이 action은 실행 시작 및 종료를 위해 사용되며 제약 조건 또는 솔버 유형과 같은 런타임 파라미터를 설정할 수도 있습니다.
 
 .. image:: local_planner_small.png
    :width: 500px
    :align: center
 
-The local planner implementation is based on two plugins:
+로컬 플래너 구현은 다음 두 가지 플러그인을 기반으로 합니다.:
 
-* **Trajectory Operator**: This plugin maintains the global reference trajectory, handles trajectory updates from the global planner, and monitors the process of the current robot state.
-* **Local Constraint Solver**: This plugin implements the iterative solver algorithm that produces the robot commands based on the reference trajectory and the local constraints. It may include additional interfaces for dynamically processing sensor input or event updates.
+* 궤적 연산자(**Trajectory Operator**): 이 플러그인은 글로벌 참조 궤적을 유지 관리하고, 글로벌 플래너로부터 궤적 업데이트를 처리하며, 현재 로봇 상태의 프로세스를 모니터링합니다.
+* 로컬 제약 솔버(**Local Constraint Solver**): 이 플러그인은 반복 솔버 알고리즘을 구현하는데, 기준 궤적과 로컬 제약 조건에 따라 로봇 명령을 생성하는 알고리즘이다. 센서 입력 또는 이벤트 업데이트를 동적으로 처리하기 위한 추가적인 인터페이스를 포함할 수 있습니다.
 
-The diagram below shows an example loop cycle of the Local Planner upon action request by the Hybrid Planning Manager:
+아래 다이어그램은 Hybrid Planning Manager의 액션 요청시에 로컬 플래너의 예제 loop cycle을 보여줍니다.:
 
 .. image:: local_planner_loop.png
    :width: 700px
    :align: center
 
-Each iteration the local planner requests the current planning scene and matches the current robot state within the reference trajectory. If the goal is reached, the local planning action successfully finishes. Otherwise, the current local planning problem is identified based on the current robot state and solved afterwards. Finally, the resulting control commands are published to the robot controller.
+각 반복마다 로컬 플래너는 현재의 planning scene을 요청하며, 참조 궤적 내에서 현재 로봇 상태를 일치시킵니다. 목표에 도달하면 로컬 플래닝 action이 성공적으로 완료됩니다. 그렇지 않으면 현재 로봇 상태를 기반으로 현재 로컬 플래닝 문제를 식별하고 나서 해결합니다. 마지막으로 최종 제어 명령이 로봇 컨트롤러에게 publish됩니다.
 
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
-The runtime behavior of a Hybrid Planner can best be understood by drawing a workflow diagram that visualizes the communication channels and events of the different components.
+Hybrid Planner의 런타임 동작을 이해하기 위해서는 다양한 구성 요소 간의 커뮤니케이션 채널과 이벤트를 시각화하는 워크플로우 다이어그램을 그리는 것이 가장 좋습니다.
 
-Below is a diagram that shows the runtime logic of a successful trajectory execution.
+아래 다이어그램은 성공적인 궤적 실행의 런타임 로직을 보여줍니다.
 
 .. image:: hybrid_planner_logic.png
    :width: 700px
    :align: center
 
-The planner is invoked by a hybrid planning request which is also the first event the Hybrid Planning Manager reacts to.
-In this example, the planner logic simply runs both planners in sequence. After the initial hybrid planning request, the Hybrid Planning Manager invokes the global planner.
-The global planner computes and publishes a trajectory which is received by the Hybrid Planning Manager and the Local Planner Component.
-Important to notice is, that the Local Planner Component just processes the new trajectory and does not start executing until it is invoked by the Hybrid Planning Manager. Once requested by the Hybrid Planning Manager, the Local Planner Component starts unwinding the reference trajectory and returns the action response successfully when it reaches the final state. After that, the Hybrid Planning Manager returns a successful HybridPlanningResponse.
+플래너는 hybrid planning request에 의해 호출되며, 이 요청은 Hybrid Planning Manager가 반응하는 첫 번째 이벤트이기도 합니다.
+이 예시에서 플래너 로직은 단순히 양쪽 플래너를 순차적으로 실행합니다. 초기 하이브리드 플래닝 요청 후에 Hybrid Planning Manager가 global planner를 호출합니다.
+글로벌 플래너는 궤적를 계산하고 publish하며, 이 궤적은 하이브리드 플래닝 관리자와 Local Planner Component가 수신합니다.
+중요한 것은 Local Planner Component는 새로운 궤적을 처리만 하며, 하이브리드 플래닝 관리자에 의해 호출될 때까지 실행을 시작하지 않는다는 점입니다. 일단 하이브리드 플래너 관리자가 요청하면 로컬 플래너 구성 요소는 참조 경로(reference trajectory)를 풀기(unwinding) 시작하고 최종 상태에 도달하면 성공적으로 action response을 반환합니다. 그 후 하이브리드 플래닝 관리자는 성공적인 HybridPlanningResponse를 반환합니다.
 
-Now let's consider a more difficult scenario where the hybrid planner is designed to avoid an obstacle during execution by replanning.
-The animation below shows a simple motion that is being fixed at runtime because of changing collision objects.
+이제 좀 더 어려운 시나리오를 살펴보겠습니다. 여기서는 하이브리드 플래너가 실행 중 장애물을 피하기 위해 재계획을 수행하도록 설계되었습니다.
+아래 애니메이션은 충돌 물체가 변경됨에 따라 런타임에 수정되는 간단한 모션을 보여줍니다.
 
 .. image:: replanning_example.gif
    :width: 500px
    :align: center
 
 
-Here, the collision object present during the global planning process disappears after the global trajectory is computed. Instead two new collision objects appear that invalidate the initial global trajectory. The local planner detects the imminent collision and pauses the execution until the global planner has provided an updated collision free trajectory.
+여기서는 글로벌 계획 프로세스 중에 존재하던 충돌 물체는 글로벌 궤적을 계산하고 나면  사라집니다. 대신 초기 글로벌 경로를 무효화하는 2개의 새로운 충돌 물체가 나타납니다. 로컬 플래너는 임박한 충돌을 감지하고 글로벌 플래너가 업데이트된 충돌 없는 경로를 제공할 때까지 실행을 일시 중지합니다.
 
-Below you can see the workflow of the described behavior.
+아래에서 설명한 behavior의 워크플로를 볼 수 있습니다.
 
 .. image:: hybrid_planner_logic_2.png
    :width: 700px
    :align: center
 
-The startup is the same as in the first example, but during unwinding the reference trajectory the local planner detects a collision. Here, the planner logic reacts by re-invoking the global planner. During the calculation of the new global solution, the local planner must prevent the robot from colliding with the collision object i.e. by keeping its current position. After the global planner finishes its calculation, the new global solution is published to the local planner and the local planner’s Trajectory Operator Plugin blends the update into the reference trajectory. Afterwards, the Local Planner Component continues to follow the reference trajectory as the updated solution enables it to steer around the collision object.
+시작은 첫 번째 예시와 동일하지만, 참조 궤적을 풀어내는(unwinding) 과정에서 로컬 플래너가 충돌을 감지합니다. 여기에서 플래너 로직은 글로벌 플래너를 다시 호출하여 반응합니다. 새로운 글로벌 해결책을 계산하는 동안, 로컬 플래너는 로봇이 충돌 객체와 충돌하지 않도록 현재 위치를 유지해야 합니다. 즉, 로컬 플래너는 로봇의 현재 위치를 유지해야 합니다. 글로벌 플래너가 계산을 완료하면 새로운 글로벌 솔루션이 로컬 플래너에게 전달되고, 로컬 플래너의 Trajectory Operator Plugin은 업데이트를 참조 궤적에 혼합합니다. 그 후, Local Planner Component는 업데이트된 솔루션을 통해 충돌 객체를 피해 조종할 수 있으므로 참조 궤적을 계속 따릅니다.
 
-If you want to use Hybrid Planning in your application or just want to experiment with it, check out the :doc:`Hybrid Planning Example Tutorial </doc/examples/hybrid_planning/hybrid_planning_tutorial>`.
+Hybrid Planning을 애플리케이션에서 사용하거나 실험하고 싶다면, :doc:`Hybrid Planning Example Tutorial </doc/examples/hybrid_planning/hybrid_planning_tutorial>`을 확인하세요.
