@@ -1,106 +1,227 @@
-:moveit1:
+.. _MoveIt Task Constructor:
 
-..
-   Once updated for MoveIt 2, remove all lines above title (including this comment and :moveit1: tag)
-
+#######################
 MoveIt Task Constructor
-=======================
+#######################
 
-.. image:: mtc_example.png
-   :width: 700px
+What is MoveIt Task Constructor?
+--------------------------------
 
-The Task Constructor framework provides a flexible and transparent way to define and plan actions that consist of multiple interdependent subtasks. It draws on the planning capabilities of MoveIt to solve individual subproblems in black-box planning stages. A common interface, based on MoveIt's PlanningScene is used to pass solution hypotheses between stages. The framework enables the hierarchical organization of basic stages using containers, allowing for sequential as well as parallel compositions. For more details, please refer to the associated `ICRA 2019 publication`_.
+| MoveIt Task Constructor (MTC) 프레임워크는 복잡한 planning tasks을 서로 내부적으로 의존하는 subtasks로 분할하는 것을 돕습니다.
+| MTC는 MoveIt을 사용하여 subtasks를 해결합니다. subtasks의 정보는 InterfaceState 객체를 통해서 전달됩니다.
 
-.. _ICRA 2019 publication: https://pub.uni-bielefeld.de/download/2918864/2933599/paper.pdf
+.. image:: ./_static/images/mtc_task.png
 
-Getting Started
+MTC Stages
+-----------
+| MTC 단계란 작업 실행 파이프라인에서의 component 또는 단계를 의미합니다.
+| stages는 임의의 순서로 배열할 수 있으며, 계층 구조는 개별 stage 유형에 의해서만 제한됩니다.
+| stage를 배열할 수 있는 순서는 결과가 전달되는 방향에 따라 제한됩니다.
+
+결과 흐름에 관련해서 3가지 가능한 stages가 있습니다:
+
+* Generators
+
+* Propagators
+
+* Connectors
+
+Generator Stage
+^^^^^^^^^^^^^^^
+.. image:: ./_static/images/generating_stage.png
+
+| Generator stages get no input from adjacent stages. They compute results and pass them in both directions - forward and backward.
+| Execution of a MTC task starts with the Generator stages.
+| The most important generator stage is ``CurrentState``, which gets the current robot state as the starting point for a planning pipeline.
+
+| Monitoring Generator is a stage that monitors the solution of another stage (not adjacent) to use the solutions for planning.
+| Example of Monitoring Generator - ``GeneratePose``. It usually monitors a ``CurrentState`` or ``ModifyPlanningScene`` stage. By monitoring the solutions of ``CurrentState``, the ``GeneratePose`` stage can find the object or frame around which it should generate poses.
+
+| More information on generator stages provided by MTC can be found here - :ref:`Generating Stages`.
+
+Propagating Stage
+^^^^^^^^^^^^^^^^^
+.. image:: ./_static/images/propagating_stage.png
+
+| Propagators receive solutions from one neighbor state, solve a problem and then propagate the result to the neighbor on the opposite side.
+| Depending on the implementation, this stage can pass solutions forward, backward, or in both directions.
+| Example of propagating stage - ``Move Relative`` to a pose. This stage is commonly used to approach close to an object to pick.
+
+| More information on propagating stages provided by MTC can be found here - :ref:`Propagating Stages`.
+
+Connecting Stage
+^^^^^^^^^^^^^^^^
+.. image:: ./_static/images/connecting_stage.png
+
+| Connectors do not propagate any results but attempt to connect the start and goal inputs provided by adjacent stages.
+| A connect stage often solves for a feasible trajectory between the start and goal states.
+
+| More information on connecting stages provided by MTC can be found here - :ref:`Connecting Stages`.
+
+Wrapper
+^^^^^^^
+| Wrappers encapsulate another stage to modify or filter the results.
+| Example of wrapper - ``Compute IK`` for ``Generate Grasp Pose`` stage. A ``Generate Grasp Pose`` stage will produce cartesian pose solutions. By wrapping an ``Compute IK`` stage around ``Generate Pose`` stage, the cartesian pose solutions from ``Generate Pose`` stage can be used to produce IK solutions (i.e) produce joint state configuration of robot to reach the poses.
+
+| More information on wrappers provided by MTC can be found here - :ref:`Wrappers`.
+
+MTC Containers
 ---------------
+| The MTC framework enables the hierarchical organization of stages using containers, allowing for sequential as well as parallel compositions.
+| A MTC container helps organize the order of execution of the stages.
+| Programmatically, it is possible to add a container within another container.
 
-If you have not already done so, make sure you have completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+Currently available containers:
 
-Installing MoveIt Task Constructor
-----------------------------------
+* Serial
 
-Install From Source
-^^^^^^^^^^^^^^^^^^^
+* Parallel
 
-Go into your catkin workspace and initialize wstool if necessary (assuming **~/ws_moveit** as workspace path): ::
+Serial Container
+^^^^^^^^^^^^^^^^
+| Serial containers organize stages linearly and only consider end-to-end solutions as results.
+| A MTC Task by default is stored as a serial container.
 
-  cd ~/ws_moveit/src
-  wstool init
+Parallel Container
+^^^^^^^^^^^^^^^^^^
+Parallel containers combine a set of stages to allow planning alternate solutions.
 
-Clone MoveIt Task Constructor and source dependencies: ::
+| More information on parallel containers can be found here - :ref:`Parallel Containers`.
 
-  wstool merge https://raw.githubusercontent.com/ros-planning/moveit_task_constructor/master/.rosinstall
-  wstool update
+Initializing a MTC Task
+-----------------------
 
-Install missing packages with rosdep: ::
+The top-level planning problem is specified as a MTC Task and the subproblems which are specified by Stages are added to the MTC task object.
 
-  rosdep install --from-paths . --ignore-src --rosdistro $ROS_DISTRO
+.. code-block:: c++
 
-Build the workspace: ::
+  auto node = std::make_shared<rclcpp::Node>();
+  auto task = std::make_unique<moveit::task_constructor::Task>();
+  task->loadRobotModel(node);
+  // Set controllers used to execute robot motion. If not set, MoveIt has controller discovery logic.
+  task->setProperty("trajectory_execution_info", "joint_trajectory_controller gripper_controller");
 
-  catkin build
 
-Running the Demo
-----------------
+Adding containers and stages to a MTC Task
+-------------------------------------------
 
-The MoveIt Task Constructor package contains several basic examples and a pick-and-place demo.
-For all demos you should launch the basic environment: ::
+Adding a stage to MTC task
 
-  roslaunch moveit_task_constructor_demo demo.launch
+.. code-block:: c++
 
-Subsequently, you can run the individual demos: ::
+  auto current_state = std::make_unique<moveit::task_constructor::stages::CurrentState>("current_state");
+  task->add(std::move(current_state));
 
-  rosrun moveit_task_constructor_demo cartesian
-  rosrun moveit_task_constructor_demo modular
-  roslaunch moveit_task_constructor_demo pickplace.launch
+Containers derive from Stage and hence containers can be added to MTC task similarly
 
-On the right side you should see the **Motion Planning Tasks** panel outlining the hierarchical stage structure of the tasks.
-When you select a particular stage, the list of successful and failed solutions will be
-shown in the right-most window. Selecting one of those solutions will start its visualization.
+.. code-block:: c++
 
-.. image:: mtc_show_stages.gif
-   :width: 700px
+  auto container = std::make_unique<moveit::task_constructor::SerialContainer>("Pick Object");
+  // TODO: Add stages to the container before adding the container to MTC task
+  task->add(std::move(container));
 
-.. _moveit_task_constructor_concepts:
+Setting planning solvers
+------------------------
 
-Basic Concepts
---------------
+Stages that do motion planning need solver information.
 
-The fundamental idea of MTC is that complex motion planning problems can be composed into a set of simpler subproblems.
-The top-level planning problem is specified as a **Task** while all subproblems are specified by **Stages**.
-Stages can be arranged in any arbitrary order and hierarchy only limited by the individual stages types.
-The order in which stages can be arranged is restricted by the direction in which results are passed.
-There are three possible stages relating to the result flow: generator, propagator, and connector stages:
+Solvers available in MTC
 
-**Generators** compute their results independently of their neighbor stages and pass them in both directions, backwards and forwards.
-An example is an IK sampler for geometric poses where approaching and departing motions (neighbor stages) depend on the solution.
+* ``PipelinePlanner`` - Uses MoveIt's planning pipeline
 
-**Propagators** receive the result of one neighbor stage, solve a subproblem and then propagate their result to the neighbor on the opposite site.
-Depending on the implementation, propagating stages can pass solutions forward, backward or in both directions separately.
-An example is a stage that computes a Cartesian path based on either a start or a goal state.
+* ``JointInterpolation`` - Interpolates between the start and goal joint states. It does not support complex motions.
 
-**Connectors** do not propagate any results, but rather attempt to bridge the gap between the resulting states of both neighbors.
-An example is the computation of a free-motion plan from one given state to another.
+* ``CartesianPath`` - Moves the end effector in a straight line in Cartesian space.
 
-Additional to the order types, there are different hierarchy types allowing to encapsulate subordinate stages.
-Stages without subordinate stages are called **primitive stages**, higher-level stages are called **container stages**.
-There are three container types:
+Code Example on how to initialize the solver
 
-**Wrappers** encapsulate a single subordinate stage and modify or filter the results.
-For example, a filter stage that only accepts solutions of its child stage that satisfy a certain constraint can be realized as a wrapper.
-Another standard use of this type includes the IK wrapper stage, which generates inverse kinematics solutions based on planning scenes annotated with a pose target property.
+.. code-block:: c++
 
-**Serial Containers** hold a sequence of subordinate stages and only consider end-to-end solutions as results.
-An example is a picking motion that consists of a sequence of coherent steps.
+  const auto mtc_pipeline_planner = std::make_shared<moveit::task_constructor::solvers::PipelinePlanner>(
+      node, "ompl", "RRTConnectkConfigDefault");
+  const auto mtc_joint_interpolation_planner =
+      std::make_shared<moveit::task_constructor::solvers::JointInterpolationPlanner>();
+  const auto mtc_cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
 
-**Parallel Containers** combine set of subordinate stages and can be used for passing the best of alternative results, running fallback solvers or for merging multiple independent solutions.
-Examples are running alternative planners for a free-motion plan, picking objects with the right hand or with the left hand as a fallback, or moving the arm and opening the gripper at the same time.
+These solvers will be passed into stages like ``MoveTo``, ``MoveRelative``, and ``Connect``.
 
-.. image:: mtc_stage_types.png
-   :width: 700px
+Setting Properties
+------------------
 
-Stages not only support solving motion planning problems.
-They can also be used for all kinds of state transitions, as for instance modifying the planning scene.
-Combined with the possibility of using class inheritance it is possible to construct very complex behavior while only relying on a well-structured set of primitive stages.
+| Each MTC stage has configurable properties. Example - planning group, timeout, goal state, etc.
+| Properties of different types can be set using the function below.
+
+.. code-block:: c++
+
+  void setProperty(const std::string& name, const boost::any& value);
+
+| Children stages can easily inherit properties from their parents, thus reducing the configuration overhead.
+
+Cost calculator for Stages
+---------------------------
+
+CostTerm is the basic interface to compute costs for solutions for MTC stages.
+
+CostTerm implementations available in MTC
+
+* ``Constant`` - Adds a constant cost to each solution
+
+* ``PathLength`` - Cost depends on trajectory length with optional weight for different joints
+
+* ``TrajectoryDuration`` - Cost depends on execution duration of the whole trajectory
+
+* ``TrajectoryCostTerm`` - Cost terms that only work on SubTrajectory solutions
+
+* ``LambdaCostTerm`` - Pass in a lambda expression to calculate cost
+
+* ``DistanceToReference`` - Cost depends on weighted joint space distance to a reference point
+
+* ``LinkMotion`` - Cost depends on length of Cartesian trajectory of a link
+
+* ``Clearance`` - Cost is inverse of distance to collision
+
+Example code on how to set CostTerm using ``LambdaCostTerm``
+
+.. code-block:: c++
+
+  stage->setCostTerm(moveit::task_constructor::LambdaCostTerm(
+        [](const moveit::task_constructor::SubTrajectory& traj) { return 100 * traj.cost(); }));
+
+All stages provided by MTC have default cost terms. Stages which produce trajectories as solutions usually use path length to calculate cost.
+
+Planning and Executing a MTC Task
+---------------------------------
+
+Planning an MTC task will return a ``MoveItErrorCode``.
+Refer :moveit_msgs_codedir:`here<msg/MoveItErrorCodes.msg>` to identity the different error types.
+If planning succeeds, you can expect the plan function to return ``moveit_msgs::msg::MoveItErrorCodes::SUCCESS``.
+
+.. code-block:: c++
+
+  auto error_code = task.plan()
+
+After planning, extract the first successful solution and pass it to the execute function. This will create an ``execute_task_solution`` action client.
+The action server resides in the ``execute_task_solution_capability`` plugin provided by MTC.
+The plugin extends ``MoveGroupCapability``. It constructs a ``MotionPlanRequest`` from the MTC solution and uses MoveIt's ``PlanExecution`` to actuate the robot.
+
+.. code-block:: c++
+
+  auto result = task.execute(*task.solutions().front());
+
+
+Links to Additional Information
+--------------------------------
+
+Here is a :doc:`tutorial </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>` on how to create a Pick and Place pipeline using MTC.
+
+The links listed below contain more information on stages and containers provided by MTC
+
+.. toctree::
+    :maxdepth: 1
+
+    generating_stages.rst
+    propagating_stages.rst
+    connecting_stages.rst
+    wrappers.rst
+    parallel_containers.rst
+    debugging_mtc_task.rst
