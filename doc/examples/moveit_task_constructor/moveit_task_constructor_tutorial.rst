@@ -199,9 +199,9 @@ planning이 성공하면 plan function은 ``moveit_msgs::msg::MoveItErrorCodes::
 
   auto error_code = task.plan()
 
-After planning, extract the first successful solution and pass it to the execute function. This will create an ``execute_task_solution`` action client.
-The action server resides in the ``execute_task_solution_capability`` plugin provided by MTC.
-The plugin extends ``MoveGroupCapability``. It constructs a ``MotionPlanRequest`` from the MTC solution and uses MoveIt's ``PlanExecution`` to actuate the robot.
+계획을 수립한 후, 첫 번째 성공적인 솔루션을 추출하여 실행 함수에 전달합니다. 이를 통해 ``execute_task_solution`` action client가 생성됩니다.
+action server는 MTC가 제공하는 ``execute_task_solution_capability`` plugin에 상주하고 있습니다.
+이 플러그인은 ``MoveGroupCapability``를 확장한 것입니다. MTC 솔루션에서 ``MotionPlanRequest``를 생성하고 MoveIt의 ``PlanExecution``을 사용하여 로봇을 구동합니다.
 
 .. code-block:: c++
 
@@ -211,9 +211,9 @@ The plugin extends ``MoveGroupCapability``. It constructs a ``MotionPlanRequest`
 Links to Additional Information
 --------------------------------
 
-Here is a :doc:`tutorial </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>` on how to create a Pick and Place pipeline using MTC.
+MTC를 사용하여 Pick and Place 파이프라인을 만드는 방법 :doc:`tutorial </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>`
 
-The links listed below contain more information on stages and containers provided by MTC
+아래 링크에는 MTC가 제공하는 stage 및 컨테이너에 대한 추가 정보가 포함되어 있습니다.
 
 .. toctree::
     :maxdepth: 1
