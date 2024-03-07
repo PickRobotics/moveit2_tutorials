@@ -84,14 +84,14 @@ Serial Container
 
 Parallel Container
 ^^^^^^^^^^^^^^^^^^
-Parallel containers combine a set of stages to allow planning alternate solutions.
+병렬 컨테이너는 일련의 stages를 결합하여 대체 솔루션을 계획할 수 있도록 합니다.
 
-| More information on parallel containers can be found here - :ref:`Parallel Containers`.
+| 병렬 컨테이너에 대한 자세한 내용은 여기에서 확인할 수 있습니다 - :ref:`Parallel Containers`
 
 Initializing a MTC Task
 -----------------------
 
-The top-level planning problem is specified as a MTC Task and the subproblems which are specified by Stages are added to the MTC task object.
+최상위 계획 문제는 MTC task으로 지정되고 Stages에 의해 지정된 subproblems(하위 문제)는 MTC task object에 추가됩니다.
 
 .. code-block:: c++
 
@@ -105,14 +105,14 @@ The top-level planning problem is specified as a MTC Task and the subproblems wh
 Adding containers and stages to a MTC Task
 -------------------------------------------
 
-Adding a stage to MTC task
+stage를 MTC task에 추가하기
 
 .. code-block:: c++
 
   auto current_state = std::make_unique<moveit::task_constructor::stages::CurrentState>("current_state");
   task->add(std::move(current_state));
 
-Containers derive from Stage and hence containers can be added to MTC task similarly
+컨테이너는 Stage에서 파생되므로 컨테이너는 마찬가지로 MTC task에 추가할 수 있습니다.
 
 .. code-block:: c++
 
@@ -123,15 +123,15 @@ Containers derive from Stage and hence containers can be added to MTC task simil
 Setting planning solvers
 ------------------------
 
-Stages that do motion planning need solver information.
+motion planning을 수행하는 stages에서는 솔버 정보가 필요합니다.
 
 Solvers available in MTC
 
-* ``PipelinePlanner`` - Uses MoveIt's planning pipeline
+* ``PipelinePlanner`` - MoveIt의 planning pipeline을 사용합니다.
 
-* ``JointInterpolation`` - Interpolates between the start and goal joint states. It does not support complex motions.
+* ``JointInterpolation`` - 시작과 목표 조인트 상태 사이를 보간합니다. 복잡한 motion은 지원하지 않습니다.
 
-* ``CartesianPath`` - Moves the end effector in a straight line in Cartesian space.
+* ``CartesianPath`` - end-effector를 카테시안 공간에서 직선으로 이동시킵니다.
 
 Code Example on how to initialize the solver
 
@@ -143,58 +143,57 @@ Code Example on how to initialize the solver
       std::make_shared<moveit::task_constructor::solvers::JointInterpolationPlanner>();
   const auto mtc_cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
 
-These solvers will be passed into stages like ``MoveTo``, ``MoveRelative``, and ``Connect``.
+이 솔버들은 ``MoveTo``, ``MoveRelative``, ``Connect``와 같은 stages에 전달됩니다.
 
 Setting Properties
 ------------------
 
-| Each MTC stage has configurable properties. Example - planning group, timeout, goal state, etc.
-| Properties of different types can be set using the function below.
+| 각 MTC stage는 설정 가능한 속성을 가집니다. 예시 - planning group, timeout, 목표 상태 등
+| 다른 타입의 속성은 아래 함수를 사용하여 설정할 수 있습니다.
 
 .. code-block:: c++
 
   void setProperty(const std::string& name, const boost::any& value);
 
-| Children stages can easily inherit properties from their parents, thus reducing the configuration overhead.
+| 자식 stages는 부모로부터 속성을 쉽게 상속받을 수 있으므로 설정 오버헤드를 줄일 수 있습니다.
 
 Cost calculator for Stages
 ---------------------------
 
-CostTerm is the basic interface to compute costs for solutions for MTC stages.
+CostTerm은 MTC stage의 솔루션 비용을 계산하는 기본 인터페이스입니다.
 
-CostTerm implementations available in MTC
+MTC에서 사용 가능한 CostTerm 구현
 
-* ``Constant`` - Adds a constant cost to each solution
+* ``Constant`` - 각 솔루션에 상수 비용 추가
 
-* ``PathLength`` - Cost depends on trajectory length with optional weight for different joints
+* ``PathLength`` - 비용은 각 joints에 대해서 옵션 가중치를 가지는 경로 길이에 따라 다름
 
-* ``TrajectoryDuration`` - Cost depends on execution duration of the whole trajectory
+* ``TrajectoryDuration`` - 비용은 전체 궤적의 실행 시간에 따라 다름
 
-* ``TrajectoryCostTerm`` - Cost terms that only work on SubTrajectory solutions
+* ``TrajectoryCostTerm`` - SubTrajectory 솔루션에서만 작동하는 비용 항
 
-* ``LambdaCostTerm`` - Pass in a lambda expression to calculate cost
+* ``LambdaCostTerm`` - 비용 계산을 위해서 람다 식을 전달
 
-* ``DistanceToReference`` - Cost depends on weighted joint space distance to a reference point
+* ``DistanceToReference`` - reference 지점까지의 weighted joint space 거리에 따른 비용
 
-* ``LinkMotion`` - Cost depends on length of Cartesian trajectory of a link
+* ``LinkMotion`` - link의 카테시안 경로 길이에 따른 비용
 
-* ``Clearance`` - Cost is inverse of distance to collision
+* ``Clearance`` - 비용은 충돌까지의 거리의 역수(inverse)
 
-Example code on how to set CostTerm using ``LambdaCostTerm``
+``LambdaCostTerm``을 사용하여 CostTerm 설정 방법에 대한 예제 코드
 
 .. code-block:: c++
 
   stage->setCostTerm(moveit::task_constructor::LambdaCostTerm(
         [](const moveit::task_constructor::SubTrajectory& traj) { return 100 * traj.cost(); }));
 
-All stages provided by MTC have default cost terms. Stages which produce trajectories as solutions usually use path length to calculate cost.
+MTC가 제공하는 모든 stages는 기본 비용 terms을 가지고 있습니다. 궤적을 생성하는 stages는 해결방법으로서 경로 길이(path length)를 비용으로 사용합니다.
 
 Planning and Executing a MTC Task
 ---------------------------------
 
-Planning an MTC task will return a ``MoveItErrorCode``.
-Refer :moveit_msgs_codedir:`here<msg/MoveItErrorCodes.msg>` to identity the different error types.
-If planning succeeds, you can expect the plan function to return ``moveit_msgs::msg::MoveItErrorCodes::SUCCESS``.
+MTC 작업을 계획하면 ``MoveItErrorCode``가 반환됩니다. 여기에서 :moveit_msgs_codedir:`here<msg/MoveItErrorCodes.msg>`를 참조하여 다양한 오류 유형을 확인할 수 있습니다.
+planning이 성공하면 plan function은 ``moveit_msgs::msg::MoveItErrorCodes::SUCCESS`` 을 반환합니다.
 
 .. code-block:: c++
 
