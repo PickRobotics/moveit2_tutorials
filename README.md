@@ -39,7 +39,7 @@ MoveIt 튜터리얼 소스 코드를 다운로드하세요:
 
     git clone https://github.com/ros-planning/moveit2_tutorials.git
     vcs import < moveit2_tutorials/moveit2_tutorials.repos
-    rosdep install -r --from-paths . --ignore-src --rosdistro rolling -y
+    rosdep install -r --from-paths . --ignore-src --rosdistro humble -y
 
 workspace를 설정하고 빌드하세요:
 
@@ -50,7 +50,7 @@ workspace를 설정하고 빌드하세요:
 
 여러분의 장치에서 로컬로 html 페이지를 생성해서 튜터리얼을 테스트하고자 한다면, ``build_locally`` 스크립트를 사용하여 moveit2_tutorials 패키지의 root에서 다음 명령어를 실행하세요:
 
-    export ROS_DISTRO=rolling  # 20.04
+    export ROS_DISTRO=humble  # 22.04
 
     cd $COLCON_WS/src/moveit2_tutorials
     source /opt/ros/$ROS_DISTRO/setup.bash
