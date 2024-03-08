@@ -79,40 +79,40 @@ workspace를 설정하고 빌드하세요:
 
 **Style**
 
-* Each tutorial should be focused on teaching the user one feature or interface within MoveIt.
-* Tutorials should flow from show to tell with videos and demos at the beginning followed by explanations.
-* New tutorials should match the formatting, style, and flow of existing tutorials whenever possible.
+* 각 튜토리얼은 MoveIt 내의 한 가지 기능 또는 인터페이스 사용법을 가르치는 데 중점을 두어야 합니다.
+* 튜토리얼은 설명보다 시연부터 시작하여 처음에는 비디오 및 데모를 보여주고 이어서 설명을 하는 방식으로 진행되어야 합니다.
+* 가능한 경우 새로운 튜토리얼은 기존 튜토리얼의 형식, 스타일 및 흐름과 일치해야 합니다.
 
 **pre-commit**
 
-pre-commit is a tool that is used in moveit2_tutorials to check and apply style guidelines automatically. To install pre-commit into your system:
+pre-commit은 moveit2_tutorials에서 스타일 가이드를 자동으로 확인 및 적용하는 도구입니다. 시스템에 pre-commit을 설치하려면 다음과 같이 하십시오.:
 
     pip3 install pre-commit
 
-Then under the moveit2_tutorials directory install the git hooks like this:
+그런 다음 moveit2_tutorials 디렉토리 아래에서 다음과 같이 git hooks를 설치합니다.:
 
     cd $COLCON_WS/src/moveit2_tutorials && pre-commit install
 
-With this pre-commit will automatically run and check a list of styling including clang-format, end of files, and trailing whitespaces whenever you run `git commit`. To run pre-commit any time other than `git commit`:
+이 pre-commit을 사용하면 `git commit`을 실행할 때마다 clang-format, 파일 끝, 여분 공백 등 스타일 목록을 자동으로 실행 및 확인합니다. git commit 이외의 다른 시간에 `git commit`을 실행하려면:
 
     cd $COLCON_WS/src/moveit2_tutorials && pre-commit run -a
 
 ### Including Images and Videos
 #### Images
-The standard way to include an image in reStructuredText is
+reStructuredText에 이미지를 포함하는 표준 방법은
 ```
 .. image:: filename.png
    :width: 700px
 ```
 
-This assumes that `filename.png` is in the same folder as the source `.rst` file. Images linked in this way will automatically be copied to the appropriate folder in the build.
+여기서 `.rst` 파일과 같은 폴더에 `filename.png` 이미지가 있다고 가정합니다. 이 방식으로 링크된 이미지는 자동으로 빌드 과정에서 적절한 폴더로 복사됩니다.
 
 [External Documentation](https://sublime-and-sphinx-guide.readthedocs.io/en/latest/images.html)
 
-Do **not** include animated gifs as the file format leads to very large files. Use a video format like `webm` and see the section on the local video below.
+애니메이션 GIF는 **사용하지 마십시오**. 이 파일 형식은 파일 크기가 매우 커집니다. `webm`과 같은 비디오 형식을 사용하고 아래의 로컬 비디오 섹션을 참조하십시오.
 
 #### YouTube and other External Video
-You can embed video with raw HTML, like in this example from the Pick and Place Tutorial.
+"Pick and Place 튜토리얼"의 이 예와 같이 raw HTML을 사용하여 비디오를 포함할 수 있습니다.
 ```
 .. raw:: html
 
@@ -123,6 +123,7 @@ You can embed video with raw HTML, like in this example from the Pick and Place 
 This includes [Youtube's suggested embed HTML](https://support.google.com/youtube/answer/171780?hl=en).
 
 #### Local Video
+이 저장소에 포함된 비디오를 포함하려면 "RViz 빠른 시작" 튜토리얼의 이 예와 같이 생코드 HTML을 사용해야 합니다.
 To embed a video that is included in this repository, you also will use raw HTML, like this example from the Quickstart in RViz tutorial.
 
 ```
