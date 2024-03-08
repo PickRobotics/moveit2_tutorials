@@ -5,36 +5,36 @@ Motion Planning
 The Motion Planning Plugin
 ---------------------------
 
-MoveIt works with motion planners through a **plugin interface**.
-This allows MoveIt to communicate with and use different motion planners from multiple libraries, making MoveIt easily extensible. The interface to the motion planners is through a ROS action or service (offered by the ``move_group`` node).
-The default motion planners for move_group are configured using OMPL and the MoveIt interface to OMPL by the MoveIt Setup Assistant.
-Other planners that are available by default are the Pilz industrial motion planner and CHOMP.
+MoveIt은 **plugin interface**를 통해 motion planners와 함께 작동합니다.
+이를 통해 MoveIt은 여러 라이브러리의 다양한 모션 플래너와 통신하고 사용할 수 있게 하며, 이를 통해 MoveIt을 쉽게 확장할 수 있습니다. 모션 플래너와의 인터페이스는 ROS action 또는 service(``move_group`` node 제공)를 통해 이루어집니다.
+move_group의 기본 모션 플래너는 OMPL 및 MoveIt Setup Assistant를 통해 MoveIt OMPL에 대한 MoveIt 인터페이스을 사용하여 구성됩니다.
+기본적으로 사용할 수 있는 다른 플래너로는 Pilz 산업용 모션 플래너와 CHOMP가 있습니다.
 
 The Motion Plan Request
 ------------------------
 
-The motion plan request specifies what you would like the motion planner to do.
-Typically, you will be asking the motion planner to move an arm to a different location (in joint space) or the end-effector to a new pose.
-Collisions are checked for by default (including self-collisions and attached objects).
-You can also specify the planner via the ``planning_pipeline`` and ``planner_id`` parameters, and the constraints for the motion planner to check - the inbuilt constraints provided by MoveIt are ``kinematic constraints``:
+모션 계획 요청(motion plan request)은 motion planner가 수행하길 원하는 작업을 지정합니다.
+일반적으로 모션 플래너에게 로봇 팔을 다른 위치(joint space내에)로 이동하거나, end-effector를 새로운 pose로 이동하도록 요청합니다.
+충돌 감지는 기본적으로 (self-collisions 및 부착된 물체 포함) 수행됩니다.
+또한 ``planning_pipeline`` 와 ``planner_id`` 파라미터를 통해 플래너를 지정하고, 모션 플래너가 확인해야 하는 제약 조건을 지정할 수 있습니다. MoveIt에서 제공하는 기본 제약 조건은 ``kinematic constraints``(운동학적 제약 조건)입니다.:
 
-- **Position constraints**: restrict the position of a link to lie within a region of space.
+- **Position constraints**(위치 제약 조건): link의 위치를 특정 공간 영역 내에 있도록 제한합니다.
 
-- **Orientation constraints**: restrict the orientation of a link to lie within specified roll, pitch or yaw limits.
+- **Orientation constraints**(방향 제약 조건): link의 방향을 지정된 roll, pitch, yaw 제한 내에 있도록 제한합니다.
 
-- **Visibility constraints**: restrict a point on a link to lie within the visibility cone for a particular sensor.
+- **Visibility constraints**(가시성 제약 조건): link의 한 점을 특정 센서의 가시성 콘(visibility cone) 내에 있도록 제한합니다.
 
-- **Joint constraints**: restrict a joint to lie between two values.
+- **Joint constraints**(관절 제약 조건): joint를 두 값 사이에 있도록 제한합니다.
 
-- **User-specified constraints**: it is also possible to specify your own constraints with a user-defined callback.
+- **User-specified constraints**(사용자 지정 제약 조건): 사용자 정의 callback을 사용하여 직접 제약 조건을 지정할 수도 있습니다.
 
 The Motion Plan Result
 --------------------------
 
-The **move_group** node will generate a desired trajectory in response to your motion plan request.
-This trajectory will move the arm (or any group of joints) to the desired location.
-Note that the result coming out of **move_group** is a trajectory and not just a path.
-**move_group** will use the desired maximum velocities and accelerations (if specified) to generate a trajectory that obeys velocity and acceleration constraints at the joint level.
+**move_group** node는 사용자의 모션 계획 요청(motion plan request)에 따라 원하는 궤적(trajectory)을 생성합니다.
+이 궤적은 팔 (또는 모든 joints 그룹)을 원하는 위치로 이동시킵니다.
+**move_group**에서 나오는 결과는 단순히 경로(path)가 아니라 궤적임을 유의하십시오.
+**move_group**은 최대 속도 및 가속도(지정되어 있다면)를 사용하여 joint 레벨에서 속도 및 가속도 제약 조건을 준수하는 궤적을 생성합니다.
 
 Motion planning adapters
 ------------------------
