@@ -1,14 +1,14 @@
-MoveIt 2 Documentation
+MoveIt 2 한글 문서
 ======================
 
-Welcome to the unified MoveIt documentation, which includes tutorials, how-to-guides, core concepts, and more.
+통합 MoveIt 한글 문서에 오신 것을 환영합니다. 이 사이트에서는 튜토리얼, 사용 방법 안내, 핵심 개념 등을 제공합니다.
 
-MoveIt 2 is the robotic manipulation platform for ROS 2, and incorporates the latest advances in motion planning, manipulation, 3D perception, kinematics, control, and navigation. MoveIt 2 was first released in 2019; for ROS 1 documentation, see `MoveIt 1 tutorials <https://ros-planning.github.io/moveit_tutorials>`_.
+MoveIt 2는 ROS 2를 위한 로봇 manipulation 플랫폼이며, 모션 계획, manipulation, 3D 인식, kinematics, 제어 및 navigation 분야의 최신 기술을 포함합니다. MoveIt 2는 2019년에 처음 출시되었으며, ROS 1 문서는 `MoveIt 1 tutorials <https://ros-planning.github.io/moveit_tutorials>`_ 참고하세요.
 
 .. image:: https://moveit.ros.org/assets/images/roadmap.png
    :width: 400px
 
-How-To Use This Website
+이 웹사이트를 사용하는 방법
 -----------------------
 
 * :doc:`/doc/tutorials/tutorials` will walk you through creating your first project with MoveIt.
