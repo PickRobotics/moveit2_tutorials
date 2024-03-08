@@ -120,11 +120,10 @@ reStructuredText에 이미지를 포함하는 표준 방법은
         <iframe width="700px" height="400px" src="https://www.youtube.com/embed/QBJPxx_63Bs?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
 ```
-This includes [Youtube's suggested embed HTML](https://support.google.com/youtube/answer/171780?hl=en).
+이렇게 하면 [Youtube's suggested embed HTML](https://support.google.com/youtube/answer/171780?hl=en)가 포함됩니다.
 
 #### Local Video
-이 저장소에 포함된 비디오를 포함하려면 "RViz 빠른 시작" 튜토리얼의 이 예와 같이 생코드 HTML을 사용해야 합니다.
-To embed a video that is included in this repository, you also will use raw HTML, like this example from the Quickstart in RViz tutorial.
+이 저장소에 포함된 비디오를 포함하기 위해서 RViz 튜토리얼의 예제와 같이 raw HTML을 사용합니다.
 
 ```
 .. raw:: html
@@ -135,7 +134,7 @@ To embed a video that is included in this repository, you also will use raw HTML
     </video>
 ```
 
-Note that the video file is in the `_static/videos` folder instead of the same folder.
+같은 폴더가 아닌 `_static/videos` 폴더에 비디오 파일이 있음에 유의하십시오.
 
 [External Documentation on &lt;video&gt; tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
 
