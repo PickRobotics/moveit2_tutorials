@@ -1,33 +1,33 @@
 Visualizing In RViz
 ===================
 
-This tutorial will introduce you to a tool that can help you more easily understand what your MoveIt application is doing by rendering visualizations in RViz.
+이 튜터리얼은 RViz에서 시각화를 렌더링하여 MoveIt 어플리케이션이 수행하는 작업을 더 쉽게 이해하는 것을 돕는 도구를 소개합니다.
 
-Prerequisites
--------------
+사전 요구사항
+---------------
 
-If you haven't already done so, make sure you've completed the steps in :doc:`Your First Project </doc/tutorials/your_first_project/your_first_project>`.
-This project assumes you are starting with the ``hello_moveit`` project, where the previous tutorial left off.
+:doc:`Your First Project </doc/tutorials/your_first_project/your_first_project>` 을 모두 완료하고 진행하세요.
+이번 프로젝트는 이전 튜토리얼의 ``hello_moveit`` 프로젝트의 중단된 부분에서 시작한다고 가정합니다.
 
 Steps
 -----
 
-1 Add the dependency moveit_visual_tools
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 moveit_visual_tools에 의존성 추가하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add this line to your ``package.xml`` in the ``hello_moveit`` project after the other ``<depend>`` statements:
+``hello_moveit`` 프로젝트의 ``package.xml`` 파일에서 다른 ``<depend>`` 구문 뒤에 다음 줄을 추가하십시오.:
 
 .. code-block:: xml
 
   <depend>moveit_visual_tools</depend>
 
-Then in your ``CMakeLists.txt`` add this line to the section of ``find_package`` statements:
+다음으로 ``CMakeLists.txt`` 파일에서 ``find_package`` 구문의 섹션에 다음 줄을 추가합니다.:
 
 .. code-block:: cmake
 
   find_package(moveit_visual_tools REQUIRED)
 
-Further down in the file extend the ``ament_target_dependencies`` macro call to include the new dependency like this:
+파일 하단 부분에서 ``ament_target_dependencies`` 매크로 호출을 다음과 같이 확장하여 새로운 dependency 항목을 포함하세요:
 
 .. code-block:: cmake
 
@@ -38,37 +38,37 @@ Further down in the file extend the ``ament_target_dependencies`` macro call to 
     "rclcpp"
   )
 
-To verify that you added the dependency correctly, add the required include to your source file ``hello_moveit.cpp``:
+의존 관계가 제대로 추가되었는지 확인하려면 소스 파일 ``hello_moveit.cpp``에 다음과 같은 헤더 파일 포함을 추가하십시오:
 
 .. code-block:: C++
 
   #include <moveit_visual_tools/moveit_visual_tools.h>
 
-To test that this all worked, open a terminal in the workspace directory (remembering to source your ROS install in opt) and then build with colcon:
+모든 작업이 정상적으로 이루어졌는지 테스트하기 위해서 workspace 디렉토리에서 터미널을 열고 (opt 디렉토리에 설치된 ROS를 source하는 것을 잊지 마세요) colcon 명령으로 빌드하세요:
 
 .. code-block:: bash
 
   cd ~/ws_moveit
   colcon build --mixin debug
 
-2 Create a ROS executor and spin the node on a thread
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 ROS executor 생성 및 thread로 해당 node를 spin하기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Before we can initialize MoveItVisualTools, we need to have a executor spinning on our ROS node.
-This is necessary because of how MoveItVisualTools interacts with ROS services and topics. First, add the threading library to your includes at the top.
+MoveItVisualTools를 초기화하기 전에 ROS 노드에서 작동 중인 실행자(executor)가 있어야 합니다.
+이는 MoveItVisualTools가 ROS service 및 topic과 상호 작용하는 방식 때문에 필요합니다. 먼저 threading 라이브러리를 includes에 추가하세요.
 
 .. code-block:: C++
 
   #include <thread>  // <---- add this to the set of includes at the top
 
-By creating and naming loggers, we are able to keep our program logs organized.
+loggers를 생성하고 이름을 지정함으로써 프로그램 로그를 구성할 수 있습니다.
 
   .. code-block:: C++
 
     // Create a ROS logger
     auto const logger = rclcpp::get_logger("hello_moveit");
 
-Next, add your executor before creating the MoveIt MoveGroup Interface.
+다음으로 MoveIt MoveGroup Interface를 생성하기 전에 executor를 추가하세요.
 
 .. code-block:: C++
 
@@ -81,7 +81,7 @@ Next, add your executor before creating the MoveIt MoveGroup Interface.
 
   ...
 
-Finally, make sure to join the thread before exiting.
+마지막으로 종료하기 전에 thread를 join해야 합니다.
 
 .. code-block:: C++
 
@@ -90,12 +90,12 @@ Finally, make sure to join the thread before exiting.
     spinner.join();  // <--- Join the thread before exiting
     return 0;
 
-After making these changes, rebuild your workspace to make sure you don't have any syntax errors.
+이러한 변경 사항을 하나씩 적용한 후, workspace을 다시 빌드하여 문법 오류가 없는지 확인하세요.
 
-3 Create and Initialize MoveItVisualTools
+3 MoveItVisualTools 생성 및 초기화
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Next, we will construct and initialize MoveItVisualTools after the construction of MoveGroupInterface.
+다음으로 MoveGroupInterface를 생성한 후 MoveItVisualTools를 생성하고 초기화합니다.
 
 .. code-block:: C++
 
@@ -110,15 +110,15 @@ Next, we will construct and initialize MoveItVisualTools after the construction 
     moveit_visual_tools.deleteAllMarkers();
     moveit_visual_tools.loadRemoteControl();
 
-We pass the following into the constructor: the ROS node, the base link of the robot, the marker topic to use (more on this later), and the robot model (which we get from the move_group_interface).
-Next, we make a call to delete all the markers. This clears any rendered state out of RViz that we have left over from previous runs.
-Lastly, we load remote control.
-Remote control is a really simple plugin that lets us have a button in RViz to interact with our program.
+생성자에게 다음 내용을 전달합니다. : ROS node, 로봇의 base link, 사용할 marker topic (나중에 자세히 설명), robot model (move_group_interface에서 얻음)
+다음으로 모든 마커를 삭제하는 호출을 합니다. 이렇게 하면 이전 실행에서 남은 RViz의 렌더링된 상태가 모두 지워집니다.
+마지막으로 원격 제어기를 로드합니다.
+원격 제어기는 매우 간단한 plugin으로, RViz에서 버튼을 사용하여 프로그램과 상호 작용할 수 있게 해줍니다.
 
-4 Write closures for visualizations
+4 시각화를 위해 closures 작성하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After we've constructed and initialized, we now create some closures (function objects that have access to variables in our current scope) that we can use later in our program to help render visualizations in RViz.
+우리가 생성 및 초기화를 마치고 나서 이제 현재 scope의 변수에 액세스할 수 있는 closures(함수 객체) 몇 개를 생성하는데, 이것은 나중에 프로그램에서 RViz로 시각화를 렌더링하는 데 도움을 줄 수 있습니다.
 
 .. code-block:: C++
 
