@@ -3,7 +3,7 @@
 
 여기서 튜토리얼을 가장 잘 실행하기 위한 환경을 설정할 것입니다. colcon 워크스페이스를 만들고, 모든 최신 MoveIt 소스 코드를 다운로드하고, 모든 것을 소스에서 빌드하여 최신 수정 사항과 개선 사항을 보장합니다.
 
-MoveIt의 모든 소스 코드를 빌드하는 데는 20-30분이 걸릴 수 있습니다. 컴퓨터의 CPU 속도와 사용 가능한 RAM에 따라 다르지만, 성능이 떨어지는 시스템에서 시작하거나 일반적으로 빨리 시작하려는 경우 :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>` 를 확인하십시오.
+MoveIt의 모든 소스 코드를 빌드하는 데는 20-30분이 걸릴 수 있습니다. 컴퓨터의 CPU 속도와 사용 가능한 RAM에 따라 다르지만, 성능이 떨어지는 시스템에서 시작하거나 일반적으로 빨리 시작하려는 경우 :doc:`Docker 가이드 </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>` 를 확인하십시오.
 
 ROS 2와 colcon 설치하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -83,8 +83,8 @@ Colcon 워크스페이스 빌드하기
 이 빌드 명령은 컴퓨터 속도와 사용 가능한 RAM(32GB 권장)에 따라 오랜 시간(20분 이상)이 걸릴 수 있습니다.
 
 .. warning::
-  이 명령으로 빌드하는 일부 패키지는 최대 16GB의 RAM을 필요로 합니다. 기본적으로 ``colcon``은 가능한 한 많은 패키지를 동시에 빌드하려고 시도합니다.
-  컴퓨터 메모리 부족인 경우 또는 빌드가 일반적으로 컴퓨터에서 완료하는 데 문제가 있는 경우 위의 ``colcon`` 명령에 ``--executor sequential``을 추가하여 한 번에 한 패키지만 빌드하거나 ``--parallel-workers <X>``를 사용하여 동시 빌드 수를 제한할 수 있습니다.
+  이 명령으로 빌드하는 일부 패키지는 최대 16GB의 RAM을 필요로 합니다. 기본적으로 ``colcon`` 은 가능한 한 많은 패키지를 동시에 빌드하려고 시도합니다.
+  컴퓨터 메모리 부족인 경우 또는 빌드가 일반적으로 컴퓨터에서 완료하는 데 문제가 있는 경우 위의 ``colcon`` 명령에 ``--executor sequential`` 을 추가하여 한 번에 한 패키지만 빌드하거나 ``--parallel-workers <X>`` 를 사용하여 동시 빌드 수를 제한할 수 있습니다.
 
 모든 것이 순조롭게 진행되면 "Summary: X packages finished" 메시지가 표시되어야 합니다. 여기서 X는 50일 수도 있습니다. 문제가 발생하면 `ROS Installation <https://docs.ros.org/en/rolling/Installation.html>`_ 를 다시 확인하십시오.
 
@@ -95,11 +95,11 @@ Colcon 워크스페이스를 source하기: ::
 
   source ~/ws_moveit/install/setup.bash
 
-옵션: ``.bashrc``에 이전 명령을 추가하기: ::
+옵션: ``.bashrc`` 에 이전 명령을 추가하기: ::
 
    echo 'source ~/ws_moveit/install/setup.bash' >> ~/.bashrc
 
-.. note:: ``~/.bashrc``에서 자동으로 ``setup.bash``를 source하는 것은
+.. note:: ``~/.bashrc`` 에서 자동으로 ``setup.bash`` 를 source하는 것은
    고급 사용자에게는 필요하지 않지만 단순화하기 위해서 이 방식을 추천합니다.
 
 다음 단계
