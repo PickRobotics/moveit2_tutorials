@@ -3,7 +3,7 @@
 
 이 튜터리얼은 MoveIt를 사용하여 첫번째 C++ 애플리케이션을 작성하는 방법을 안내합니다.
 
-경고: MoveIt의 대부분의 기능은 제대로 작동하지 않을 수 있는데 왜냐하면 전체 Move Group 기능에 대해서는 추가 매개변수가 필요하기 때문입니다. 전체 설정을 위해 :doc:`Move Group C++ Interface Tutorial </doc/examples/move_group_interface/move_group_interface_tutorial>`을 계속 진행하십시오.
+경고: MoveIt의 대부분의 기능은 제대로 작동하지 않을 수 있는데 왜냐하면 전체 Move Group 기능에 대해서는 추가 매개변수가 필요하기 때문입니다. 전체 설정을 위해 :doc:`Move Group C++ Interface Tutorial </doc/examples/move_group_interface/move_group_interface_tutorial>` 을 계속 진행하십시오.
 
 사전 요구사항
 ---------------
@@ -39,7 +39,7 @@ ROS 2 명령 도구를 사용하여 새로운 package를 생성합니다.:
 ``moveit_ros_planning_interface`` 와 ``rclcpp``를 의존성에 추가했다는 것에 주목하십시오.
 이렇게 하면 ``package.xml`` 및 ``CMakeLists.txt`` 파일에 필요한 변경 사항을 생성하게 되어 2개 packages에 대해서 의존이 가능하게 됩니다.
 
-``ws_moveit/src/hello_moveit/src/hello_moveit.cpp``에 생성된 새 소스 파일을 편집기로 엽니다.
+``ws_moveit/src/hello_moveit/src/hello_moveit.cpp`` 에 생성된 새 소스 파일을 편집기로 엽니다.
 
 2 ROS Node와 Executor를 생성하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -207,7 +207,7 @@ workspace 디렉토리 ``ws_moveit`` 에서 다음 명령을 실행하십시오.
   [ERROR] [1644181704.350825487] [hello_moveit]: Could not find parameter robot_description and did not receive robot_description via std_msgs::msg::String subscription within 10.000000 seconds.
 
 이것은 ``demo.launch.py`` 런치가 robot description이 제공하는 ``MoveGroup`` 노드를 시작시키기 때문에 발생합니다.
-``MoveGroupInterface``이 생성될 때 robot description과 함께 topic을 publish하는 node를 찾습니다.
+``MoveGroupInterface`` 이 생성될 때 robot description과 함께 topic을 publish하는 node를 찾습니다.
 10초 내에 찾지 못하면 이 오류를 출력하고 프로그램을 종료합니다.
 
 3.2 코드 살펴보기
