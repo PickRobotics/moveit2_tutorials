@@ -11,7 +11,7 @@
 :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 을 모두 완료하고 진행하세요.
 
 이 튜터리얼은 여러분이 ROS 2의 기본을 이해하고 있다고 가정합니다.
-이를 위해 `Official ROS 2 Tutorials <https://docs.ros.org/en/{DISTRO}/Tutorials.html>`_ 에서 "Writing a simple publisher and Subscriber (C++)"까지 완료하세요.
+이를 위해 `공식 ROS 2 튜터리얼 <https://docs.ros.org/en/{DISTRO}/Tutorials.html>`_ 에서 "Writing a simple publisher and Subscriber (C++)"까지 완료하세요.
 
 Steps
 -----
@@ -36,7 +36,7 @@ ROS 2 명령 도구를 사용하여 새로운 package를 생성합니다.:
 
 이 명령의 출력으로 새 디렉토리에 몇 개의 파일을 만들었다는 것을 보여줍니다.
 
-``moveit_ros_planning_interface``와 ``rclcpp``를 의존성에 추가했다는 것에 주목하십시오.
+``moveit_ros_planning_interface`` 와 ``rclcpp``를 의존성에 추가했다는 것에 주목하십시오.
 이렇게 하면 ``package.xml`` 및 ``CMakeLists.txt`` 파일에 필요한 변경 사항을 생성하게 되어 2개 packages에 대해서 의존이 가능하게 됩니다.
 
 ``ws_moveit/src/hello_moveit/src/hello_moveit.cpp``에 생성된 새 소스 파일을 편집기로 엽니다.
@@ -115,7 +115,7 @@ ROS 2 명령 도구를 사용하여 새로운 package를 생성합니다.:
 첫번째 인자는 문자열로서 ROS가 고유한 노드를 만들기 위해 사용된다.
 두번째 인자는 MoveIt에서 ROS 파라미터를 사용하는 방식 때문에 필요하다.
 
-다음으로 "hello_moveit"라는 이름의 `logger를 생성<https://docs.ros.org/en/humble/Tutorials/Demos/Logging-and-logger-configuration.html>`_ 해서 로그 출력을 조직화하고 구성할 수 있도록 합니다.
+다음으로 "hello_moveit"라는 이름의 `logger를 생성 <https://docs.ros.org/en/humble/Tutorials/Demos/Logging-and-logger-configuration.html>`_ 해서 로그 출력을 조직화하고 구성할 수 있도록 합니다.
 
 .. code-block:: C++
 
@@ -213,20 +213,20 @@ workspace 디렉토리 ``ws_moveit`` 에서 다음 명령을 실행하십시오.
 3.2 코드 살펴보기
 ~~~~~~~~~~~~~~~~~~~~
 
-첫번째로  ``MoveGroupInterface``를 생성합니다. 이 객체는 ``move_group``과 상호작용할 수 있도록 해주며, 우리가 trajectories를 plan and execute할 수 있게 해줍니다.
+첫번째로  ``MoveGroupInterface`` 를 생성합니다. 이 객체는 ``move_group`` 과 상호작용할 수 있도록 해주며, 우리가 trajectories를 plan and execute할 수 있게 해줍니다.
 이 프로그램에서 생성하는 유일한 mutable 객체임을 주목하십시오.
-주목해야할 또 다른 것은 여기서 우리가 생성한 ``MoveGroupInterface`` 객체에 대한 두번째 인터페이스입니다: ``"manipulator"``.
-이것은 robot description에서 정의된 joints group으로, 이 ``MoveGroupInterface``를 사용하여 작동할 것입니다.
+주목해야할 또 다른 것은 여기서 우리가 생성한 ``MoveGroupInterface`` 객체에 대한 두번째 인터페이스입니다: ``"manipulator"`` .
+이것은 robot description에서 정의된 joints group으로, 이 ``MoveGroupInterface`` 를 사용하여 작동할 것입니다.
 
 .. code-block:: C++
 
   using moveit::planning_interface::MoveGroupInterface;
   auto move_group_interface = MoveGroupInterface(node, "manipulator");
 
-그런 다음, target pose와 plan을 설정합니다. target pose는 오직 ``setPoseTarget``을 통해서만 설정된다는 점에 유의하십시오.
+그런 다음, target pose와 plan을 설정합니다. target pose는 오직 ``setPoseTarget`` 을 통해서만 설정된다는 점에 유의하십시오.
 starting pose는 현재 로봇의 joint state publisher에 의해 publish된 위치이며, ``MoveGroupInterface::setStartState*`` 함수군을 사용하여 변경할 수 있지만 하지만 이 튜터리얼에서는 다루지 않습니다.
 
-다음 섹션에서 유의해야 할 또 다른 사항은 ``target_pose``와 planning의 메시지 타입을 생성하기 위해 lambdas를 사용한다는 것입니다.
+다음 섹션에서 유의해야 할 또 다른 사항은 ``target_pose`` 와 planning의 메시지 타입을 생성하기 위해 lambdas를 사용한다는 것입니다.
 이것은 modern C++ 코드베이스에서 좀더 선언적인 스타일로 코드를 작성할 수 있도록 하는 패턴입니다.
 이 패턴에 대한 자세한 내용은 이 튜터리얼의 끝에서 몇개의 링크를 제공합니다.
 
@@ -273,11 +273,11 @@ Further Reading
 
 - lambdas를 사용하여 객체를 상수로 초기화할 수 있었습니다.
   이 기술은 IIFE라고 불립니다.
-  `Read more about this pattern from C++ Stories <https://www.cppstories.com/2016/11/iife-for-complex-initialization/>`_.
+  `이와 관련된 패턴 C++ Stories 자료 <https://www.cppstories.com/2016/11/iife-for-complex-initialization/>`_.
 - 또한 가능한 모든 것을 const로 선언했습니다.
-  `Read more about the usefulness of const here <https://www.cppstories.com/2016/12/please-declare-your-variables-as-const/>`_.
+  `const의 유용성 자료 <https://www.cppstories.com/2016/12/please-declare-your-variables-as-const/>`_.
 
 다음 단계
 -----------
 
-다음 튜토리얼 :doc:`Visualizing in RViz </doc/tutorials/visualizing_in_rviz/visualizing_in_rviz>`에서 여기서 작성한 프로그램을 확장하여 MoveIt이 무엇을 하는지 이해하기 쉽게 하는 visual markers를 생성할 예정입니다.
+다음 튜토리얼 :doc:`Visualizing in RViz </doc/tutorials/visualizing_in_rviz/visualizing_in_rviz>` 에서 여기서 작성한 프로그램을 확장하여 MoveIt이 무엇을 하는지 이해하기 쉽게 하는 visual markers를 생성할 예정입니다.
