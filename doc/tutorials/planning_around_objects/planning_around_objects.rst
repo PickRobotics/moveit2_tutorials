@@ -48,7 +48,7 @@ Steps
 첫 번째 주목해야 할 점은 이 객체가 로봇 좌표 프레임에 위치하게 된다는 것입니다.
 만약 우리가 scene에서 장애물의 위치를 보고해주는 인식 시스템을 가지고 있다면, 이 시스템이 만들어내는 메시지의 형태일 수도 있습니다.
 하지만 이번에는 단지 예시이기 때문에 수동으로 만들고 있습니다.
-이 코드 블록의 끝에서 주목해야 할 한 가지는 이 메시지의 작업을 ``ADD``로 설정한다는 것입니다.
+이 코드 블록의 끝에서 주목해야 할 한 가지는 이 메시지의 작업을 ``ADD`` 로 설정한다는 것입니다.
 이를 통해서 결과적으로 객체가 충돌 scene에 추가됩니다.
 이전 단계의 목표 포즈를 설정하는 것과 계획을 생성하는 것 사이에 아래 코드 블록을 삽입하세요.
 
@@ -87,7 +87,7 @@ Steps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 마지막으로 이 객체를 충돌 scene에 추가해야 합니다.
-이 작업을 위해 ROS 인터페이스를 사용하여 계획 장면(planning scene)의 변경 사항을 ``MoveGroup``에게 전달하는 ``PlanningSceneInterface``라는 객체를 사용합니다.
+이 작업을 위해 ROS 인터페이스를 사용하여 계획 장면(planning scene)의 변경 사항을 ``MoveGroup`` 에게 전달하는 ``PlanningSceneInterface`` 라는 객체를 사용합니다.
 이 코드 블록은 충돌 객체를 생성하는 코드 블록 바로 다음에 와야 합니다.
 
 .. code-block:: C++
@@ -123,6 +123,6 @@ Further Reading
 다음 단계
 -----------
 
-다음 튜터리얼 :doc:`Pick and Place with MoveIt Task Constructor </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>`에서, 더 어려운 모션 계획을 해결하도록 설계된 상위 계층 도구를 소개합니다.
+다음 튜터리얼 :doc:`Pick and Place with MoveIt Task Constructor </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>` 에서, 더 어려운 모션 계획을 해결하도록 설계된 상위 계층 도구를 소개합니다.
 다음 튜토리얼에서는 물체를 집어서 놓는 프로그램을 만들 것입니다.
 

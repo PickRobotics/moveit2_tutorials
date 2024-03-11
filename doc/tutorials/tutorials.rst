@@ -1,12 +1,12 @@
 Tutorials
 =========
 
-These tutorials will quickly get you using the MoveIt 2 Motion Planning Framework.
+이 튜터리얼은 여러분이 MoveIt 2 Motion Planning Framework를 빠르게 사용해볼 수 있도록 합니다.
 
 .. image:: quickstart_in_rviz/rviz_plugin_head.png
    :width: 700px
 
-In these tutorials, the Franka Emika Panda robot is used as a quick-start demo.
+이 튜터리얼에서는 퀵 스타트 데모로 Franka Emika Panda 로봇을 사용합니다.
 
 .. toctree::
    :maxdepth: 1
