@@ -21,7 +21,7 @@ Steps
 
 터미널을 열고 `ROS 2 설치를 source <https://docs.ros.org/en/{DISTRO}/Tutorials/Configuring-ROS2-Environment.html>`_ 하여 ``ros2`` 명령이 동작하도록 합니다.
 
-:doc:`Getting Started Tutorial </doc/tutorials/getting_started/getting_started>` 에서 생성한 ``ws_moveit`` 디렉토리로  이동합니다.
+:doc:`시작하기 튜터리얼 </doc/tutorials/getting_started/getting_started>` 에서 생성한 ``ws_moveit`` 디렉토리로  이동합니다.
 
 ``src`` 디렉토리로 이동하십시오. 이 디렉토리에 소스 코드를 넣을 것입니다.
 
