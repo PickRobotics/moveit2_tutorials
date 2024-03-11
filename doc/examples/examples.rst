@@ -1,22 +1,22 @@
 Examples
 ========
 
-This is a catch-all place for pages that have not yet been updated for the new structure or are still not yet ported from ROS 1.
+여기는 새로운 구조로 업데이트되지 않았거나 아직 ROS 1에서 포팅되지 않은 페이지들을 위한 임시 보관소입니다.
 
-To migrate these pages into the new structure please see the appropriate pages under :doc:`/doc/how_to_contribute/how_to_contribute`.
+해당 페이지를 새로운 구조로 이전시키기 위해서  :doc:`/doc/how_to_contribute/how_to_contribute` 아래 있는 적절한 페이지를 참고하세요.
 
 MoveGroup - ROS Wrappers in C++
 ------------------------------------------
-The simplest way to use MoveIt through scripting is using the ``move_group_interface``. This interface is ideal for beginners and provides unified access to many of the features of MoveIt.
+스크립팅을 통해 MoveIt을 사용하는 가장 간단한 방법은 ``move_group_interface`` 를 사용하는 것입니다. 이 인터페이스는 초보자에게 이상적이며 MoveIt의 다양한 기능에 대한 통합된 액세스를 제공합니다.
 
 .. toctree::
    :maxdepth: 1
 
    move_group_interface/move_group_interface_tutorial
 
-Using MoveIt Directly Through the C++ API
------------------------------------------
-Building more complex applications with MoveIt often requires developers to dig into MoveIt’s C++ API. As an added plus, using the C++ API directly skips many of the ROS Service/Action layers resulting in significantly faster performance.
+C++ API를 통해 MoveIt 직접 사용하기
+--------------------------------------------
+MoveIt를 사용하여 더 복잡한 응용 프로그램을 만들려면 개발자가 MoveIt의 C++ API를 깊이 파고드는 것이 필요합니다. 추가적인 장점으로 C++ API를 직접 사용하면 많은 ROS Service/Action 레이어를 건너뛰어 결과적으로 성능이 크게 향상됩니다.
 
 .. toctree::
    :maxdepth: 1
@@ -39,8 +39,8 @@ Building more complex applications with MoveIt often requires developers to dig 
    bullet_collision_checker/bullet_collision_checker
    mobile_base_arm/mobile_base_arm_tutorial
 
-Using MoveIt Directly Through the Python API
---------------------------------------------
+Python API를 통해 MoveIt 직접 사용하기
+-----------------------------------------------
 The MoveIt Python API binds a subset of the C++ API. The Python API is useful for rapid prototyping and experimentation, or if you already are working within a Python development environment.
 
 .. toctree::
@@ -49,9 +49,9 @@ The MoveIt Python API binds a subset of the C++ API. The Python API is useful fo
    motion_planning_python_api/motion_planning_python_api_tutorial
    jupyter_notebook_prototyping/jupyter_notebook_prototyping_tutorial
 
-Integration with a New Robot
+새로운 Robot과 통합하기
 ----------------------------
-Before attempting to integrate a new robot with MoveIt 2, check whether your robot has already been set up (see the `list of robots running MoveIt <http://moveit.ros.org/robots/>`_). Otherwise, follow the tutorials in this section to integrate your robot with MoveIt.
+새로운 로봇을 MoveIt 2에 통합하기 전에 해당 로봇이 이미 설정되어 있는지 확인하세요. ( `MoveIt을 실행하는 로봇 목록 <http://moveit.ros.org/robots/>`_ 을 살펴보세요) 아직 설정되어 있지 않다면, 이 섹션에 있는 안내를 따라 로봇을 MoveIt과 통합해보세요.
 
 .. toctree::
    :maxdepth: 1

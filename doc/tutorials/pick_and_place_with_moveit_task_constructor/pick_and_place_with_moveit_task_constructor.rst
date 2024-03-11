@@ -1,5 +1,5 @@
-Pick and Place with MoveIt Task Constructor
-===========================================
+MoveIt Task Constructor로 Pick and Place 수행하기
+============================================================
 .. raw:: html
 
     <video width="700px" controls="true" autoplay="true" loop="true">
@@ -7,17 +7,19 @@ Pick and Place with MoveIt Task Constructor
         MoveIt Task Constructor Pick and Place example
     </video>
 
-This tutorial will walk you through creating a package that plans a pick and place operation using `MoveIt Task Constructor <https://github.com/ros-planning/moveit_task_constructor/tree/ros2/>`_. MoveIt Task Constructor provides a way to plan for tasks that consist of multiple different subtasks (known as stages). If you just want to run the tutorial, you can follow the :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>` to start a container with the completed tutorial.
+이 튜터리얼은 `MoveIt Task Constructor <https://github.com/ros-planning/moveit_task_constructor/tree/ros2/>`_ 사용하여 pick and place 작업을 계획하는 패키지 생성 과정을 소개합니다. MoveIt Task Constructor는 여러 개의 subtasks(stages라고 함)으로 구성된 작업을 계획하는 방법을 제공합니다. 튜토리얼만 실행하고 싶다면 :doc:`Docker Guide </doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu>` 를 따라하면 완성된 튜토리얼이 있는 컨테이너를 시작할 수 있습니다.
 
-1 Basic Concepts
+1 기본 개념
 ----------------
 
-The fundamental idea of MTC is that complex motion planning problems can be composed into a set of simpler subproblems.
-The top-level planning problem is specified as a **Task** while all subproblems are specified by **Stages**.
-Stages can be arranged in any arbitrary order and hierarchy only limited by the individual stages types.
-The order in which stages can be arranged is restricted by the direction in which results are passed.
-There are three possible stages relating to the result flow: generator, propagator, and connector stages:
+MTC의 기본적인 아이디어는 복잡한 모션 계획 문제를 더 간단한 하위 문제 세트로 분할할 수 있다는 것입니다.
+최상위 계획 문제는 **태스크(Task)**로 지정되며, 모든 하위 문제는 **스테이지(Stages)**로 지정됩니다.
+스테이지는 임의의 순서로 배열할 수 있으며, 계층 구조는 개별 스테이지 유형에 의해서만 제한됩니다.
+스테이지 배열 순서는 결과가 전달되는 방향에 따라 제한됩니다.
+결과 흐름과 관련된 세 가지 가능한 스테이지 유형은 생성기(generator), 전파기(propagator), 연결기(connector) 스테이지입니다.:
 
+**발생기 (Generators)**는 이웃하는 stages와 독립적으로 결과를 계산하고 양방향으로, 즉 앞뒤로 전달합니다.
+예를 들어, 접근 및 이탈 모션 (이웃 단계)이 해결 방법에 따라 달라지는 기하학적 포즈에 대한 IK sampler가 있습니다.
 **Generators** compute their results independently of their neighbor stages and pass them in both directions, backwards and forwards.
 An example is an IK sampler for geometric poses where approaching and departing motions (neighbor stages) depend on the solution.
 
