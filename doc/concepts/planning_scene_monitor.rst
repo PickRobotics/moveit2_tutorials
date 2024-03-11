@@ -1,40 +1,38 @@
-======================
-Planning Scene Monitor
-======================
+========================
+Planning Scene 모니터
+========================
 
-The ``planning scene`` is an object used for storing the representation of the world around the robot and also the state of the robot itself.
-The internal state of the ``planning_scene`` object is typically maintained by a ``planning_scene_monitor`` component that enables reading and writing the state in a thread-safe manner.
+``planning scene``은 로봇 주변 world의 표현과 로봇 자체의 상태를 저장하는데 사용되는 객체입니다.
+``planning_scene`` 객체의 내부 상태는 일반적으로 ``planning_scene_monitor`` component에 의해 관리되며, 이 component는 thread-safe 방식으로 상태 읽기 및 쓰기를 가능하게 합니다.
 
 .. image:: /_static/images/planning_scene_monitor.svg
 
-World Geometry Monitor
+World Geometry 모니터
 ----------------------
 
-The world geometry monitor builds world geometry using information from the sensors on the robot such as LIDARs or depth cameras and from user input.
-It uses the ``occupancy map monitor`` described below to build a 3D representation of the environment around the robot and augments that with information on the ``planning_scene`` topic for adding object information.
+world geometry monitor는 로봇의 LiDAR, depth 카메라와 같은 센서 정보와 사용자 입력을 사용하여 world geometry를 구축합니다.
+이 모니터는 아래 설명하는 ``occupancy map monitor``를 사용하여 로봇 주변 환경의 3D 표현을 구축하고 ``planning_scene`` topic에 있는 객체 정보를 추가하여 보강합니다.
 
 3D Perception
 -------------
 
-3D perception in MoveIt is handled by the ``occupancy map monitor``.
-The occupancy map monitor uses a plugin architecture to handle different kinds of sensor input as shown in the Figure above.
-In particular, MoveIt has inbuilt support for handling two kinds of inputs:
+MoveIt에서 3D 인식은 ``occupancy map monitor``가 처리합니다. occupancy map monitor는 플러그인 아키텍처를 사용하여 위 그림과 같이 다양한 종류의 센서 입력을 처리합니다. 특히, MoveIt은 아래 2가지 종류의 입력 처리를 기본 기능으로 지원합니다.:
 
-- **Point clouds**: handled by the ``PointCloudOccupancyMapUpdater`` plugin.
+- **Point clouds**: ``PointCloudOccupancyMapUpdater`` 플러그인에 의해 처리됩니다.
 
-- **Depth images**: handled by the ``DepthImageOccupancyMapUpdater`` plugin.
+- **Depth images**: ``DepthImageOccupancyMapUpdater`` 플러그인에 의해 처리됩니다.
 
-Note that you can add your own types of updaters as a plugin to the occupancy map monitor.
+occupancy map monitor에 플러그인 형태로 사용자 정의 업데이터 타입을 추가할 수도 있습니다.
 
 Octomap
 -------
 
-The Occupancy map monitor uses an `Octomap <https://octomap.github.io/>`_ to maintain the occupancy map of the environment.
-The Octomap can actually encode probabilistic information about individual cells although this information is not currently used in MoveIt.
-The Octomap can directly be passed into FCL, the collision checking library that MoveIt uses.
+Occupancy map monitor는 `Octomap <https://octomap.github.io/>`_ 을 사용하여 환경의 occupancy map를 유지 관리합니다.
+Octomap은 실제로 개별 셀에 대한 확률 정보를 인코딩할 수 있지만, 이 정보는 현재 MoveIt에서 사용되지 않습니다.
+Octomap은 MoveIt에서 사용하는 충돌 검사 라이브러리인 FCL에 직접 전달할 수 있습니다.
 
 Depth Image Occupancy Map Updater
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The depth image occupancy map updater includes its own *self-filter*, i.e. it will remove visible parts of the robot from the depth map.
-It uses current information about the robot (the robot state) to carry out this operation.
+depth image occupancy map 업데이터는 자체 필터(*self-filter*)를 포함합니다. 즉 로봇의 시각적인 부분을 depth map에서 제거하는 기능을 포함합니다.
+이 작업을 수행하기 위해 로봇(robot state)에 대한 현재 정보를 사용합니다.
