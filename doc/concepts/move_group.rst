@@ -55,7 +55,7 @@ Transform Information
 이를 통해 node는 로봇의 pose에 대한 전역 정보 (다른 것들 중에서)를 얻을 수 있습니다.
 예를 들어, ROS navigation stack은 로봇의 map frame과 base frame 간의 변환을 TF에 publish합니다.
 ``move_group`` 은 TF를 사용하여 내부적인 사용을 위한 이 transformation을 파악할 수 있습니다.
-주의: ``move_group``은 TF만 수신합니다.
+주의: ``move_group`` 은 TF만 수신합니다.
 로봇에서 TF 정보를 publish하려면 로봇쪽에서 ``robot_state_publisher`` node를 실행해야 합니다.
 
 Controller Interface

@@ -1,5 +1,5 @@
 ===================================
-경로 프로세싱(Trajectory Processing)
+궤적 프로세싱(Trajectory Processing)
 ===================================
 
 Time parameterization
