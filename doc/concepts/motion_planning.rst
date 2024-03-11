@@ -41,53 +41,52 @@ Motion planning adapters
 
 .. image:: /_static/images/motion_planner.png
 
-The complete motion planning pipeline chains together a motion planner with other components called **planning request adapters**.
-Planning request adapters allow for pre-processing motion plan requests and post-processing motion plan responses.
-Pre-processing is useful in several situations, e.g. when a start state for the robot is slightly outside the specified joint limits for the robot.
-Post-processing is needed for several other operations, e.g. to convert paths generated for a robot into time-parameterized trajectories.
-MoveIt provides a set of default motion planning adapters that each perform a very specific function.
+완전한 모션 계획 파이프라인(motion planning pipeline)은 motion planner를 **planning request adapters** 라고 불리는 다른 구성 요소와 연결합니다.
+Planning request adapters는 모션 계획 요청을 사전 처리하고 모션 계획 응답을 사후 처리할 수 있도록 합니다.
+사전 처리는 여러 상황에서 유용한데 예를 들면 로봇의 시작 상태가 로봇에 지정된 joint limits을 약간 벗어나 있는 경우가 있습니다.
+사후 처리에는 다른 여러 작업에서 필요로하는데, 예를 들면 로봇을 위해 생성된 path를 시간 매개 변수 궤적(time-parameterized trajectories)으로 변환하는 경우입니다.
+MoveIt은 각각 매우 특정한 기능을 수행하는 일련의 기본 motion planning adapters를 제공합니다.
 
 CheckStartStateBounds
 ^^^^^^^^^^^^^^^^^^^^^
 
-The fix start state bounds adapter fixes the start state to be within the joint limits specified in the URDF.
-The need for this adapter arises in situations where the joint limits for the physical robot are not properly configured.
-The robot may then end up in a configuration where one or more of its joints is slightly outside its joint limits.
-In this case, the motion planner is unable to plan since it will think that the starting state is outside joint limits.
-The "CheckStartStateBounds" planning request adapter will "fix" the start state by moving it to the joint limit.
-However, this is obviously not the right solution every time - e.g. where the joint is really outside its joint limits by a large amount.
-A parameter for the adapter specifies how much the joint can be outside its limits for it to be "fixable".
+fix start state bounds adapter는 URDF 파일에 명시된 joint 한계값 내로 시작 상태를 맞추는 역할을 합니다.
+이 어댑터가 필요한 경우는 실제 로봇의 joint 한계가 올바르게 설정되지 않은 경우입니다.
+이렇게 되면 로봇의 한개 이상의 joint들이 joint 한계를 약간 벗어나는 구성에 놓이게 될 수 있습니다.
+이 경우 모션 플래너는 시작 상태가 joint 한계를 벗어났다고 판단하기 때문에 경로를 계획할 수 없습니다.
+"CheckStartStateBounds" planning request adapter는 시작 상태를 joint 한계 위치로 이동시켜 수정합니다.
+하지만, 이는 항상 올바른 해결책은 아닙니다. 예를 들어 joint가 실제로 joint 한계를 크게 벗어난 경우에는 말이죠.
+어댑터의 매개 변수는 joint가 얼마나 벗어나도 수정 가능한지에 대한 한계를 지정합니다.
 
 ValidateWorkspaceBounds
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The fix workspace bounds adapter will specify a default workspace for planning: a cube of size 10 m x 10 m x 10 m.
-This workspace will only be specified if the planning request to the planner does not have these fields filled in.
+fix workspace bounds adapter는 로봇의 작업 공간을 기본값으로 설정합니다. 이 기본값은 가로 10 미터, 세로 10 미터, 높이 10 미터 크기의 정육면체 공간입니다.  하지만, 사용자가 계획 요청 시 작업 공간을 설정하지 않은 경우에만 어댑터가 개입하게 됩니다.
 
 CheckStartStateCollision
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The fix start state collision adapter will attempt to sample a new collision-free configuration near a specified configuration (in collision) by perturbing the joint values by a small amount.
-The amount that it will perturb the values by is specified by the **jiggle_fraction** parameter that controls the perturbation as a percentage of the total range of motion for the joint.
-The other parameter for this adapter specifies how many random perturbations the adapter will sample before giving up.
+fix start state collision adapter는 지정한 관절 설정값(충돌 상태) 근처에서 작은 값만큼 관절 값을 변화시켜 충돌 없는 새로운 관절 설정을 찾으려고 시도합니다.
+변화시키는 양은 **jiggle_fraction** 파라미터에 의해 설정되며, 이 파라미터는 관절의 전체 가동 범위에 대한 백분율로 변화량을 제어합니다.
+이 어댑터의 다른 파라미터는 샘플링을 포기하기 전에 어댑터가 샘플링할 임의의 변화의 개수를 지정합니다.
 
 
 AddTimeParameterization
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The motion planners will typically generate "kinematic paths", i.e., paths that do not obey any velocity or acceleration constraints and are not time parameterized.
-This adapter will "time parameterize" the motion plans by applying velocity and acceleration constraints.
+motion planners는 일반적으로 속도나 가속도 제약 조건을 따르지 않고 시간 매개변수(time parameterized)가 없는 "kinematic paths"를 생성합니다.
+이 어댑터는 속도 및 가속도 제약 조건을 적용하여 모션 플랜을 "time parameterize(시간 매개변수화)"합니다.
 
 ResolveConstraintFrames
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Goal constraints can be set using subframes (e.g. a pose goal in the frame ``cup/handle``, where ``handle`` is a subframe on the object ``cup``).
-This adapter changes the frame of constraints to an object or robot frame (e.g. ``cup``).
+목표 제약(Goal constraints) 조건은 subframes을 사용하여 설정할 수 있습니다 (예: ``cup/handle`` frame에서 pose goal로, 여기서 ``handle`` 은 객체 ``cup`` 상의 subframe입니다.).
+이 어댑터는 제약 조건의 프레임을 객체 혹은 로봇 프레임 (예: ``cup`` )으로 변경합니다.
 
 OMPL
 ----
 
-OMPL (Open Motion Planning Library) is an open-source motion planning library that primarily implements randomized motion planners.
-MoveIt integrates directly with OMPL and uses the motion planners from that library as its primary/default set of planners.
-The planners in OMPL are abstract; i.e. OMPL has no concept of a robot.
-Instead, MoveIt configures OMPL and provides the back-end for OMPL to work with problems in Robotics.
+OMPL (Open Motion Planning Library)은 주로 랜덤 모션 플래너를 구현하는 오픈소스 모션 플래닝 라이브러리( motion planning library)입니다.
+MoveIt은 OMPL과 직접 통합되어 있고, 이 라이브러리의 모션 플래너를 기본 플래너로 사용합니다.
+OMPL내에 플래너는 추상적입니다. 예로 OMPL은 로봇의 개념이 없습니다.
+대신 MoveIt은 OMPL을 설정하고 로봇공학에서 문제 해결을 위해서 OMPL이 작동할 수 있도록 백엔드를 제공합니다.
