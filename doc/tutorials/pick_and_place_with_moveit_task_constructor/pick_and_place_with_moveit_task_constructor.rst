@@ -19,48 +19,46 @@ MTC의 기본적인 아이디어는 복잡한 모션 계획 문제를 더 간단
 결과 흐름과 관련된 세 가지 가능한 스테이지 유형은 생성기(generator), 전파기(propagator), 연결기(connector) 스테이지입니다.:
 
 **발생기 (Generators)**는 이웃하는 stages와 독립적으로 결과를 계산하고 양방향으로, 즉 앞뒤로 전달합니다.
-예를 들어, 접근 및 이탈 모션 (이웃 단계)이 해결 방법에 따라 달라지는 기하학적 포즈에 대한 IK sampler가 있습니다.
-**Generators** compute their results independently of their neighbor stages and pass them in both directions, backwards and forwards.
-An example is an IK sampler for geometric poses where approaching and departing motions (neighbor stages) depend on the solution.
+예를 들어, 접근 및 이탈 모션 (이웃 stages)이 솔루션에 따라 달라지는 기하학적 포즈에 대한 IK sampler가 있습니다.
 
-**Propagators** receive the result of one neighbor stage, solve a subproblem and then propagate their result to the neighbor on the opposite site.
-Depending on the implementation, propagating stages can pass solutions forward, backward or in both directions separately.
-An example is a stage that computes a Cartesian path based on either a start or a goal state.
+**전파기 (Propagators)**는 한쪽 이웃 stage의 결과를 받고, 하위 문제를 해결한 다음 반대편 이웃에게 결과를 전파합니다.
+구현 방법에 따라 전파 단계는 해결책을 앞으로, 뒤로 또는 양 방향으로 별도로 전달할 수 있습니다.
+예를 들어, 시작 상태 또는 목표 상태를 기반으로 데카르트 경로를 계산하는 stage가 있습니다.
 
-**Connectors** do not propagate any results, but rather attempt to bridge the gap between the resulting states of both neighbors.
-An example is the computation of a free-motion plan from one given state to another.
+**연결기 (Connectors)**는 결과를 전파하지 않고, 두 이웃의 결과 상태 간의 간격을 연결하려고 시도합니다.
+예를 들어, 주어진 한 상태에서 다른 상태로 가는 free-motion 계획의 계산입니다.
 
-Additional to the order types, there are different hierarchy types allowing to encapsulate subordinate stages.
-Stages without subordinate stages are called **primitive stages**, higher-level stages are called **container stages**.
-There are three container types:
+위의 순서 유형 외에도 하위 단계를 캡슐화 할 수 있는 다른 계층 유형(hierarchy types)이 있습니다.
+하위 단계가 없는 단계를 **기본 단계 (primitive stages)**라고 하고, 상위 단계를 **컨테이너 단계 (container stages)**라고 합니다.
+컨테이너 유형은 세 가지가 있습니다.:
 
-**Wrappers** encapsulate a single subordinate stage and modify or filter the results.
-For example, a filter stage that only accepts solutions of its child stage that satisfy a certain constraint can be realized as a wrapper.
-Another standard use of this type includes the IK wrapper stage, which generates inverse kinematics solutions based on planning scenes annotated with a pose target property.
+**래퍼(Wrapper)**는 단일 하위 단계를 캡슐화하고 결과를 수정 또는 필터링합니다.
+예를 들어, 자식 단계의 해결책 중 특정 제약 조건을 만족하는 것만 수용하는 필터 단계는 래퍼가 될 수 있습니다.
+이러한 유형의 또 다른 표준적인 사용 사례로는 포즈 타겟 속성(pose target property)으로 주석 처리된 계획 장면(planning scenes)을 기반으로 역 운동학(inverse kinematics) 솔루션을 생성하는 IK wrapper stage가 있습니다.
 
-**Serial Containers** hold a sequence of subordinate stages and only consider end-to-end solutions as results.
-An example is a picking motion that consists of a sequence of coherent steps.
+**직렬 컨테이너(Serial Container)**는 하위 단계 시퀀스를 보유하고 결과로서 끝에서 끝까지의 솔루션(end-to-end solution)만 고려합니다.
+일련의 일관된 단계로 구성된 집는 동작(picking motion)이 한 예입니다.
 
-**Parallel Containers** combine set of subordinate stages and can be used for passing the best of alternative results, running fallback solvers or for merging multiple independent solutions.
-Examples are running alternative planners for a free-motion plan, picking objects with the right hand or with the left hand as a fallback, or moving the arm and opening the gripper at the same time.
+**병렬 컨테이너(Parallel Container)**는 하위 단계 집합을 결합하고, 대안 결과 중 최상의 결과를 전달하거나, fallback solvers를 실행하거나, 여러 독립적인 해결책을 병합하는 데 사용할 수 있습니다.
+예를 들어, 자유 이동 계획(free-motion plan)에 대한 대안 계획자(alternative planners) 실행, 오른손 또는 왼손으로 물건 집기 (fallback처럼) 혹은 동시에 팔 이동 및 그리퍼 열기 등이 있습니다.
 
 .. image:: mtc_stage_types.png
    :width: 700px
 
-Stages not only support solving motion planning problems.
-They can also be used for all kinds of state transitions, as for instance modifying the planning scene.
-Combined with the possibility of using class inheritance it is possible to construct very complex behavior while only relying on a well-structured set of primitive stages.
+stages는 단순히 모션 계획 문제를 푸는 것을 지원하는 것이 아닙니다.
+모든 종류의 상태 변환(state transitions)에도 사용할 수 있습니다. 예를 들어 계획 장면(planning scene) 수정과 같이 말입니다.
+클래스 상속을 사용하는 가능성이 결합되면, 잘 정리된 primitive stages 세트만 사용하면서도 매우 복잡한 behavior을 구성할 수 있습니다.
 
-More detailed information on MTC can be found in the :doc:`MoveIt Task Constructor concepts page </doc/concepts/moveit_task_constructor/moveit_task_constructor>`
+MTC에 대한 좀더 상세하는 정보는 :doc:`MoveIt Task Constructor concepts page </doc/concepts/moveit_task_constructor/moveit_task_constructor>` 를 참고하세요.
 
-2 Getting Started
+2 시작하기
 -----------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+먼저 :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 에서 설명된 단계를 완료하세요.
 
-2.1 Download MoveIt Task Constructor
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2.1 MoveIt Task Constructor 다운받기
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Move into your colcon workspace and pull the MoveIt Task Constructor source: ::
+colcon 워크스페이스로 이동하고 MoveIt Task Constructor 소스를 가져옵니다.: ::
 
     cd ~/ws_moveit/src
     git clone git@github.com:ros-planning/moveit_task_constructor.git -b ros2
@@ -68,45 +66,45 @@ Move into your colcon workspace and pull the MoveIt Task Constructor source: ::
 3 Trying It Out
 ------------------
 
-The MoveIt Task Constructor package contains several basic examples and a pick-and-place demo.
-For all demos you should launch the basic environment: ::
+MoveIt Task Constructor 패키지에는 몇 가지 기본 예제와 pick-and-place 데모가 포함되어 있습니다.
+모든 데모를 위해서는 기본 환경을 launch해야 합니다: ::
 
   ros2 launch moveit_task_constructor_demo demo.launch.py
 
-Subsequently, you can run the individual demos: ::
+이어서 다음 개별 데모들을 실행할 수 있습니다: ::
 
   ros2 run moveit_task_constructor_demo cartesian.launch.py
   ros2 run moveit_task_constructor_demo modular.launch.py
   ros2 launch moveit_task_constructor_demo pickplace.launch.py
 
-On the right side you should see the **Motion Planning Tasks** panel outlining the hierarchical stage structure of the tasks.
-When you select a particular stage, the list of successful and failed solutions will be
-shown in the right-most window. Selecting one of those solutions will start its visualization.
+오른쪽에 **Motion Planning Tasks** 패널을 확인할 수 있습니다. 이 패널은 태스크의 계층적 stage 구조를 보여줍니다.
+특정 stage를 선택하면, 성공한 솔루션과 실패한 솔루션 목록이 가장 오른쪽 창에 표시됩니다.
+해당 솔루션 중 하나를 선택하면 시각화가 시작됩니다.
 
 .. image:: mtc_show_stages.gif
    :width: 700px
 
-4 Setting up a Project with MoveIt Task Constructor
----------------------------------------------------
+4 MoveIt Task Constructor로 프로젝트 설정하기
+-------------------------------------------------------
 
-This section walks through the steps required to build a simple task with MoveIt Task Constructor.
+이 섹션에서는 MoveIt Task Constructor를 사용하여 간단한 태스크를 만드는 데 필요한 단계를 안내합니다.
 
 4.1 Create a New Package
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a new package with the following command: ::
+다음 명령을 사용하여 새 package를 만드세요: ::
 
     ros2 pkg create \
     --build-type ament_cmake \
     --dependencies moveit_task_constructor_core rclcpp \
     --node-name mtc_node mtc_tutorial
 
-This will create a new package and folder called ``mtc_tutorial`` with a dependency on ``moveit_task_constructor_core`` as well as a hello world example in ``src/mtc_node``.
+이 코드는 ``mtc_tutorial`` 이라는 새로운 package와 폴더를 생성합니다. 이 패키지는 ``moveit_task_constructor_core`` 에 의존하며, ``src/mtc_node`` 에서 hello world 예제 코드도 제공합니다.
 
-4.2 The Code
+4.2 코드
 ^^^^^^^^^^^^
 
-Open ``mtc_node.cpp`` in your editor of choice, and paste in the following code.
+원하는 편집기에서 ``mtc_node.cpp`` 파일을 열고, 다음 코드를 붙여넣으세요.
 
 .. code-block:: c++
 
@@ -278,12 +276,12 @@ Open ``mtc_node.cpp`` in your editor of choice, and paste in the following code.
 4.3 Code Breakdown
 ^^^^^^^^^^^^^^^^^^
 
-The top of the code includes the ROS and MoveIt Libraries that this package uses.
+코드 상단에 이 package에서 사용하는 ROS 및 MoveIt 라이브러리 헤더를 include합니다.
 
- * ``rclcpp/rclcpp.hpp`` includes core ROS2 functionality
- * ``moveit/planning_scene/planning_scene.h`` and ``moveit/planning_scene_interface/planning_scene_interface.h`` include functionality to interface with the robot model and collision objects
- * ``moveit/task_constructor/task.h``, ``moveit/task_constructor/solvers.h``, and ``moveit/task_constructor/stages.h`` include different components of MoveIt Task Constructor that are used in the example
- * ``tf2_geometry_msgs/tf2_geometry_msgs.hpp`` and ``tf2_eigen/tf2_eigen.hpp`` won't be used in this initial example, but they will be used for pose generation when we add more stages to the MoveIt Task Constructor task.
+ * ``rclcpp/rclcpp.hpp`` : ROS 2 core 기능
+ * ``moveit/planning_scene/planning_scene.h`` 와 ``moveit/planning_scene_interface/planning_scene_interface.h`` : robot model과 충돌 객체 인터페이스 기능
+ * ``moveit/task_constructor/task.h``, ``moveit/task_constructor/solvers.h``,  ``moveit/task_constructor/stages.h`` : 예제에서 사용하는 MoveIt Task Constructor의 다른 components
+ * ``tf2_geometry_msgs/tf2_geometry_msgs.hpp`` 와 ``tf2_eigen/tf2_eigen.hpp`` : 초기 예제에서는 사용하지 않지만 MoveIt Task Constructor 태스크에 stages를 추가할때 pose 생성을 위해서 사용하게 됩니다.
 
 .. code-block:: c++
 
@@ -304,14 +302,14 @@ The top of the code includes the ROS and MoveIt Libraries that this package uses
     #include <tf2_eigen/tf2_eigen.h>
     #endif
 
-The next line gets a logger for our new node. We also create a namespace alias for ``moveit::task_constructor`` for convenience.
+다음 줄에서는 새로운 node에 대한 로거를 가져옵니다. 편의를 위해 ``moveit::task_constructor`` 에 대해서 namespace alias도 생성합니다.
 
 .. code-block:: c++
 
     static const rclcpp::Logger LOGGER = rclcpp::get_logger("mtc_tutorial");
     namespace mtc = moveit::task_constructor;
 
-We start by defining a class that will contain the main MoveIt Task Constructor functionality.  We also declare the MoveIt Task Constructor task object as a member variable for our class: this isn't strictly necessary for a given application, but it helps save the task for later visualization purposes. We will explore each function individually below.
+이제 MoveIt Task Constructor의 주요 기능을 포함하는 클래스를 정의합니다. 또한 클래스의 멤버 변수로 MoveIt Task Constructor 태스크 객체를 선언합니다.: 이는 특정 응용 프로그램에 반드시 필요한 것은 아니지만, 나중에 시각화 목적으로 작업을 저장하는 데 도움이 됩니다. 개별 함수에 대해서는 나중에 자세히 살펴보겠습니다.
 
 .. code-block:: c++
 
@@ -333,7 +331,7 @@ We start by defining a class that will contain the main MoveIt Task Constructor 
       rclcpp::Node::SharedPtr node_;
     };
 
-These lines initialize the node with specified options (it is the constructor of our ``MTCTaskNode`` class).
+이 코드는 노드를 지정된 옵션으로 초기화합니다.( ``MTCTaskNode`` 클래스의 생성자 입니다.)
 
 .. code-block:: c++
 
@@ -342,7 +340,7 @@ These lines initialize the node with specified options (it is the constructor of
     {
     }
 
-These next lines define a getter function to get the node base interface, which will be used for the executor later.
+다음 코드는 getter 함수를 정의합니다. 이 함수는 나중에 실행자(executor)를 위해 사용할 node base 인터페이스를 얻어옵니다.
 
 .. code-block:: c++
 
@@ -351,8 +349,8 @@ These next lines define a getter function to get the node base interface, which 
       return node_->get_node_base_interface();
     }
 
-This class method is used to set up the planning scene that is used in the example. It creates a cylinder with dimensions specified by ``object.primitives[0].dimensions`` and position specified by ``pose.position.x`` and ``pose.position.y``.
-You can try changing these numbers to resize and move the cylinder around. If we move the cylinder out of the robot's reach, planning will fail.
+이 클래스 메서드는 예제에서 사용되는 planning scenes을 설정하는 데 사용됩니다. ``object.primitives[0].dimensions`` 로 dimensions을,  ``pose.position.x`` 와 ``pose.position.y`` 로 위치를 지정하여 실린더를 만듭니다.
+이 값을 변경하여 실린더의 크기를 조절하고 이동시킬 수 있습니다. 실린더를 로봇의 도달 범위 밖으로 이동시키면 계획은 실패하게 됩니다.
 
 .. code-block:: c++
 
@@ -374,7 +372,7 @@ You can try changing these numbers to resize and move the cylinder around. If we
       psi.applyCollisionObject(object);
     }
 
-This function interfaces with the MoveIt Task Constructor task object. It first creates a task, which includes setting some properties and adding stages. This will be discussed further in the ``createTask`` function definition. Next, ``task.init()`` initializes the task and ``task.plan(5)`` generates a plan, stopping after 5 successful plans are found. The next line publishes the solution to be visualized in RViz - this line can be removed if you don't care for visualization. Finally, ``task.execute()`` executes the plan. Execution occurs via an action server interface with the RViz plugin.
+이 함수는 MoveIt Task Constructor 태스크 객체와 연결하는 역할을 합니다. 먼저 태스크를 생성하는데, 이는 일부 속성 설정과 stages 추가를 포함합니다. 이에 대한 자세한 내용은 ``createTask`` 함수 정의에서 설명합니다. 다음으로, ``task.init()`` 은 태스크를 초기화하고, ``task.plan(5)`` 은 5개의 성공적인 계획을 찾을때까지 계획을 생성합니다. 다음 줄은 RViz에서 시각화되도록 솔루션을 publish합니다. 만약 시각화를 원하지 않으면 이 줄을 삭제하면 됩니다. 마지막으로, ``task.execute()`` 는 계획을 실행합니다. 실행은 RViz 플러그인과의 action server 인터페이스를 통해 발생합니다.
 
 .. code-block:: c++
 
@@ -409,7 +407,7 @@ This function interfaces with the MoveIt Task Constructor task object. It first 
       return;
     }
 
-As mentioned above, this function creates a MoveIt Task Constructor object and sets some initial properties. In this case, we set the task name to "demo_task", load the robot model, define the names of some useful frames, and set those frame names as properties of the task with ``task.setProperty(property_name, value)``. The next few code blocks will fill out this function body.
+위에서 언급했듯이, 이 함수는 MoveIt Task Constructor 객체를 생성하고 몇 가지 초기 속성을 설정합니다. 이 경우에는 태스크 이름을 "demo_task"로 설정하고, robot model을 로딩하고, 몇 가지 유용한 프레임의 이름을 정의하고, 해당 프레임 이름은 ``task.setProperty(property_name, value)`` 를 사용하여 태스크의 속성으로 설정합니다. 다음 몇 개의 코드 블록은 이 함수 몸통을 채울 것입니다.
 
 .. code-block:: c++
 
@@ -428,7 +426,7 @@ As mentioned above, this function creates a MoveIt Task Constructor object and s
       task.setProperty("eef", hand_group_name);
       task.setProperty("ik_frame", hand_frame);
 
-Now, we add an example stage to the node. The first line sets ``current_state_ptr`` to ``nullptr``; this creates a pointer to a stage such that we can re-use stage information in specific scenarios. This line is not used at this moment, but will be used later when more stages are added to the task. Next, we make a ``current_state`` stage (a generator stage) and add it to our task - this starts the robot off in its current state. Now that we've created the ``CurrentState`` stage, we save a pointer to it in the ``current_state_ptr`` for later use.
+이제 해당 node에 예제 stage를 추가합니다. 첫 번째 줄은 ``current_state_ptr`` 을 ``nullptr`` 로 설정합니다.; 이는 특정 시나리오에서 stage 정보를 재사용할 수 있도록 stage를 가리키는 포인터를 생성합니다. 이 줄은 현재 시점에서는 사용되지 않지만, 나중에 태스크에 더 많은 stages가 추가될 때 사용됩니다. 다음으로 ``current_state`` stage (생성기 단계(generator stage))를 만들고 태스크에 추가합니다. - 이렇게 하면 로봇이 현재 상태에서 시작됩니다. 이제 ``CurrentState`` stage를 만들었으므로 나중에 사용하기 위해 포인터를 ``current_state_ptr`` 에 저장합니다.
 
 .. code-block:: c++
 
@@ -437,7 +435,7 @@ Now, we add an example stage to the node. The first line sets ``current_state_pt
       current_state_ptr = stage_state_current.get();
       task.add(std::move(stage_state_current));
 
-Solvers are used to define the type of robot motion. MoveIt Task Constructor has three options for solvers:
+solvers는 robot motion 타입을 정의하는데 사용됩니다. MoveIt Task Constructor는 solver에 대해서 3가지 옵션을 제공합니다:
 
 
   **PipelinePlanner** uses MoveIt's planning pipeline, which typically defaults to `OMPL <https://github.com/ompl/ompl>`_.
