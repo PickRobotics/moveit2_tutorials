@@ -31,7 +31,7 @@ Table Of Contents
    doc/api/api
    doc/how_to_contribute/how_to_contribute
 
-기여
+기여하기
 -----------
 
 MoveIt 튜토리얼에 과거 주요 기여자들을 연대순으로 나열하였습니다.: Sachin Chitta, Dave Hershberger, Acorn Pooley, Dave Coleman, Michael Gorner, Francisco Suarez, Mike Lautman, Tyler Weaver, David Lu!!, Vatan Tezer, and Andy Zelenak.
