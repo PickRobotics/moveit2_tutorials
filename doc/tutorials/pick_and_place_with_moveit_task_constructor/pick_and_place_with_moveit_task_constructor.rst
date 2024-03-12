@@ -481,7 +481,7 @@ solvers는 robot motion 타입을 정의하는데 사용됩니다. MoveIt Task C
       return task;
     }
 
-마지막으로 ``main``이 있습니다. 다음 줄은 위에서 정의한 클래스를 사용하여 node를 생성하고 클래스 메서드를 호출하여 기본 MTC 태스크를 설정하고 실행합니다. 이 예에서는 태스트가 실행을 완료하더라도 실행자(executor)를 취소하지 않고 RViz에서 솔루션을 검사하기 위해 node를 유지 관리합니다.
+마지막으로 ``main`` 이 있습니다. 다음 줄은 위에서 정의한 클래스를 사용하여 node를 생성하고 클래스 메서드를 호출하여 기본 MTC 태스크를 설정하고 실행합니다. 이 예에서는 태스트가 실행을 완료하더라도 실행자(executor)를 취소하지 않고 RViz에서 솔루션을 검사하기 위해 node를 유지 관리합니다.
 
 .. code-block:: c++
 
@@ -694,7 +694,8 @@ c
                                 Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d::UnitZ());
           grasp_frame_transform.linear() = q.matrix();
           grasp_frame_transform.translation().z() = 0.1;
-stage`generate pose IK`` 라는 이름과 앞서 정의한 ``generate grasp pose`` stage를 함께 사용하는 ``ComputeIK`` stage를 생성합니다. 일부 로봇은 지정된 포즈에 대해 여러 inverse kinematics 솔루션을 가질 수 있습니다. 솔루션 갯수 제한을 최대 8개로 설정합니다. 또한 최소 솔루션 거리도 설정합니다. 이는 솔루션 간의 차이 임계값입니다. 솔루션의 joint 위치가 이전 솔루션과 너무 유사하면 유효하지 않다고 표시됩니다. 다음으로 몇 가지 추가 속성을 설정하고 ``ComputeIK`` stage를 직렬 컨테이너에 추가합니다.
+
+``generate pose IK`` 라는 이름과 앞서 정의한 ``generate grasp pose`` stage를 함께 사용하는 ``ComputeIK`` stage를 생성합니다. 일부 로봇은 지정된 포즈에 대해 여러 inverse kinematics 솔루션을 가질 수 있습니다. 솔루션 갯수 제한을 최대 8개로 설정합니다. 또한 최소 솔루션 거리도 설정합니다. 이는 솔루션 간의 차이 임계값입니다. 솔루션의 joint 위치가 이전 솔루션과 너무 유사하면 유효하지 않다고 표시됩니다. 다음으로 몇 가지 추가 속성을 설정하고 ``ComputeIK`` stage를 직렬 컨테이너에 추가합니다.
 
 .. code-block:: c++
 
