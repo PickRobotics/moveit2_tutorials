@@ -37,6 +37,8 @@ Table Of Contents
 MoveIt 튜토리얼에 과거 주요 기여자들을 연대순으로 나열하였습니다.: Sachin Chitta, Dave Hershberger, Acorn Pooley, Dave Coleman, Michael Gorner, Francisco Suarez, Mike Lautman, Tyler Weaver, David Lu!!, Vatan Tezer, and Andy Zelenak.
 Some major past contributors to the MoveIt tutorials are listed in chronological order: Sachin Chitta, Dave Hershberger, Acorn Pooley, Dave Coleman, Michael Gorner, Francisco Suarez, Mike Lautman, Tyler Weaver, David Lu!!, Vatan Tezer, Andy Zelenak. 이는 수년간 이 문서에 큰 영향을 미친 `46명 이상 <https://github.com/ros-planning/moveit2_tutorials/graphs/contributors>`_ 의 컨트리뷰터 중 일부입니다.
 
+한국어 버전은 김재은(Kim Jaeeun), 신제용(Shin Jeyong)이 번역 및 배포하고 있습니다.
+
 이 문서를 개선하는데 도움을 주세요. 기꺼이 이 자리에 여러분의 이름도 함께 실을 것입니다!
 
 기업 스폰서쉽
