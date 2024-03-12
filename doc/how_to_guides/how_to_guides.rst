@@ -1,11 +1,11 @@
 How-To Guides
 =============
 
-These how-to guides will help you quickly solve specific problems using MoveIt.
+이 가이드는 MoveIt을 사용하여 특정 문제를 빠르게 해결하는 데 도움을 줍니다.
 
-For more information, refer to :doc:`/doc/how_to_guides/how_to_guide`.
+더 많은 정보는 :doc:`/doc/how_to_guides/how_to_guide` 를 참고하세요.
 
-Configuring and Using MoveIt
+MoveIt 설정 및 사용하기
 ----------------------------
 
 .. toctree::
@@ -26,7 +26,7 @@ Configuring and Using MoveIt
    trac_ik/trac_ik_tutorial
    benchmarking/benchmarking_tutorial
 
-Developing and Documenting MoveIt
+MoveIt 개발 및 문서화
 ---------------------------------
 
 .. toctree::

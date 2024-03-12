@@ -1,9 +1,9 @@
 .. _MoveIt Configuration:
 
-MoveIt Configuration
+MoveIt 설정
 ==================================
 
-The recommended way of configuring MoveIt for your robot is by creating a colcon package containing the MoveIt Configuration.
+여러분의 로봇에 대한 MoveIt 설정 권장 방법은 MoveIt 설정을 포함하는 colcon 패키지를 만드는 것입니다.
 
 Suppose you would like to create a configuration package for some robot named ``my_robot``.
 To do this, you can create a colcon package named ``my_robot_moveit_config``, whose structure is as follows:
