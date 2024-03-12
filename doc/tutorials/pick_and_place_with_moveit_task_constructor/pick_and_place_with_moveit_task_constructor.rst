@@ -438,25 +438,25 @@ MoveIt Task Constructor 패키지에는 몇 가지 기본 예제와 pick-and-pla
 solvers는 robot motion 타입을 정의하는데 사용됩니다. MoveIt Task Constructor는 solver에 대해서 3가지 옵션을 제공합니다:
 
 
-  **PipelinePlanner** uses MoveIt's planning pipeline, which typically defaults to `OMPL <https://github.com/ompl/ompl>`_.
+  **PipelinePlanner** 는 MoveIt의 planning pipeline을 사용하며, 이것은 `OMPL <https://github.com/ompl/ompl>`_ 에 기본값입니다.
 
   .. code:: c++
 
         auto sampling_planner = std::make_shared<mtc::solvers::PipelinePlanner>(node_);
 
-  **JointInterpolation** is a simple planner that interpolates between the start and goal joint states. It is typically used for simple motions as it computes quickly but doesn't support complex motions.
+  **JointInterpolation** 은 시작과 목표 joint 상태 사이를 보간하는 간단한 planner입니다. 계산은 빠르지만 복잡한 동작을 지원하지 않기 때문에 일반적으로 간단한 motions에 사용됩니다.
 
   .. code:: c++
 
         auto interpolation_planner = std::make_shared<mtc::solvers::JointInterpolationPlanner>();
 
-  **CartesianPath** is used to move the end effector in a straight line in Cartesian space.
+  **CartesianPath** 는 end-effector를 데카르트 공간 내에서 직선 경로를 따라 이동하는 데 사용됩니다.
 
   .. code:: c++
 
         auto cartesian_planner = std::make_shared<mtc::solvers::CartesianPath>();
 
-Feel free to try out the different solvers and see how the robot motion changes. For the first stage we will use the Cartesian planner, which requires the following properties to be set:
+다양한 solvers를 사용해보고 로봇 움직임이 어떻게 변하는지 확인해보세요. 첫 번째 stage에서는 데카르트 planner를 사용할 것이며, 다음과 같은 속성을 설정해야 합니다.:
 
 .. code-block:: c++
 
@@ -465,10 +465,10 @@ Feel free to try out the different solvers and see how the robot motion changes.
       cartesian_planner->setMaxAccelerationScalingFactor(1.0);
       cartesian_planner->setStepSize(.01);
 
-Now that we added in the planners, we can add a stage that will move the robot.
-The following lines use a ``MoveTo`` stage (a propagator stage). Since opening the hand is a relatively simple movement, we can use the joint interpolation planner.
-This stage plans a move to the "open hand" pose, which is a named pose defined in the :moveit_resources_codedir:`SRDF<panda_moveit_config/config/panda.srdf>` for the Panda robot.
-We return the task and finish with the ``createTask()`` function.
+이제 planner에 추가했으므로 로봇을 이동시키는 stage를 추가할 수 있습니다.
+다음 줄은 ``MoveTo`` stage (propagator stage)를 사용합니다. 손을 펴는 것은 비교적 간단한 동작이므로 joint interpolation planner를 사용할 수 있습니다.
+이 stage는 Panda 로봇의 :moveit_resources_codedir:`SRDF<panda_moveit_config/config/panda.srdf>` 내에 정의된 pose의 이름인 "open hand" 포즈로의 이동을 계획합니다.
+``createTask()`` 함수를 사용하여 태스크를 반환하고 완료합니다.
 
 .. code-block:: c++
 
@@ -481,7 +481,7 @@ We return the task and finish with the ``createTask()`` function.
       return task;
     }
 
-Finally, we have ``main``: the following lines create a node using the class defined above, and calls the class methods to set up and execute a basic MTC task. In this example, we do not cancel the executor once the task has finished executing to keep the node alive to inspect the solutions in RViz.
+마지막으로 ``main``이 있습니다. 다음 줄은 위에서 정의한 클래스를 사용하여 node를 생성하고 클래스 메서드를 호출하여 기본 MTC 태스크를 설정하고 실행합니다. 이 예에서는 태스트가 실행을 완료하더라도 실행자(executor)를 취소하지 않고 RViz에서 솔루션을 검사하기 위해 node를 유지 관리합니다.
 
 .. code-block:: c++
 
@@ -510,15 +510,15 @@ Finally, we have ``main``: the following lines create a node using the class def
     }
 
 
-5 Running the Demo
+5 데모 실행하기
 ------------------
 
 5.1 Launch Files
 ^^^^^^^^^^^^^^^^
 
-We will need a launch file to launch the ``move_group``, ``ros2_control``, ``static_tf``, ``robot_state_publisher``, and ``rviz`` nodes that provide us the environment to run the demo. The one we will use for this example can be found :codedir:`here<tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc_demo.launch.py>`.
+데모 실행을 위한 환경을 제공하는 ``move_group``, ``ros2_control``, ``static_tf``, ``robot_state_publisher``, ``rviz`` nodes들을 실행하기 위해서는 launch 파일이 필요합니다. 이 예제에서 사용할 파일은 :codedir:`here<tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc_demo.launch.py>` 에 위치합니다.
 
-To run the MoveIt Task Constructor node, we will use a second launch file to start the ``mtc_tutorial`` executable with the proper parameters. Here we can load URDF, SRDF, and OMPL parameters, or use MoveIt Configs Utils to do so. Your launch file should look something like the one found in this tutorial package :codedir:`here <tutorials/pick_and_place_with_moveit_task_constructor/launch/pick_place_demo.launch.py>` (pay close attention to the ``package`` and ``executable`` arguments below as they are different from the launch file linked) :
+MoveIt Task Constructor node를 실행하기 위해서는 두 번째 실행 파일을 사용하여 적절한 파라미터와 함께 ``mtc_tutorial`` 실행 파일을 시작합니다. 여기서는 URDF, SRDF, OMPL 파라미터를 로딩하거나 MoveIt Configs Utils를 사용하여 로딩할 수 있습니다. 사용자의 launch 파일은 이 튜토리얼 패키지에서 찾을 수 있는 것과 비슷해야 합니다. :codedir:`here <tutorials/pick_and_place_with_moveit_task_constructor/launch/pick_place_demo.launch.py>` (링크된 launch 파일과 아래의 ``package`` 와 ``executable`` 인수가 다르므로 주의하십시오) :
 
 .. code-block:: python
 
@@ -541,62 +541,62 @@ To run the MoveIt Task Constructor node, we will use a second launch file to sta
 
         return LaunchDescription([pick_place_demo])
 
-Save a launch file as ``pick_place_demo.launch.py`` or download one to the package's launch directory. Make sure to edit the ``CMakeLists.txt`` so it includes the launch folder by adding the following lines: ::
+패키지의 launch 디렉토리에 ``pick_place_demo.launch.py`` 이름으로 launch 파일을 저장하거나 다운로드하세요. 다음과 같은 라인을 추가하여 ``CMakeLists.txt`` 파일을 수정하여 launch 폴더를 포함하도록 해야 합니다. : ::
 
     install(DIRECTORY launch
       DESTINATION share/${PROJECT_NAME}
       )
 
-Now we can build and source the colcon workspace. ::
+이제 colcon 워크스페이스를 빌드하고 source할 수 있습니다. ::
 
     cd ~/ws_moveit
     colcon build --mixin release
     source ~/ws_moveit/install/setup.bash
 
-Start by launching the first launch file. If you want to use the one provided by the tutorials: ::
+첫 번째 launch 파일을 실행하는 것부터 시작합니다. 튜토리얼에서 제공하는 파일을 사용하려는 경우: ::
 
     ros2 launch moveit2_tutorials mtc_demo.launch.py
 
-RViz will now load. If you're using your own launch file and haven't included an rviz config :codedir:`such as this<tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc.rviz>`, you will need to configure RViz before you see anything displayed. If you're using the launch file from the tutorials package, RViz will already be configured for you and you can jump to the end of the next section.
+이제 RViz가 로드됩니다. 여러분이 만든 launch 파일을 사용하고 있고  :codedir:`such as this<tutorials/pick_and_place_with_moveit_task_constructor/launch/mtc.rviz>` 과 같은 rviz 설정을 포함하지 않은 경우, 어떤 것이든 화면에 표시되기 전에 RViz를 구성해야 합니다. 튜토리얼 패키지의 launch 파일을 사용하는 경우라면 RViz는 이미 설정되어 있으므로 다음 섹션의 끝으로 건너뛸 수 있습니다.
 
-5.2 RViz Configuration
+5.2 RViz 설정
 ^^^^^^^^^^^^^^^^^^^^^^
 
-If you are not using the RViz configuration provided, we'll have to make some changes to the RViz configuration to see your robot and the MoveIt Task Constructor solutions. First, start RViz. The following steps will cover how to set up RViz for MoveIt Task Constructor solution visualization.
+제공된 RViz 설정을 사용하지 않는 경우라면 로봇과 MoveIt Task Constructor 솔루션을 보기 위해 RViz 설정을 약간 변경해야 합니다. 다음은 RViz를 MoveIt Task Constructor 솔루션 시각화를 위해 설정하는 방법입니다.
 
-1. If the **MotionPlanning** display is active, uncheck it to hide it for now.
-2. Under **Global Options**, change the **Fixed Frame** from ``map`` to ``panda_link0`` if not already done.
-3. On the bottom left of the window, click the **Add** button.
-4. Under ``moveit_task_constructor_visualization`` select **Motion Planning Tasks** and click OK. The **Motion Planning Tasks** display should appear on the bottom left.
-5. In the **Displays**, under **Motion Planning Tasks**,  change **Task Solution Topic** to ``/solution``
+1. **모션 플래닝(MotionPlanning)** 디스플레이가 활성화되어 있으면 일시적으로 숨기도록 체크 해제하십시오.
+2. **전역 옵션(Global Options)** 에서 **고정 프레임(Fixed Frame)** 을 아직 ``panda_link0``으로 변경하지 않은 경우 ``map`` 에서 ``panda_link0`` 으로 변경하십시오.
+3. 창 하단 왼쪽에서 **Add** 버튼을 클릭하십시오.
+4. ``moveit_task_constructor_visualization`` 아래 **모션 플래닝 작업(Motion Planning Task)** 을 선택하고 OK를 누르십시오. **Motion Planning Tasks** 디스플레이가 하단 왼쪽에 나타나야 합니다.
+5. **Displays** 에서 **Motion Planning Tasks** 아래 **Task Solution Topic** 을 ``/solution`` 으로 변경하십시오.
 
-You should see the panda arm in the main view with Motion Planning Tasks display open in the bottom left and nothing in it. Your MTC task will show up in this panel once you launch the ``mtc_tutorial`` node. If you're using ``mtc_demo.launch.py`` from the tutorials, jump back in here.
+메인 뷰에서 panda arm과 하단 왼쪽에 열린 Motion Planning Tasks display가 표시되며 아무 내용도 표시되지 않아야 합니다.  ``mtc_tutorial`` node를 launch 시키면 MTC task가 이 패널에 표시됩니다.  튜토리얼에서 ``mtc_demo.launch.py`` 를 사용하고 있다면 여기로 돌아오십시오.
 
-5.3 Launching the Demo
+5.3 데모 런치시키기
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Launch the ``mtc_tutorial`` node with  ::
+``mtc_tutorial`` node를 아래 명령으로 Launch 시킵니다.  ::
 
     ros2 launch mtc_tutorial pick_place_demo.launch.py
 
-You should see the arm execute the task with the single stage to open the hand, with the cylinder in green in front of it. It should look something like this:
+녹색 실린더가 앞에 있으며, arm은 손을 벌리기 위해서 하나의 stage로 작업을 수행하는 것을 볼 수 있습니다. 대략 다음과 같이 보일 것입니다:
 
 .. image:: first_stages.png
    :width: 700px
 
-If you haven't made your own package, but still want to see what this looks like, you can launch this file from the tutorials: ::
+여러분은 자체 패키지를 만들지 않았지만, 어떤 모습인지 보고 싶다면 튜토리얼에서 이 파일을 launch 시킬 수 있습니다.: ::
 
     ros2 launch moveit2_tutorials mtc_demo_minimal.launch.py
 
-6 Adding Stages
----------------
+6 Stages 추가하기
+---------------------
 
-So far, we've walked through creating and executing a simple task, which runs but does not do much. Now, we will start adding the pick-and-place stages to the task. The image below shows an outline of the stages we will use in our task.
+지금까지 간단한 태스크를 만들고 실행하는 과정을 살펴봤으며 실행하더라도 실제로는 많은 일을 수행하지 않습니다. 이제 태스크에 pick-and-place stages를 추가하기 시작할 것입니다. 아래 이미지는 태스크에 사용할 stages의 개요를 보여줍니다.
 
 .. image:: stages.png
    :width: 700px
 
-We will start adding stages after our existing open hand stage. Open ``mtc_node.cpp`` and locate the following lines:
+기존의 open hand stage 이후에 stages를 추가하기 시작할 것입니다. ``mtc_node.cpp`` 파일을 열고 다음과 같은 코드를 찾으세요.:
 
 .. code-block:: c++
 
@@ -610,7 +610,7 @@ We will start adding stages after our existing open hand stage. Open ``mtc_node.
 6.1 Pick Stages
 ^^^^^^^^^^^^^^^
 
-We need to move the arm to a position where we can pick up our object. This is done with a ``Connect`` stage, which as its name implies, is a Connector stage. This means that it tries to bridge between the results of the stage before and after it. This stage is initialized with a name, ``move_to_pick``, and a ``GroupPlannerVector`` that specifies the planning group and the planner. We then set a timeout for the stage, set the properties for the stage, and add it to our task.
+물체를 집을 수 있는 위치로 arm을 이동시켜야 합니다. 이 작업은 ``Connect`` stage(이름에서 알 수 있듯이 Connector stage)를 사용하여 수행됩니다. 즉, 이 stage 앞뒤 stage의 결과를 연결하려고 시도합니다. 이 stage는 이름 ``move_to_pick`` 와  planning group과 planner를 지정하는 ``GroupPlannerVector`` 로 초기화됩니다. 그런 다음 stage에 대한 타임아웃을 설정하고, 스테이지 속성을 설정한 다음 태스크에 추가합니다.
 
 .. code-block:: c++
 
@@ -622,18 +622,16 @@ We need to move the arm to a position where we can pick up our object. This is d
       task.add(std::move(stage_move_to_pick));
 
 
-Next, we create a pointer to a MoveIt Task Constructor stage object, and set it to ``nullptr`` for now. Later, we will use this to save a stage.
+다음으로, MoveIt Task Constructor stage 객체에 대한 포인터를 만들고, 현재로서는 ``nullptr`` 로 설정합니다. 나중에 이것을 사용하여 stage를 저장할 것입니다.
 
 .. code-block:: c++
 
       mtc::Stage* attach_object_stage =
           nullptr;  // Forward attach_object_stage to place pose generator
 
-This next block of code creates a ``SerialContainer``.
-This is a container that can be added to our task and can hold several substages.
-In this case, we create a serial container that will contain the stages relevant to the picking action.
-Instead of adding the stages to the task, we will add the relevant stages to the serial container. We use ``exposeTo()`` to declare the task properties from the parent task in the new serial container, and use ``configureInitFrom()`` to initialize them.
-This allows the contained stages to access these properties.
+다음 코드 블록은 ``SerialContainer(직렬 컨테이너)`` 를 만듭니다. 이는 태스크에 추가할 수 있고 여러 하위 stages를 보유할 수 있는 컨테이너입니다. 이 경우, 직렬 컨테이너를 만들어서 집기 동작(picking action)과 관련된 stages를 포함할 수 있습니다.
+stages를 태스크에 추가하는 대신에 관련 stages를 직렬 컨테이너에 추가합니다. ``exposeTo()`` 를 사용하여 새 직렬 컨테이너에서 상위 태스크의 태스크 속성을 선언하고, ``configureInitFrom()`` 을 사용하여 초기화합니다.
+이를 통해서 포함된 stages가 이러한 속성에 액세스할 수 있습니다.
 
 .. code-block:: c++
 
@@ -645,7 +643,7 @@ This allows the contained stages to access these properties.
 
 
 
-We then create a stage to approach the object. This stage is a ``MoveRelative`` stage, which allows us to specify a relative movement from our current position. ``MoveRelative`` is a propagator stage: it receives the solution from its neighbouring stages and propagates it to the next or previous stage. Using ``cartesian_planner`` finds a solution that involves moving the end effector in a straight line. We set the properties, and set the minimum and maximum distance to move. Now we create a ``Vector3Stamped`` message to indicate the direction we want to move - in this case, in the Z direction from the hand frame. Finally, we add this stage to our serial container
+우리는 먼저 객체에 접근하는 stage를 만듭니다. 이 stage는  ``MoveRelative`` stage이며, 현재 위치에서 상대적인 이동을 지정할 수 있게 해줍니다.  ``MoveRelative`` 은 전파자(propagator) stage입니다. : 즉, 이웃 stages로부터 솔루션을 받아 다음 단계 또는 이전 stage로 전파합니다. ``cartesian_planner`` 를 사용하여 end-effector를 직선으로 이동시키는 솔루션을 찾습니다. 우리는 속성을 설정하고 이동할 최소 및 최대 거리를 설정합니다. 이제 이동하고자 하는 방향을 가리키는 ``Vector3Stamped`` 메시지를 만듭니다. 이 경우에는 hand frame에서 Z 축 방향으로 이동합니다. 마지막으로 이 stage를 직렬 컨테이너(serial container)에 추가합니다.
 
 .. code-block:: c++
 
@@ -665,12 +663,12 @@ We then create a stage to approach the object. This stage is a ``MoveRelative`` 
           grasp->insert(std::move(stage));
         }
 
-Now, create a stage to generate the grasp pose.
-This is a generator stage, so it computes its results without regard to the stages before and after it.
-The first stage, ``CurrentState`` is a generator stage as well - to connect the first stage and this stage, a connecting stage must be used, which we already created above.
-This code sets the stage properties, sets the pose before grasping, the angle delta, and the monitored stage.
-Angle delta is a property of the ``GenerateGraspPose`` stage that is used to determine the number of poses to generate; when generating solutions, MoveIt Task Constructor will try to grasp the object from many different orientations, with the difference between the orientations specified by the angle delta. The smaller the delta, the closer together the grasp orientations will be. When defining the current stage, we set ``current_state_ptr``, which is now used to forward information about the object pose and shape to the inverse kinematics solver.
-This stage won't be directly added to the serial container like previously, as we still need to do inverse kinematics on the poses it generates.
+이제 잡기 포즈(grasp pose)를 생성하는 stage를 생성합니다.
+이 단계는 생성기 단계(generator stage) 이므로 앞뒤 stage와 관계없이 결과를 계산합니다.
+첫 번째 단계인  ``CurrentState`` 도 생성기 단계입니다. 첫 번째 stage와 이 stage를 연결하려면 위에서 이미 생성한 connecting stage를 사용해야만 합니다.
+이 코드는 stage 속성, grasping 전의 포즈, 각도 변화량(angle delta), 모니터링되고 있는 stage를 설정합니다.
+각도 변화량은 생성할 포즈 수를 결정하는 ``GenerateGraspPose`` stage의 속성입니다.; MoveIt Task Constructor는 솔루션을 생성할 때 각도 변화량으로 지정된 방향 차이를 가진 여러 방향에서 객체를 잡으려고 시도합니다. 각도 변화량이 작을수록 그립 방향이 더 가까워집니다. 현재 stage를 정의할 때 객체 포즈 및 모양에 대한 정보를 역 운동학 솔버(inverse kinematics solver)에게 전달하는 데 사용되는 ``current_state_ptr`` 을 설정합니다.
+이 stage는 생성하는 포즈에 대한 역 운동학(inverse kinematics)을 수행해야 하므로 이전처럼 직렬 컨테이너에 직접 추가되지 않습니다.
 
 .. code-block:: c++
 
@@ -686,7 +684,7 @@ This stage won't be directly added to the serial container like previously, as w
 
 
 
-Before we compute inverse kinematics for the poses generated above, we first need to define the frame. This can be done with a ``PoseStamped`` message from ``geometry_msgs`` or in this case, we define the transform using Eigen transformation matrix and the name of the relevant link. Here, we define the transformation matrix.
+c
 
 .. code-block:: c++
 
@@ -697,6 +695,7 @@ Before we compute inverse kinematics for the poses generated above, we first nee
           grasp_frame_transform.linear() = q.matrix();
           grasp_frame_transform.translation().z() = 0.1;
 
+이제  ``generate pose IK`` 라는 이름과 앞서 정의한 ``generate grasp pose`` stage를 함께 사용하는 ``ComputeIK`` stage를 생성합니다. 일부 로봇은 지정된 포즈에 대해 여러 inverse kinematics 솔루션을 가질 수 있습니다. 솔루션 갯수 제한을 최대 8개로 설정합니다. 또한 최소 솔루션 거리도 설정합니다. 이는 솔루션 간의 차이 임계값입니다. 솔루션의 관절 위치가 이전 솔루션과 너무 유사하면 유효하지 않다고 표시됩니다. 다음으로 몇 가지 추가 속성을 구성하고 "ComputeIK" 스테이지를 직렬 컨테이너에 추가합니다.
 Now, we create the ``ComputeIK`` stage, and give it the name ``generate pose IK`` as well as the ``generate grasp pose`` stage defined above. Some robots have multiple inverse kinematics solutions for a given pose - we set the limit on the amount of solutions to solve for up to 8. We also set the minimum solution distance, which is a threshold on how different solutions must be: if the joint positions in a solution are too similar to a previous solution, it will be marked as invalid. Next, we configure some additional properties, and add the ``ComputeIK`` stage to the serial container.
 
 .. code-block:: c++
