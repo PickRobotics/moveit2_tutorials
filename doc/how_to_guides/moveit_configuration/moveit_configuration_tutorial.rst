@@ -5,8 +5,8 @@ MoveIt 설정
 
 여러분의 로봇에 대한 MoveIt 설정 권장 방법은 MoveIt 설정을 포함하는 colcon 패키지를 만드는 것입니다.
 
-Suppose you would like to create a configuration package for some robot named ``my_robot``.
-To do this, you can create a colcon package named ``my_robot_moveit_config``, whose structure is as follows:
+``my_robot`` 이라는 이름의 로봇에 대한 설정 패키지를 만들고 싶다고 가정해봅시다.
+이를 위해서는  ``my_robot_moveit_config`` 라는 이름의 colcon 패키지를 생성할 수 있습니다. 이 패키지의 구조는 다음과 같습니다.:
 
 .. code-block::
 
@@ -24,35 +24,35 @@ To do this, you can create a colcon package named ``my_robot_moveit_config``, wh
         CMakeLists.txt
         package.xml
 
-You can create such a package manually, or use the :doc:`MoveIt Setup Assistant </doc/examples/setup_assistant/setup_assistant_tutorial>` to automatically generate it given a robot description file (URDF or xacro).
+이러한 패키지는 직접 만들 수도 있고,  :doc:`MoveIt Setup Assistant </doc/examples/setup_assistant/setup_assistant_tutorial>` 를 사용하여 URDF 또는 xacro 로봇 서술 파일을 기반으로 자동 생성할 수도 있습니다.
 
-Refer to the `moveit_resources <https://github.com/ros-planning/moveit_resources/tree/ros2>`_ repository for working examples of MoveIt configuration packages.
+실제 MoveIt 설정 패키지 예제는 `moveit_resources <https://github.com/ros-planning/moveit_resources/tree/ros2>`_ 리포지토리에서 참조할 수 있습니다.
 
 
-Configuration Files Overview
+설정 파일 개요
 ----------------------------
 
-The ``config/`` folder of a MoveIt configuration package contains several files that describe parameters for various capabilities of MoveIt.
+MoveIt 설정 패키지의 ``config/`` 폴더에는 MoveIt의 다양한 기능에 대한 파라미터를 설명하는 여러 파일을 포함하고 있습니다.
 
-Note that several of these files are optional depending on the functionality required at runtime.
+여러 파일은 런타임시에 필요한 기능에 따라 선택적으로 의존하고 있다는 점에 유의하세요.
 
 Robot Description
 ^^^^^^^^^^^^^^^^^
 
-This is the most important piece of information in a MoveIt configuration package.
-There must be a URDF and SRDF file present in this folder to describe the robot kinematics, planning groups, collision rules, and more.
-To learn more about these files, refer to the :doc:`URDF/SRDF Overview </doc/examples/urdf_srdf/urdf_srdf_tutorial>`.
+이것이 MoveIt 설정 패키지에서 가장 중요한 정보입니다.
+이 폴더에는 로봇의 운동학, 계획 그룹, 충돌 규칙 등을 설명하는 URDF 및 SRDF 파일이 반드시 있어야 합니다.
+이러한 파일정보는 :doc:`URDF/SRDF Overview </doc/examples/urdf_srdf/urdf_srdf_tutorial>` 를 참조하십시오.
 
 Joint Limits
 ^^^^^^^^^^^^
 
-The URDF file specification allows setting joint position and velocity limits.
-However, you may want to define different joint limits for motion planning with MoveIt without modifying the underlying robot description file.
-Furthermore, some features in MoveIt use additional types of joint limits, such as acceleration and jerk limits, which cannot be specified in URDF.
+URDF 파일 스펙을 사용하면 joint 위치 및 속도 제한을 설정할 수 있습니다.
+하지만 기본 로봇 서술 파일을 수정하지 않고 MoveIt으로 모션 계획에 대해서 다른 joint limits(조인트 제약)을 정의할 수도 있습니다.
+더욱이 MoveIt의 일부 기능에서는 URDF에서 지정할 수 없는 가속도 및 저크 제한(jerk limits)과 같은 추가적인 관절 제한 유형(types of joint limits)을 사용합니다.
 
-The default location of this file is in ``config/joint_limits.yaml``.
+이 파일의 기본 위치는 ``config/joint_limits.yaml`` 입니다.
 
-Here is an example snippet of a joint limits file for a simple robot with two joints:
+2개 joints를 가지는 단순한 로봇의 joint limits 예제 일부는 아래와 같습니다.:
 
 .. code-block:: yaml
 
@@ -73,11 +73,11 @@ Here is an example snippet of a joint limits file for a simple robot with two jo
 Inverse Kinematics (IK) Solver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Many motion planning applications in MoveIt require solving inverse kinematics.
+MoveIt의 많은 모션 계획 응용 프로그램은 inverse kinematics을 풀어야 합니다.풀 필요가 있습니다.
 
-Both the IK solver plugin used and its parameters are configured through a file whose default location is ``config/kinematics.yaml``.
+사용하는 IK solver 플러그인과 해당 매개 변수는 ``config/kinematics.yaml`` 파일을 통해 설정합니다.
 
-For more information, refer to :doc:`Kinematics Configuration </doc/examples/kinematics_configuration/kinematics_configuration_tutorial>`.
+자세한 내용은 :doc:`Kinematics Configuration </doc/examples/kinematics_configuration/kinematics_configuration_tutorial>` 을 참조하십시오.
 
 Motion Planning Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
