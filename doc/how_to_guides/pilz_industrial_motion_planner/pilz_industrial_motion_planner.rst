@@ -1,48 +1,40 @@
 Pilz Industrial Motion Planner
 ==============================
 
-``pilz_industrial_motion_planner`` provides a trajectory generator to plan standard robot
-motions like point-to-point, linear, and circular with MoveIt.
+``pilz_industrial_motion_planner`` 는 궤적 생성기로서 MoveIt과 함께 표준 로봇 모션(점대점, 선형, 원형)을
+계획합니다.
 
-By loading the corresponding planning pipeline
-(``pilz_industrial_motion_planner_planning_planner.yaml`` in your
-``*_moveit_config`` package), the trajectory generation
-functionalities can be accessed through the user interface (C++, Python
-or RViz) provided by the ``move_group`` node, e.g.
-``/plan_kinematic_path`` service and ``/move_action`` action.
-For detailed usage tutorials, please refer to
-:doc:`/doc/examples/moveit_cpp/moveitcpp_tutorial` and
-:doc:`/doc/examples/move_group_interface/move_group_interface_tutorial`.
+관련된 planning pipeline( ``*_moveit_config`` 패키지에 있는
+``pilz_industrial_motion_planner_planning_planner.yaml`` 파일)을 로딩함으로써, 궤적 생성 기능은 
+``move_group`` node가 제공하는 사용자 인터페이스(C++, Python 또는 RViz)를 통해 접근할 수 있습니다.
+예를 들면, ``/plan_kinematic_path`` service 와 ``/move_action`` action 등이 있습니다.
+자세한 사용법 안내는 :doc:`/doc/examples/moveit_cpp/moveitcpp_tutorial` 및
+:doc:`/doc/examples/move_group_interface/move_group_interface_tutorial` 문서를 참조하십시오.
 
-Joint Limits
-------------
+조인트 제한(Joint Limits)
+----------------------------
 
-The planner uses maximum velocities and accelerations from the
-parameters of the ROS node that is operating the Pilz planning pipeline.
-Using the MoveIt Setup Assistant the file ``joint_limits.yaml``
-is auto-generated with proper defaults and loaded during startup.
+Pilz 플래닝 파이프라인을 실행하는 ROS node의 파라미터에서
+플래너는 최대 속도와 가속도를 사용합니다.
+MoveIt Setup Assistant를 사용하여
+``joint_limits.yaml`` 파일이 적절한 기본값으로 자동 생성되고 시작할때 로드됩니다.
 
-The specified limits override the limits from the URDF robot description.
-Note that while setting position limits and velocity limits is possible
-in both the URDF and a parameter file, setting acceleration limits is
-only possible using a parameter file. In addition to the common
-``has_acceleration`` and ``max_acceleration`` parameters, we added the
-ability to also set ``has_deceleration`` and ``max_deceleration``\ (<0.0).
+지정된 제한값이 URDF robot description의 제한값보다 우선하게 됩니다.
+위치 제한과 속도 제한을 설정은 URDF와 파라미터 파일 모두에서 가능하지만,
+가속도 제한은 파라미터 파일만 사용하여 설정할 수 있다는 점에 유의하십시오.
+일반적인 ``has_acceleration`` 및 ``max_acceleration`` 파라미터에 외에도
+``has_deceleration`` 및 ``max_deceleration``\ (<0.0) 을 설정하는 기능도 추가했습니다.
 
-The limits are merged under the premise that the limits from the
-node parameters must be stricter or at least equal to the parameters
-set in the URDF.
+제한값은 node 파라미터의 제한값이 URDF에서 설정된 파라미터보다 엄격하거나
+적어도 같아야 한다는 전제 하에 병합됩니다.
 
-Currently, the calculated trajectory will respect the limits by using the
-strictest combination of all limits as a common limit for all joints.
+현재 계산된 궤적은 모든 조인트에 대해서 공통된 제한값으로서 모든 제한값의 가장 엄격한
+결합을 사용하여 이런 제한들을 준수합니다.
 
-Cartesian Limits
-----------------
+데카르트 제한(Cartesian Limits)
+----------------------------------
 
-For Cartesian trajectory generation (LIN/CIRC), the planner needs
-information about the maximum speed in 3D Cartesian space. Namely,
-translational/rotational velocity/acceleration/deceleration need to be
-set in the node parameters like this:
+카테시안 궤적 생성 (LIN/CIRC)의 경우, planner는 3D 데카르트 공간에서의 최대 속도에 대한 정보가 필요합니다. 즉, 평행 이동/회전 속도/가속/감속을 다음과 같이 node 파라미터에 설정해야 합니다.:
 
 .. code:: yaml
 
@@ -52,124 +44,93 @@ set in the node parameters like this:
       max_trans_dec: -5
       max_rot_vel: 1.57
 
-You can specify Cartesian velocity and acceleration limits in a file named
-``pilz_cartesian_limits.yaml`` in your ``*_moveit_config`` package.
+``*_moveit_config`` 패키지 내에 ``pilz_cartesian_limits.yaml`` 라는 파일에서 데카르트 속도 및 가속 제한을 지정할 수 있습니다.
 
-The planners assume the same acceleration ratio for translational and
-rotational trapezoidal shapes. The rotational acceleration is
-calculated as ``max_trans_acc / max_trans_vel * max_rot_vel``
-(and for deceleration accordingly).
+planners는 평행 이동 및 회전 사다리꼴 모양에 대해 동일한 가속 비율을 가정합니다.
+회전 가속도는 다음과 같이 계산됩니다.
+``max_trans_acc / max_trans_vel * max_rot_vel`` (감속도도 마찬가지로)
 
 Planning Interface
 ------------------
 
-This package uses ``moveit_msgs::msgs::MotionPlanRequest`` and ``moveit_msgs::msg::MotionPlanResponse``
-as input and output for motion planning. The parameters needed for each planning algorithm
-are explained below.
+이 패키지는 motion planning의 입력 및 출력으로 ``moveit_msgs::msgs::MotionPlanRequest`` 와 ``moveit_msgs::msg::MotionPlanResponse`` 를 사용합니다.
+각 계획 알고리즘에 필요한 파라미터는 다음과 같이 설명됩니다.
 
-For a general introduction on how to fill a ``MotionPlanRequest``, see
-:ref:`move_group_interface-planning-to-pose-goal`.
+``MotionPlanRequest`` 를 채우는 방법에 대한 일반적인 소개는
+:ref:`move_group_interface-planning-to-pose-goal` 을 참조하십시오.
 
-You can specify ``"PTP"``, ``"LIN"`` or ``"CIRC"`` as the ``planner_id`` of the ``MotionPlanRequest``.
+``MotionPlanRequest`` 의 "planner_id" 로 "PTP", "LIN" 또는 "CIRC" 를 지정할 수 있습니다.
 
 The PTP motion command
 ----------------------
 
-This planner generates fully synchronized point-to-point trajectories
-with trapezoidal joint velocity profiles. All joints are assumed to have
-the same maximal joint velocity/acceleration/deceleration limits. If
-not, the strictest limits are adopted. The axis with the longest time to
-reach the goal is selected as the lead axis. Other axes are decelerated
-so that they share the same acceleration/constant velocity/deceleration
-phases as the lead axis.
+이 planner는 사다리꼴 조인트 속도 프로파일을 가진 완전히 동기화된 point-to-point 궤적을 생성합니다. 모든 조인트는 동일한 최대 조인트 속도/가속도/감속 제한을 갖는다고 가정합니다. 그렇지 않은 경우 가장 엄격한 한계가 적용됩니다. 목표에 도달하는 데 가장 오랜 시간이 걸리는 축이 리드 축(lead axis)으로 선택됩니다. 다른 축은 리드 축과 동일한 가속/등속/감속 단계를 공유하도록 감속됩니다.
 
 .. image:: ptp.png
    :alt: PTP velocity profile with trapezoidal ramps - the axis with the longest duration
          determines the maximum velocity
 
-PTP Input Parameters in ``moveit_msgs::MotionPlanRequest``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``moveit_msgs::MotionPlanRequest`` 에서 PTP Input 파라미터들
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``planner_id``: ``"PTP"``
-- ``group_name``: the name of the planning group
-- ``max_velocity_scaling_factor``: scaling factor of maximal joint velocity
-- ``max_acceleration_scaling_factor``: scaling factor of maximal joint acceleration/deceleration
-- ``start_state/joint_state/(name, position and velocity)``: joint name/position/velocity (optional) of the start state.
-- ``goal_constraints``: (goal can be given in joint space or Cartesian space)
-- for a goal in joint space
-    - ``goal_constraints/joint_constraints/joint_name``: goal joint name
-    - ``goal_constraints/joint_constraints/position``: goal joint position
-- for a goal in Cartesian space
-    - ``goal_constraints/position_constraints/header/frame_id``: frame this data is associated with
-    - ``goal_constraints/position_constraints/link_name``: target link name
-    - ``goal_constraints/position_constraints/constraint_region``: bounding volume of the target point
-    - ``goal_constraints/position_constraints/target_point_offset``: offset (in the link frame) for the target point on
-      the target link (optional)
+- ``planner_id``: ``"PTP(점대점)"``
+- ``group_name``: planning group의 이름
+- ``max_velocity_scaling_factor``: 최대 조인트 속도 스케일링 인자
+- ``max_acceleration_scaling_factor``: 최대 조인트 가속/감속 스케일링 인자
+- ``start_state/joint_state/(name, position and velocity)``: 시작 상태의 조인트 이름/위치/속도 (선택사항)
+- ``goal_constraints``: (목표는 조인트 공간 또는 데카라트 공간에서 지정될 수 있음)
+- 조인트 공간에서 목표
+    - ``goal_constraints/joint_constraints/joint_name``: 목표 조인트 이름
+    - ``goal_constraints/joint_constraints/position``: 목표 조인트 위치
+- 데카르트 공간에서 목표
+    - ``goal_constraints/position_constraints/header/frame_id``: 이 데이터가 연결된 프레임
+    - ``goal_constraints/position_constraints/link_name``: 타겟 링크 이름
+    - ``goal_constraints/position_constraints/constraint_region``: 타겟 지점의 경계 볼륨(bounding volume)
+    - ``goal_constraints/position_constraints/target_point_offset``: (선택사항) 타겟 링크에서 목표 지점에 대한 offset(링크 프레임 기준)
 
 
-PTP Planning Result in ``moveit_msg::MotionPlanResponse``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``moveit_msg::MotionPlanResponse`` 에서 PTP Planning 결과
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  ``trajectory_start``: first robot state of the planned trajectory
--  ``trajectory/joint_trajectory/joint_names``: a list of the joint
-   names of the generated joint trajectory
+-  ``trajectory_start``: 계획된 궤적의 첫 번째 로봇 상태
+-  ``trajectory/joint_trajectory/joint_names``: 생성된 조인트 궤적의 조인트 이름 목록
 -  ``trajectory/joint_trajectory/points/(positions,velocities,accelerations,time_from_start)``:
-   a list of generated way points. Each point has
-   positions/velocities/accelerations of all joints (same order as the
-   joint names) and time from start. The last point will have zero
-   velocity and acceleration.
--  ``group_name``: the name of the planning group
--  ``error_code/val``: error code of the motion planning
+   생성된 경로 지점 목록. 각 지점은 모든 조인트들의 위치/속도/가속도를 가집니다.(조인트 이름과 같은 순서) 마지막 포인트는 0 속도 및 가속도를 가진다.
+-  ``group_name``: planning group의 이름
+-  ``error_code/val``: 모션 계획 오류 코드
 
 The LIN motion command
 ----------------------
 
-This planner generates a linear Cartesian trajectory between goal and
-start poses. The planner uses the Cartesian limits to generate a
-trapezoidal velocity profile in Cartesian space. The translational
-motion is a linear interpolation between start and goal position vector.
-The rotational motion is quaternion slerp between start and goal
-orientation. The translational and rotational motion is synchronized in
-time. This planner only accepts start state with zero velocity. Planning
-result is a joint trajectory. The user needs to adapt the Cartesian
-velocity/acceleration scaling factor if the motion plan fails due to
-violation of joint space limits.
+이 플래너는 목표 포즈와 시작 포즈 사이의 선형 데카르트 경로를 생성합니다. 데카르트 제한 사항을 사용하여 데카르트 공간에서 사다리꼴 속도 프로파일을 생성합니다. 병진 운동(translational motion)은 시작 위치 벡터와 목표 위치 벡터 사이의 선형 보간입니다. 회전 운동은 시작과 목표 방향 사이의 쿼터니언 slerp(spherical linear interpolation)입니다. 병진 운동과 회전 운동은 시간적으로 동기화됩니다. 이 플래너는 속도가 0인 시작 상태만 받아들입니다. 계획 결과는 조인트 궤적입니다. 조인트 공간 제한 위반으로 인해 모션 계획이 실패하는 경우 사용자는 데카르트 속도/가속도 스케일링 요소를 조정해야 합니다.
 
-LIN Input Parameters in ``moveit_msgs::MotionPlanRequest``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``moveit_msgs::MotionPlanRequest`` 에서 LIN Input 파라미터들
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  ``planner_id``: ``"LIN"``
--  ``group_name``: the name of the planning group
--  ``max_velocity_scaling_factor``: scaling factor of maximal Cartesian
-   translational/rotational velocity
--  ``max_acceleration_scaling_factor``: scaling factor of maximal
-   Cartesian translational/rotational acceleration/deceleration
--  ``start_state/joint_state/(name, position and velocity``: joint
-   name/position of the start state.
--  ``goal_constraints`` (goal can be given in joint space or Cartesian
-   space)
+-  ``group_name``: planning group 이름
+-  ``max_velocity_scaling_factor``: 최대 데카르트 병진운동/회전 속도의 스케일링 인자
+-  ``max_acceleration_scaling_factor``: 최대 데카르트 병진/회전 가속도/감속도의 스케일링 인자
+-  ``start_state/joint_state/(name, position and velocity``: 시작 상태의 조인트 이름/위치
+-  ``goal_constraints`` (목표는 조인트 공간 또는 데카라트 공간에서 지정될 수 있음)
 
-   -  for a goal in joint space
+   -  조인트 공간에서 목표
 
-      -  ``goal_constraints/joint_constraints/joint_name``: goal joint
-         name
-      -  ``goal_constraints/joint_constraints/position``: goal joint
-         position
+      -  ``goal_constraints/joint_constraints/joint_name``: 목표 조인트 이름
+      -  ``goal_constraints/joint_constraints/position``: 목표 조인트 위치
 
-   -  for a goal in Cartesian space
+   -  데카르트 공간에서 목표
 
       -  ``goal_constraints/position_constraints/header/frame_id``:
-         frame this data is associated with
-      -  ``goal_constraints/position_constraints/link_name``: target
-         link name
+         이 데이터가 연결된 프레임
+      -  ``goal_constraints/position_constraints/link_name``: 타겟 링크 이름
       -  ``goal_constraints/position_constraints/constraint_region``:
-         bounding volume of the target point
+         타겟 지점의 경계 볼륨
       -  ``goal_constraints/position_constraints/target_point_offset``:
-         offset (in the link frame) for the target point on the target
-         link (optional)
+         (선택사항) 타겟 링크에서 목표 지점에 대한 offset(링크 프레임 기준)
 
-LIN Planning Result in ``moveit_msg::MotionPlanResponse``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``moveit_msg::MotionPlanResponse`` 에서 LIN Planning 결과
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  ``trajectory_start``: first robot state of the planned trajectory
 -  ``trajectory/joint_trajectory/joint_names``: a list of the joint

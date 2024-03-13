@@ -79,11 +79,11 @@ MoveIt의 많은 모션 계획 응용 프로그램은 inverse kinematics을 풀�
 
 자세한 내용은 :doc:`Kinematics Configuration </doc/examples/kinematics_configuration/kinematics_configuration_tutorial>` 을 참조하십시오.
 
-Motion Planning Configuration
+Motion Planning 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For each type of motion planner plugin available in MoveIt, there is a corresponding ``config/*_planning.yaml`` file that describes its configuration.
-For example, a robot that can use both :doc:`OMPL </doc/examples/ompl_interface/ompl_interface_tutorial>` and :doc:`Pilz Industrial Motion Planner </doc/how_to_guides/pilz_industrial_motion_planner/pilz_industrial_motion_planner>` will have the following folder structure:
+MoveIt에서 사용할 수 있는 motion planner 플러그인 종류마다 관련 설정은 config/*_planning.yaml 파일에 존재합니다.
+예를 들어, :doc:`OMPL </doc/examples/ompl_interface/ompl_interface_tutorial>` 와 :doc:`Pilz Industrial Motion Planner </doc/how_to_guides/pilz_industrial_motion_planner/pilz_industrial_motion_planner>` 모두 사용 가능한 로봇의 경우 아래와 같은 폴더 구조를 가집니다.:
 
 .. code-block::
 
@@ -94,39 +94,39 @@ For example, a robot that can use both :doc:`OMPL </doc/examples/ompl_interface/
             ...
         ...
 
-By default, all parameter files that match this ``config/*_planning.yaml`` pattern will be loaded.
-If OMPL is configured as a planning pipeline, that will be the default; otherwise, it will be the first pipeline in the list.
+기본적으로 이러한 ``config/*_planning.yaml`` 패턴에 일치하는 모든 파라미터 파일이 로드됩니다.
+별도의 설정이 없다면 OMPL이 기본 planning pipeline으로 설정됩니다. 그렇지 않은 경우에는 목록의 첫 번째 파이프라인이 기본값으로 설정됩니다.
 
-To learn more about the contents of the individual planning configuration files, refer to the configuration documentation for those planners.
+개별 planning 설정 파일의 내용에 대해 자세히 알아보려면 해당 planner의 설정 문서를 참조하십시오.
 
-Trajectory Execution Configuration
+궤적(Trajectory) 실행 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-MoveIt typically publishes manipulator motion commands to a `JointTrajectoryController <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`_.
-To learn more, refer to the :doc:`Low Level Controllers </doc/examples/controller_configuration/controller_configuration_tutorial>` section.
+MoveIt은 일반적으로 `JointTrajectoryController <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`_ 에게 manipulator motion command를 publish합니다.
+자세한 내용은 :doc:`Low Level Controllers </doc/examples/controller_configuration/controller_configuration_tutorial>` 섹션을 참조하십시오.
 
-The default location for trajectory execution information is in ``config/moveit_controllers.yaml``.
+궤적 실행 정보에 대한 기본 위치는 ``config/moveit_controllers.yaml`` 내에 있습니다.
 
-MoveItCpp Configuration
+MoveItCpp 설정
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-If you are using :doc:`MoveItCpp </doc/examples/moveit_cpp/moveitcpp_tutorial>`, you can define a file with all the necessary parameters.
+만약 :doc:`MoveItCpp </doc/examples/moveit_cpp/moveitcpp_tutorial>` 을 사용하고 있다면, 필요한 모든 매개변수를 포함하는 파일을 정의할 수 있습니다.
 
-The default location of this file is in ``config/moveit_cpp.yaml``.
+이 파일의 기본 위치는 ``config/moveit_cpp.yaml`` 입니다.
 
-3D Perception Configuration
+3D Perception 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you are using a perception sensor capable of generating 3D point clouds for motion planning, you can configure those settings for MoveIt.
-For more information, refer to the :doc:`Perception Pipeline Tutorial </doc/examples/perception_pipeline/perception_pipeline_tutorial>`.
+만약 모션 계획을 위해 3D point cloud를 생성할 수 있는 지각 센서(perception sensor)를 사용하고 있다면, MoveIt에 대한 설정값들을 설정할 수 있습니다.
+더 자세한 정보는 :doc:`Perception Pipeline Tutorial </doc/examples/perception_pipeline/perception_pipeline_tutorial>` 을 참조하세요.
 
-The default location of this file is in ``config/sensors_3d.yaml``.
+이 파일의 기본 위치는 ``config/sensors_3d.yaml`` 입니다.
 
 Loading Configuration Parameters into Launch Files
 --------------------------------------------------
 
-To easily load parameters from MoveIt configuration packages for use in your ROS 2 launch files, MoveIt provides a ``MoveItConfigsBuilder`` utility.
-To load the configuration parameters from your ``my_robot_moveit_config`` package:
+ROS 2 launch 파일내에서 사용 목적으로 MoveIt 설정 패키지의 매개변수를 쉽게 로드하기 위해 MoveIt은 ``MoveItConfigsBuilder`` 유틸리티를 제공합니다.
+``my_robot_moveit_config`` 패키지에서 설정 매개변수를 로드하려면 다음과 같이 하십시오.:
 
 .. code-block:: python
 
@@ -137,7 +137,7 @@ To load the configuration parameters from your ``my_robot_moveit_config`` packag
         .to_moveit_configs()
     )
 
-Then, you can either use the complete set of configuration parameters when launching a node:
+다음으로 node를 launch할때, 전체 설정 매개 변수 세트를 사용할 수도 있습니다.:
 
 .. code-block:: python
 
@@ -149,7 +149,7 @@ Then, you can either use the complete set of configuration parameters when launc
         parameters=[moveit_config.to_dict()],
     )
 
-or you can include selected sub-components as follows:
+혹은 선택한 서브-컴포넌트를 아래와 같이 선택할 수 있습니다.:
 
 .. code-block:: python
 
@@ -165,9 +165,9 @@ or you can include selected sub-components as follows:
         ],
     )
 
-Note that the above syntax will automatically look for configuration files that match the default file naming patterns described in this document.
-If you have a different naming convention, you can use the functions available in ``MoveItConfigsBuilder`` to directly set file names.
-For example, to use a non-default robot description and IK solver file path, and configure planning pipelines:
+위 문법으로 이 문서에서 설명하는 기본 파일 이름 패턴과 일치하는지를 설정 파일을 자동으로 검색합니다.
+여러분이 다른 명명 규칙을 가지고 있는 경우라면, ``MoveItConfigsBuilder`` 에 함수를 사용하여 파일 이름을 직접 설정할 수 있습니다.
+예를 들어, 기본값이 아닌 robot description와 IK solver 파일 경로를 사용하고, planning pipelines을 설정하려면 다음과 같이 하십시오.:
 
 .. code-block:: python
 
@@ -184,4 +184,4 @@ For example, to use a non-default robot description and IK solver file path, and
         .to_moveit_configs()
     )
 
-Now that you have read this page, you should be able to better understand the launch files available throughout the MoveIt 2 tutorials, and when encountering other MoveIt configuration packages in the wild.
+이 페이지를 읽었기 때문에 MoveIt 2 튜터리얼 전체에서 사용하는 launch 파일을 더 잘 이해할 수 있게 되었고 다른 MoveIt 설정 패키지를 보더라도 이해할 수 있게 되었습니다.

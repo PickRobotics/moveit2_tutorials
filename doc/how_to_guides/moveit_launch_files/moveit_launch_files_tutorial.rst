@@ -1,20 +1,20 @@
-Launch Files in MoveIt
-======================
+MoveIt에서 Launch 파일
+==========================
 
-Many of the MoveIt tutorials, as well as MoveIt packages you will encounter in the wild, use ROS 2 launch files.
+많은 MoveIt 튜토리얼과 실제 사용되는 MoveIt 패키지는 ROS 2 launch 파일을 사용합니다.
 
-This tutorial walks through a typical Python launch file that sets up a working MoveIt example.
-We will do this by going through our :codedir:`Getting Started tutorial launch file <tutorials/quickstart_in_rviz/launch/demo.launch.py>` in detail.
+이 튜토리얼은 동작하는 MoveIt 예제를 설정하는 전형적인 Python launch 파일에 대해서 다룹니다. 안내합니다.
+:codedir:`Getting Started tutorial launch file <tutorials/quickstart_in_rviz/launch/demo.launch.py>` 를 상세히 살펴보면서 이 과정을 진행합니다.
 
-If you are unfamiliar with launch files in general, refer first to `the ROS 2 documentation <https://docs.ros.org/en/rolling/Tutorials/Intermediate/Launch/Creating-Launch-Files.html>`_.
+launch 파일에 익숙하지 않은 경우, 먼저 `the ROS 2 documentation <https://docs.ros.org/en/rolling/Tutorials/Intermediate/Launch/Creating-Launch-Files.html>`_ 를 참조하십시오.
 
-Loading the MoveIt Configuration
+MoveIt 설정을 로드하기
 --------------------------------
 
-MoveIt requires several configuration parameters to include the robot description and semantic description files (:ref:`URDF and SRDF`), motion planning and kinematics plugins, trajectory execution, and more.
-These parameters are usually contained in a :ref:`MoveIt Configuration` package.
+MoveIt는 로봇 서술 및 의미 서술 파일 (:ref:`URDF and SRDF`), 모션 계획 및 kinematics 플러그인, 궤적 실행 등을 사용하기 위해서 여러 설정 파라미터가 필요합니다.
+이 파라미터는 :ref:`MoveIt Configuration` 패키지 내에 포함되어 있습니다.
 
-A handy way to refer to a MoveIt configuration package is to use the ``MoveItConfigsBuilder`` utility in your Python launch files as follows:
+파이썬 launch 파일에서 ``MoveItConfigsBuilder`` 유틸리티를 다음과 같이 사용하여 MoveIt 설정 패키지를 참조하는 간편한 방법이 있습니다.:
 
 .. code-block:: python
 
@@ -44,10 +44,10 @@ A handy way to refer to a MoveIt configuration package is to use the ``MoveItCon
         .to_moveit_configs()
     )
 
-Launching Move Group
---------------------
+Move Group을 Launch하기
+-------------------------------
 
-Once all the MoveIt configuration parameters have been loaded, you can launch the :ref:`Move Group Interface` using the entire set of loaded MoveIt parameters.
+MoveIt 설정 파라미터를 모두 로드한 후 로드된 전체 MoveIt 파라미터 세트를 사용하여 :ref:`Move Group Interface` 를 launch할 수 있습니다.
 
 .. code-block:: python
 
@@ -60,12 +60,12 @@ Once all the MoveIt configuration parameters have been loaded, you can launch th
         parameters=[moveit_config.to_dict()],
     )
 
-Visualizing with RViz
+RViz로 시각화하기
 ---------------------
 
-As discussed in the :ref:`Quickstart in RViz` tutorial, you can visualize your robot model and perform motion planning tasks using RViz.
+:ref:`Quickstart in RViz` 튜토리얼에서 설명했듯이, RViz를 사용하여 로봇 model을 시각화하고 모션 계획 태스크를 수행할 수 있습니다.
 
-The following code uses a launch argument to receive an RViz configuration file name, packages it up as a relative path to a known package directory, and specifies it as an argument when launching the RViz executable.
+다음 코드는 launch 인자를 사용하여 RViz 설정 파일 이름을 받고, 이것을 알고 있는 패키지 디렉토리에 대한 상대 경로로 패키징한 다음 RViz 실행 프로그램을 launch할 때 인자로 지정합니다.
 
 .. code-block:: python
 
@@ -100,16 +100,16 @@ The following code uses a launch argument to receive an RViz configuration file 
         ],
     )
 
-Publishing Transforms to ``tf2``
---------------------------------
+Transforms을 ``tf2`` 로 publish하기
+-----------------------------------------
 
-Many tools in the ROS ecosystem use the `tf2 <https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Tf2.html>`_ library to represent coordinate transforms, which are an important part of motion planning with MoveIt.
+ROS 에코시스템의 다양한 도구들은 MoveIt와 모션 플래닝의 중요한 부분인 좌표 변환(coordinate transforms)을 표현하기 위해 `tf2 <https://docs.ros.org/en/rolling/Concepts/Intermediate/About-Tf2.html>`_ 라이브러리를 사용합니다.
 
-As such, our launch file includes nodes that publish both fixed (static) and dynamic names to ``tf2``.
-In our case, we need:
+따라서, launch 파일에는 node들이 포함되어 있습니다. 이 node들은 ``tf2`` 에게 고정(정적) 변환과 동적 이름 모두를 publish합니다. 노드가 포함됩니다.
+이 경우 다음과 같은 것들이 필요합니다:
 
-* A static transform between the ``world`` frame and the base frame of our robot description, ``base_link``.
-* A `robot state publisher <https://github.com/ros/robot_state_publisher>`_ node that listens to the robot's joint states, calculates frame transforms using the robot's URDF model, and publishes them to ``tf2``.
+* robot description의 기본 프레임인 ``base_link`` 와 ``world`` 프레임 간의 정적 변환
+* `robot state publisher <https://github.com/ros/robot_state_publisher>`_ node는 로봇의 joint states를 수신하고 로봇의 URDF 모델을 사용하여 프레임 변환(frame transforms)을 계산하고 이것들을 ``tf2`` 로 publish함
 
 .. code-block:: python
 
@@ -131,22 +131,22 @@ In our case, we need:
         parameters=[moveit_config.robot_description],
     )
 
-Setting up ``ros2_control`` for trajectory execution
+궤적 실행을 위해 ``ros2_control`` 설정하기
 ----------------------------------------------------
 
-MoveIt normally generates joint trajectories that can then be executed by sending them to a robot with a controller capable of executing these trajectories.
-Most commonly, we connect to the `ros2_control <https://control.ros.org/master/index.html>`_ library to achieve this.
+MoveIt는 일반적으로 관절 궤적을 생성해서 이 궤적을 실행할 수 있는 로봇 제어기에게 전송해서 실행시킬 수 있습니다.
+가장 일반적으로 `ros2_control <https://control.ros.org/master/index.html>`_ 라이브러리에 연결하여 이를 수행합니다.
 
-While ``ros2_control`` allows you to connect to real robot hardware, or robots in a physics-based simulator like Gazebo or NVIDIA Isaac Sim, it also exposes a `mock components <https://control.ros.org/master/doc/ros2_control/hardware_interface/doc/mock_components_userdoc.html>`_ capability for simple, idealized simulations.
-In our example, this is configured at the URDF level using the ``use_fake_hardware`` xacro parameter defined earlier on.
-The key idea is that regardless of which hardware (simulated or real) is launched, the ``ros2_control`` launch remains the same.
+``ros2_control`` 은 실제 로봇 하드웨어 또는 Gazebo나 NVIDIA Isaac Sim과 같은 물리 기반 시뮬레이터의 로봇에 연결할 수 있지만, 간단하고 이상적인 시뮬레이션을 위한 가짜 구성 요소 `mock components <https://control.ros.org/master/doc/ros2_control/hardware_interface/doc/mock_components_userdoc.html>`_ 기능도 제공합니다.
+우리 예제에서는 이전에 정의된 ``use_fake_hardware`` xacro 파라미터를 사용하여 URDF 레벨에서 이를 설정합니다.
+핵심적인 아이디어는 실행되는 하드웨어(시뮬레이션 또는 실제)에 관계없이 ``ros2_control`` launch가 동일하다는 점입니다.
 
-Starting ``ros2_control`` involves launching a controller manager node, and then spawning a list of controllers necessary for trajectory execution.
-In our example, we have:
+``ros2_control`` 를 구동시키는 것은 controller manager node를 실행한 다음, 궤적 실행에 필요한 컨트롤러들의 목록을 생성하는 것을 포함합니다.
+우리 예제에서는 다음과 같은 컨트롤러가 있습니다.:
 
-* A joint state broadcaster, which publishes the joint states necessary for the robot state publisher to send frames to ``tf2``.
-* A joint trajectory controller for the arm actuators.
-* A gripper action controller for the parallel-jaw gripper.
+* joint state broadcaster는 robot state publisher가 프레임을 ``tf2`` 에게 전송하는데 필요한 joint states를 publish함
+* arm 액츄에이터용 joint 궤적 제어기
+* 평행-jaw 그리퍼용 그리퍼 액션 제어기(gripper action controller)
 
 .. code-block:: python
 
@@ -187,10 +187,10 @@ In our example, we have:
         arguments=["robotiq_gripper_controller", "-c", "/controller_manager"],
     )
 
-Launching all the nodes
+모든 node들 launch하기
 -----------------------
 
-Finally, we can tell our launch file to actually launch everything we described in the previous sections.
+마지막으로, 이전 섹션에서 설명한 모든 것을 실제로 lauch하도록 launch 파일에게 지시할 수 있습니다.
 
 .. code-block:: python
 
