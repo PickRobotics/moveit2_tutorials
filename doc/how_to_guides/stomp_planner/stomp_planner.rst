@@ -18,8 +18,7 @@ STOMP의 주요 장점은 토크 제한, 에너지 및 툴 제약 조건과 같�
 ---------------
 :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 을 먼저 완료합니다.
 
-You should also have gone through the steps in :doc:`Visualization with MoveIt RViz Plugin </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>`
- 문서도 해봐야 합니다.
+:doc:`Visualization with MoveIt RViz Plugin </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>` 문서도 완료합니다.
 
 사전준비
 -------------
