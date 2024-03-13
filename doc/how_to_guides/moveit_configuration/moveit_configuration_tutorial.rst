@@ -82,7 +82,7 @@ MoveIt의 많은 모션 계획 응용 프로그램은 inverse kinematics을 풀�
 Motion Planning 설정
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-MoveIt에서 사용할 수 있는 motion planner 플러그인 종류마다 관련 설정은 config/*_planning.yaml 파일에 존재합니다.
+MoveIt에서 사용할 수 있는 motion planner 플러그인 종류마다 관련 설정은 ``config/*_planning.yaml`` 파일에 존재합니다.
 예를 들어, :doc:`OMPL </doc/examples/ompl_interface/ompl_interface_tutorial>` 와 :doc:`Pilz Industrial Motion Planner </doc/how_to_guides/pilz_industrial_motion_planner/pilz_industrial_motion_planner>` 모두 사용 가능한 로봇의 경우 아래와 같은 폴더 구조를 가집니다.:
 
 .. code-block::
