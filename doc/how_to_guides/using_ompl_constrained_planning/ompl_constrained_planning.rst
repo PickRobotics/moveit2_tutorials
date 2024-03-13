@@ -1,20 +1,20 @@
-Using OMPL Constrained Planning
-===============================
+OMPL Constrained Planning 사용하기
+======================================
 
 .. image:: ompl_constrained_planning_header.png
    :width: 600px
 
-This tutorial shows you how to use OMPL's `Constrained planning capabilities <http://ompl.kavrakilab.org/constrainedPlanning.html>`_ from MoveIt. To illustrate the capabilities of this planner, four planning problems are solved with different types of path constraints. It will be easier to follow if you have read through the example on how to use the  :doc:`Move Group interface </doc/examples/move_group_interface/move_group_interface_tutorial>`.
+이 튜터리얼은 MoveIt에서 OMPL의 `Constrained planning capabilities <http://ompl.kavrakilab.org/constrainedPlanning.html>`_ 을 사용하는 방법을 보여줍니다. 이 계획자의 기능을 설명하기 위해, 네 가지 계획 문제를 서로 다른 유형의 경로 제약 조건으로 해결합니다. :doc:`Move Group interface </doc/examples/move_group_interface/move_group_interface_tutorial>` 사용 예제를 읽어보면 더 쉽게 이해할 수 있습니다.
 
-When to use this Planner
-^^^^^^^^^^^^^^^^^^^^^^^^
+이 Planner를 사용하는 경우
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The interface currently only supports a single position or orientation constraint on any link of the robot. The planning approach provides an alternative for the `enforce_joint_model_state_space <../../examples/ompl_interface/ompl_interface_tutorial.html#enforce-planning-in-joint-space>`_ option. It is expected to be most valuable for constraints regions that have a small (or zero) volume in Cartesian space, where rejection sampling does not always work. For example, this planner can be used to constrain the robot end-effector on a plane or along a line.
+현재 인터페이스는 로봇의 모든 링크에 대해 단일 위치 또는 방향 제약 조건만 지원합니다. 이 계획 접근 방식은 `enforce_joint_model_state_space <../../examples/ompl_interface/ompl_interface_tutorial.html#enforce-planning-in-joint-space>`_ 옵션에 대한 대안을 제공합니다. 거부 샘플링(rejection sampling)이 항상 작동하지 않는 경우 데카르트 공간에서 작은(또는 0) 부피를 갖는 제약 영역에서 가장 유용할 것으로 예상됩니다. 예를 들어, 이 계획자를 사용하여 로봇의 end-effector를 평면이나 선을 따라 제약할 수 있습니다.
 
-How to Configure OMPL to use Constrained Planning
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OMPL을 설정하여 Constrained Planning 사용 방법
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-OMPL reads configurations parameters from a file called :code:`ompl_planning.yaml`. This guide adds the required parameters directly in the launch file, but they can also be set in the yaml file. This guide uses the Panda robot, for which this file can be found :moveit_resources_codedir:`here <panda_moveit_config/config/ompl_planning.yaml>`. OMPL's constrained planning will be used by default if you have exactly one position or one orientation constraint. To use the constrained state space in other scenarios, add a parameter to your robot's ``ompl_planning.yaml`` to tell OMPL to plan in a constrained state space by setting :code:`enforce_constrained_state_space` to ``true``. In addition, if the parameter `projection_evaluator <../../examples/ompl_interface/ompl_interface_tutorial.html#projection-evaluator>`_ was not yet specified, we also need to add it. The projection evaluator is used to help with discretizing the state space with high dimensionality by using projections from the state space to a low dimensional Euclidean space. You can read more about it `here <https://ompl.kavrakilab.org/projections.html>`_. In general, using the first couple joints works pretty well.
+OMPL은 :code:`ompl_planning.yaml` 라는 파일에서 설정 파라미터를 읽습니다. 이 가이드에서는 필요한 파라미터를 launch 파일에서 직접 추가하지만, yaml 파일에서도 설정할 수 있습니다. 이 가이드는 Panda 로봇을 사용하며, 해당 파일은 :moveit_resources_codedir:`here <panda_moveit_config/config/ompl_planning.yaml>` 에서 찾을 수 있습니다. 정확히 하나의 위치 또는 방향 제약 조건이 있는 경우 OMPL의 제약된 계획이 기본적으로 사용됩니다. 다른 시나리오에서 제약된 상태 공간을 사용하려면 로봇의 ``ompl_planning.yaml`` 파일에 매개 변수를 추가하여 :code:`enforce_constrained_state_space` 를  ``true`` 로 설정하여 OMPL에게 제약된 상태 공간에서 계획하도록 지시해야 합니다. 또한 파라미터 `projection_evaluator <../../examples/ompl_interface/ompl_interface_tutorial.html#projection-evaluator>`_ 가 아직 지정되지 않은 경우에도 추가해야 합니다. 투영 평가기(projection evaluator)는 상태 공간을 저차원 유클리드 공간으로 투영하여 고차원 상태 공간을 이산화하는 데 도움이 됩니다. 여기 `here <https://ompl.kavrakilab.org/projections.html>`_ 에서 더 자세히 읽어볼 수 있습니다. 일반적으로 처음 몇 개의 조인트를 사용하는 것이 효과적입니다.
 
 .. code-block:: yaml
 
