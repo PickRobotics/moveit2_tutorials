@@ -21,7 +21,7 @@ Step 1: 데모 런칭 및 Plugin 설정
 
 * 이것을 처음으로 수행하는 경우, RViz에서 empty world를 보게되며 Motion Planning 플러그인을 추가해야합니다.:
 
-  * RViz내에서 emtpy world를 볼 수 있습니다.:
+  * RViz내에서 empty world를 볼 수 있습니다.:
 
   |A|
 
@@ -49,18 +49,18 @@ Step 1: 데모 런칭 및 Plugin 설정
 .. |D| image:: rviz_start.png
                :width: 700px
 
-* 일단 Motion Planning 플러그인을 로드하면 설정할 수 있습니다. "Displays" 하위 창의 "Global Options" 탭에서 **Fixed Frame** 필드를 ``/base_link``로 설정하십시오.
+* 일단 Motion Planning 플러그인을 로드하면 설정할 수 있습니다. "Displays" 하위 창의 "Global Options" 탭에서 **Fixed Frame** 필드를 ``/base_link`` 로 설정하십시오.
 
 * 이제 로봇 (이 경우 Kinova Gen 3)을 위한 플러그인 설정을 시작할 수 있습니다. "Displays"에서 "MotionPlanning"을 클릭하십시오.
 
-  * **Robot Description** 필드가 ``robot_description``로 설정되어 있는지 확인하십시오.
+  * **Robot Description** 필드가 ``robot_description`` 로 설정되어 있는지 확인하십시오.
 
-  * **Planning Scene Topic** 필드가 ``/monitored_planning_scene``로 설정되어 있는지 확인하십시오.
+  * **Planning Scene Topic** 필드가 ``/monitored_planning_scene`` 로 설정되어 있는지 확인하십시오.
     topic 이름을 클릭하여 topic-name drop-down을 노출시킵니다.
 
-  * **Planned Path** 아래 **Trajectory Topic** 필드가 ``/display_planned_path``로 설정되어 있는지 확인하십시오.
+  * **Planned Path** 아래 **Trajectory Topic** 필드가 ``/display_planned_path`` 로 설정되어 있는지 확인하십시오.
 
-  * **Planning Request**에서 **Planning Group**를 ``manipulator``으로 변경하십시오. 이것은 하단 왼쪽의 MotionPlanning 패널에서도 볼 수 있습니다.
+  * **Planning Request** 에서 **Planning Group** 를 ``manipulator`` 으로 변경하십시오. 이것은 하단 왼쪽의 MotionPlanning 패널에서도 볼 수 있습니다.
 
 
 .. image:: rviz_plugin_start.png
@@ -134,7 +134,7 @@ Step 3: Kinova Gen 3와 상호작용
    :width: 700px
 
 도달 가능 작업공간 밖으로 이동시키기
-+++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++
 end-effector를 도달 가능한 작업 공간 밖으로 이동시키려고할때 어떤 일이 발생하는지 살펴봅시다.
 
 .. image:: rviz_plugin_invalid.png
@@ -184,11 +184,11 @@ RViz에서 포인트별로 궤적을 시각적으로 검토할 수 있습니다.
 
 * "*Panels*" 메뉴에서 "*Trajectory - Trajectory Slider*"를 선택하십시오. RViz에 새 슬라이더 패널이 표시됩니다.
 
-* 목표 포즈를 설정한 다음 *Plan*을 실행하십시오.
+* 목표 포즈를 설정한 다음 *Plan* 을 실행하십시오.
 
 * "*Slider*" 패널을 조작하십시오(예: 슬라이더 이동시키기, "*Play*" 버튼 누르기).
 
-참고: end-effector를 새 목표 위치로 이동시킨 후 *Play*을 실행하기 전에 반드시 *Plan*을 실행해야 합니다. 그렇지 않으면 이전 목표 지점에 대한 waypoints가 표시됩니다.
+참고: end-effector를 새 목표 위치로 이동시킨 후 *Play* 을 실행하기 전에 반드시 *Plan* 을 실행해야 합니다. 그렇지 않으면 이전 목표 지점에 대한 waypoints가 표시됩니다.
 
 
 .. image:: rviz_plugin_plan_slider.png
@@ -209,9 +209,9 @@ Plan Cartesian motions
 궤적 실행, 속도 조정
 +++++++++++++++++++++++++++++++++++++++
 
-성공적인 계획 후에 "Plan & Execute" 또는 "Execute"을 클릭하면 궤적을 로봇에게 전송합니다. 이 튜토리얼에서는 ``kinova_demo.launch``를 사용했기 때문에 로봇은 단지 시뮬레이션만 됩니다.
+성공적인 계획 후에 "Plan & Execute" 또는 "Execute" 을 클릭하면 궤적을 로봇에게 전송합니다. 이 튜토리얼에서는 ``kinova_demo.launch`` 를 사용했기 때문에 로봇은 단지 시뮬레이션만 됩니다.
 
-초기에 기본 속도와 가속도는 로봇의 최대 속도의 10% (``0.1``)로 조정됩니다. 이러한 스케일링 요소는 아래 표시된 Planning 탭에서 변경하거나 로봇의 ``moveit_config`` (``joint_limits.yaml``에 있음)에서 기본값을 변경할 수 있습니다.
+초기에 기본 속도와 가속도는 로봇의 최대 속도의 10% (``0.1``)로 조정됩니다. 이러한 스케일링 요소는 아래 표시된 Planning 탭에서 변경하거나 로봇의 ``moveit_config`` (``joint_limits.yaml`` 에 있음)에서 기본값을 변경할 수 있습니다.
 
 .. image:: rviz_plugin_collision_aware_ik_checkbox.png
    :width: 700px
@@ -222,7 +222,7 @@ Plan Cartesian motions
 
 RViz Visual Tools
 +++++++++++++++++
-많은 튜토리얼에서 데모를 단계별로 진행하기 위해서 ``moveit_visual_tools`` 사용합니다. 다음 튜토리얼로 넘어가기 전에 **RvizVisualToolsGui**를 활성화하는 것이 좋습니다.
+많은 튜토리얼에서 데모를 단계별로 진행하기 위해서 ``moveit_visual_tools`` 사용합니다. 다음 튜토리얼로 넘어가기 전에 **RvizVisualToolsGui** 를 활성화하는 것이 좋습니다.
 
 "*Panels*" 메뉴에서 "*Add New Panels*" 를 선택하세요. 메뉴에서 "*RvizVisualToolsGui*" 를 선택하고 OK를 클릭합니다. RViz에 새로운 패널이 추가되는 것을 확인할 수 있습니다.
 
@@ -234,7 +234,7 @@ RViz Visual Tools
 
 설정 저장하기
 +++++++++++++++++++++++++
-RViz에서는 ``File->Save Config``을 통해 설정을 저장할 수 있습니다. 다음 튜터리얼로 넘어가기 전에 반드시 이 작업을 수행해야 합니다. 만약 설정을 새 이름으로 저장하고 싶다면 ``File->Save Config As``을 사용하고 다음과 같이 설정 파일을 참조할 수 있습니다. : ::
+RViz에서는 ``File->Save Config`` 을 통해 설정을 저장할 수 있습니다. 다음 튜터리얼로 넘어가기 전에 반드시 이 작업을 수행해야 합니다. 만약 설정을 새 이름으로 저장하고 싶다면 ``File->Save Config As`` 을 사용하고 다음과 같이 설정 파일을 참조할 수 있습니다. : ::
 
    ros2 launch moveit2_tutorials demo.launch.py rviz_config:=your_rviz_config.rviz
 

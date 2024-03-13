@@ -2,7 +2,7 @@
 The ``move_group`` node
 =======================
 
-아래 그림은 MoveIt에서 제공하는 핵심 node인 :cpp_api:`move_group <move_group::MoveGroupExe>`의 하이레벨 시스템 아키텍처를 보여줍니다.
+아래 그림은 MoveIt에서 제공하는 핵심 node인 :cpp_api:`move_group <move_group::MoveGroupExe>` 의 하이레벨 시스템 아키텍처를 보여줍니다.
 이 node는 통합자 역할을 하며, 개별 component들을 모두 모아 사용자가 사용할 수 있는 ROS action과 service 세트를 제공합니다.
 
 .. image:: /_static/images/move_group.png
@@ -10,7 +10,7 @@ The ``move_group`` node
 User Interface
 --------------
 
-사용자는 다음 두 가지 방법으로 ``move_group``에서 제공하는 action과 service에 액세스할 수 있습니다.:
+사용자는 다음 두 가지 방법으로 ``move_group`` 에서 제공하는 action과 service에 액세스할 수 있습니다.:
 
 - **C++ 에서** - :cpp_api:`move_group_interface <moveit::planning_interface::MoveGroupInterface>` 패키지를 사용하여 move_group에 대해서 쉽게 설정이 가능한 C++ 인터페이스를 제공
 
@@ -38,7 +38,7 @@ Configuration
 Robot Interface
 ---------------
 
-``move_group``은 ROS topic과 action을 통해 로봇과 통신합니다.
+``move_group`` 은 ROS topic과 action을 통해 로봇과 통신합니다.
 로봇의 현재 상태 정보 (joint의 위치 등)를 얻고, 로봇 센서로부터 point cloud 및 기타 센서 데이터를 가져오고, 로봇의 컨트롤러와 통신 등을 위해 로봇과 통신합니다.
 
 Joint State Information
@@ -51,7 +51,7 @@ Joint State Information
 Transform Information
 ---------------------
 
-``move_group`` 은 ROS TF 라이브러리를 사용하여 transformation 정보를 모니터링합니다. 
+``move_group`` 은 ROS TF 라이브러리를 사용하여 transformation 정보를 모니터링합니다.
 이를 통해 node는 로봇의 pose에 대한 전역 정보 (다른 것들 중에서)를 얻을 수 있습니다.
 예를 들어, ROS navigation stack은 로봇의 map frame과 base frame 간의 변환을 TF에 publish합니다.
 ``move_group`` 은 TF를 사용하여 내부적인 사용을 위한 이 transformation을 파악할 수 있습니다.
@@ -69,8 +69,8 @@ Controller Interface
 Planning Scene
 --------------
 
-``move_group`` 은 Planning Scene Monitor를 사용하여 **계획 장면(planning scene)**을 유지 관리합니다. 이 계획 장면은 world와 로봇의 현재 상태를 나타내는 것입니다.
-로봇 상태는 로봇에 견고하게 부착된(함께 이동되는) 것으로 간주되는 모든 물체를 포함할 수 있습니다. **planning scene**을 유지 관리 및 업데이트하는 아키텍처에 대한 자세한 내용은 아래의 Planning Scene 섹션에 나와 있습니다.
+``move_group`` 은 Planning Scene Monitor를 사용하여 **계획 장면(planning scene)** 을 유지 관리합니다. 이 계획 장면은 world와 로봇의 현재 상태를 나타내는 것입니다.
+로봇 상태는 로봇에 견고하게 부착된(함께 이동되는) 것으로 간주되는 모든 물체를 포함할 수 있습니다. **planning scene** 을 유지 관리 및 업데이트하는 아키텍처에 대한 자세한 내용은 아래의 Planning Scene 섹션에 나와 있습니다.
 
 Extensible Capabilities
 -----------------------

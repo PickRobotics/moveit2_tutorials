@@ -32,7 +32,7 @@ Generator Stage
 
 | Generator stages는 인접 stages로부터 입력을 받지 않습니다. 이 stage들은 결과를 계산하여 양방향(전방향 및 후방향)으로 전달합니다.
 | MTC task 실행은 Generator stages에서 시작됩니다.
-| 가장 중요한 generator stage는 ``CurrentState``이며, 현재 로봇의 상태를 계획 파이프라인(planning pipeline)의 시작 지점으로 가져옵니다.
+| 가장 중요한 generator stage는 ``CurrentState`` 이며, 현재 로봇의 상태를 계획 파이프라인(planning pipeline)의 시작 지점으로 가져옵니다.
 
 | Monitoring Generator는 다른 stage(인접하지 않은 stage)의 해결책을 모니터링하여 계획에 해당 해결책을 사용하는 stage입니다.
 | Monitoring Generator의 예제 - ``GeneratePose``. 이 stage는 일반적으로 ``CurrentState`` 혹은 ``ModifyPlanningScene`` stage를 모니터링합니다. ``CurrentState``의 해결책을 모니터링하여 ``GeneratePose`` stage는 pose를 생성해야 하는 객체 또는 프레임을 찾을 수 있습니다.
@@ -143,7 +143,7 @@ solver를 초기화시키는 방법에 대한 코드 예제
       std::make_shared<moveit::task_constructor::solvers::JointInterpolationPlanner>();
   const auto mtc_cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
 
-이 solvers는 ``MoveTo``, ``MoveRelative``, ``Connect``와 같은 stages에 전달됩니다.
+이 solvers는 ``MoveTo``, ``MoveRelative``, ``Connect`` 와 같은 stages에 전달됩니다.
 
 속성 설정하기
 ------------------
@@ -180,7 +180,7 @@ MTC에서 사용 가능한 CostTerm 구현
 
 * ``Clearance`` - 비용은 충돌까지의 거리의 역수(inverse)
 
-``LambdaCostTerm``을 사용하여 CostTerm 설정 방법에 대한 예제 코드
+``LambdaCostTerm`` 을 사용하여 CostTerm 설정 방법에 대한 예제 코드
 
 .. code-block:: c++
 
@@ -201,7 +201,7 @@ planning이 성공하면 plan function은 ``moveit_msgs::msg::MoveItErrorCodes::
 
 계획을 수립한 후, 첫 번째 성공적인 솔루션을 추출하여 실행 함수에 전달합니다. 이를 통해 ``execute_task_solution`` action client가 생성됩니다.
 action server는 MTC가 제공하는 ``execute_task_solution_capability`` plugin에 상주하고 있습니다.
-이 플러그인은 ``MoveGroupCapability``를 확장한 것입니다. MTC 솔루션에서 ``MotionPlanRequest``를 생성하고 MoveIt의 ``PlanExecution``을 사용하여 로봇을 구동합니다.
+이 플러그인은 ``MoveGroupCapability`` 를 확장한 것입니다. MTC 솔루션에서 ``MotionPlanRequest`` 를 생성하고 MoveIt의 ``PlanExecution`` 을 사용하여 로봇을 구동합니다.
 
 .. code-block:: c++
 

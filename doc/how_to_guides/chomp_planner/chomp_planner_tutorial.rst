@@ -17,7 +17,7 @@ CHOMP Planner 사용하기
 CHOMP를 로봇과 함께 사용하려면 로봇에 맞는 MoveIt 설정 패키지가 필요합니다. 예를 들어 Panda 로봇을 사용하는 경우 패키지 이름은 ``panda_moveit_config`` 이며 :moveit_resources_codedir:`here <panda_moveit_config/>` 위치에서 찾을 수 있습니다. 일반적으로 이러한 설정은 :doc:`MoveIt Setup Assistant </doc/examples/setup_assistant/setup_assistant_tutorial>` 를 사용하여 설정합니다..
 
 여러분 로봇에 CHOMP 사용하기
----------------------------
+------------------------------
 **Note:** `ros-planning/moveit_resources <https://github.com/ros-planning/moveit_resources/tree/ros2>`_ 저장소에서 ``panda_moveit_config`` 패키지를 사용하려는 경우, 이 단계는 이미 완료되었으므로 이 섹션을 건너뛸 수 있습니다. 그렇지 않은 경우에는 로봇의 설정을 추가하려면 다음을 수행해야만 합니다.:
 
 #. MoveIt 설정 패키지의 launch 디렉토리내에 :codedir:`chomp_demo.launch.py<examples/chomp_planner/launch/chomp_demo.launch.py>` 파일을 만듭니다.
