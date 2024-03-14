@@ -1,25 +1,24 @@
 How To Command Simulated Isaac Robot
 ====================================
 
-This tutorial requires a machine with ``Isaac Sim 2023.1.x`` (recommended) or ``Isaac Sim 2022.2.x`` installed.
-For Isaac Sim requirements and installation please see the `Omniverse documentation <https://docs.omniverse.nvidia.com/isaacsim/latest/index.html>`_.
-To configure Isaac Sim to work with ROS 2 please see `this guide <https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_ros.html#running-native-ros>`_.
+이 튜터리얼을 진행하기 위해서는 컴퓨터에  ``Isaac Sim 2023.1.x`` (권장) 혹은 ``Isaac Sim 2022.2.x`` 가 설치되어 있어야 합니다.
+아이작 시뮬레이터의 요구사항 및 설치 방법은 `Omniverse 문서 <https://docs.omniverse.nvidia.com/isaacsim/latest/index.html>`_ 에서 확인하실 수 있습니다.
+Isaac 시뮬레이터를 ROS 2와 함께 사용하도록 설정하는 방법은 `이 가이드 <https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_ros.html#running-native-ros>`_ 에서 확인하세요.
 
-This tutorial has the following assumptions on system configuration:
+이 튜터리얼은 다음과 같은 시스템 설정을 전제합니다.:
 
-1. NVIDIA Isaac Sim is installed in the default location. Docker based installations of Isaac sim are also supported but it is up to the user to configure the system.
-2. Docker is installed.
-   If you plan to use your GPU with MoveIt, you will need to install `nvidia-docker <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#installing-on-ubuntu-and-debian>`_.
-3. You clone this repo so that you can build a Ubuntu 22.04 Humble based Docker image that can communicate with Isaac and run this tutorial.
+1. NVIDIA Isaac 시뮬레이터가 기본 위치에 설치되어 있어야 합니다. Docker 기반 설치도 지원되지만 시스템 설정은 사용자에게 달려 있습니다.
+2. Docker 설치되어 있어야 합니다.
+   만약 MoveIt과 함께 GPU를 사용하려면 `nvidia-docker <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#installing-on-ubuntu-and-debian>`_ 을 설치해야 합니다.
+3. 이 저장소를 복제하여 Ubuntu 22.04 Humble 기반 Docker 이미지를 빌드하고 이를 통해 Isaac와 통신하여 이 튜터리얼을 실행할 수 있습니다.
 
-Introduction to ros2_control
+ros2_control 소개
 ----------------------------
 
-One of the recommended ways to execute trajectories calculated by MoveIt is to use the `ros2_control <https://control.ros.org/master/index.html>`_
-framework to manage and communicate with your robot, real or simulated. It comes highly recommended because it offers a developers a common API that
-allows your software to switch between many different robot types, and the sensors they have built in, by simply changing some launch arguments.
-For example if we inspect the Panda Robot's ``ros2_control.xacro`` we can see it uses a flag ``use_fake_hardware`` to switch between being
-simulated or connecting to a physical robot.
+MoveIt이 계산한 궤적을 실행하는 권장 방법 중 하나는 `ros2_control <https://control.ros.org/master/index.html>`_
+프레임워크를 사용하여 로봇(실제 또는 시뮬레이션)을 제어하고 통신하는 것입니다. 이 방법은 개발자에게 공통 API를 제공하여 몇 가지 launch 인자만 변경하면
+다양한 로봇 유형과 내장 센서 간에 소프트웨어를 전환할 수 있기 때문에 매우 권장됩니다.
+예를 들어 Panda 로봇의 ``ros2_control.xacro`` 파일을 살펴보면  ``use_fake_hardware`` 플래그를 사용하여 시뮬레이션과 실제 로봇 연결 간에 전환하는 것을 확인할 수 있습니다.
 
 .. code-block:: XML
 
@@ -34,16 +33,12 @@ simulated or connecting to a physical robot.
     </hardware>
 
 
-`Hardware Components <https://control.ros.org/master/doc/getting_started/getting_started.html#hardware-components>`_
-can be of different types, but the plugin ``<plugin>mock_components/GenericSystem</plugin>`` is very a simple ``System``
-that forwards the incoming ``command_interface`` values to the tracked ``state_interface`` of the joints (i.e., perfect control of the simulated joints).
+`Hardware 컴포넌트들 <https://control.ros.org/master/doc/getting_started/getting_started.html#hardware-components>`_ 은 여러 가지 타입이 있지만, plugin ``<plugin>mock_components/GenericSystem</plugin>`` 은 매우 간단한 ``System`` 으로 들어오는 ``command_interface`` 값을 조인트의 추적되는 ``state_interface`` (즉, 시뮬레이션된 조인트의 완벽한 제어)로 전달합니다.
 
-For us to expand our Panda robot to Isaac Sim we first have to introduce `topic_based_ros2_control <https://github.com/PickNikRobotics/topic_based_ros2_control>`_.
-This Hardware Interface is a ``System`` that subscribes and publishes on configured topics.
-For this tutorial the topic ``/isaac_joint_states`` will contain the robot's current state and ``/isaac_joint_commands`` will be used to actuate it.
-The `moveit_resources_panda_moveit_config <https://github.com/ros-planning/moveit_resources/blob/humble/panda_moveit_config/config/panda.ros2_control.xacro#L7>`_
-we are using in this tutorial does not support connecting to hardware, so our ``ros2_control.xacro`` is now
-updated to load the ``TopicBasedSystem`` plugin when the flag ``ros2_control_hardware_type`` is set to ``isaac``.
+Panda 로봇을 Isaac 시뮬레이터로 확장하기 위해서는 먼저 `topic_based_ros2_control <https://github.com/PickNikRobotics/topic_based_ros2_control>`_ 를 도입해야 합니다.
+이 하드웨어 인터페이스는 설정된 토픽에서 subscribe와 publish를 수행하는 ``System`` 입니다.
+이 튜토리얼에서는 topic ``/isaac_joint_states`` 에 로봇의 현재 상태가 포함되며, ``/isaac_joint_commands`` 는 로봇을 구동하는 데 사용됩니다.
+이 튜토리얼에서 사용하고 있는 `moveit_resources_panda_moveit_config <https://github.com/ros-planning/moveit_resources/blob/humble/panda_moveit_config/config/panda.ros2_control.xacro#L7>`_ 은 하드웨어 연결을 지원하지 않기 때문에 ``ros2_control.xacro`` 파일이 업데이트하여 플래그 ``ros2_control_hardware_type`` 이 ``isaac`` 값으로 설정되면 ``TopicBasedSystem`` 플러그인을 로딩하도록 합니다.
 
 .. code-block:: XML
 
@@ -56,84 +51,78 @@ updated to load the ``TopicBasedSystem`` plugin when the flag ``ros2_control_har
         <param name="joint_states_topic">/isaac_joint_states</param>
     </xacro:if>
 
-In this tutorial we have included a Python script that loads a Panda robot
-and builds an `OmniGraph <https://docs.omniverse.nvidia.com/isaacsim/latest/gui_tutorials/tutorial_gui_omnigraph.html>`_
-to publish and subscribe to the ROS topics used to control the robot.
-The OmniGraph also contains nodes to publish RGB and Depth images from the camera mounted on the hand of the Panda.
-The RGB image is published to the topic ``/rgb``, the camera info to ``/camera_info``, and the depth image to ``/depth``.
-The frame ID of the camera frame is ``/sim_camera``.
-To learn about configuring your Isaac Sim robot to communicate with ROS 2 please see the
-`Joint Control tutorial <https://docs.omniverse.nvidia.com/isaacsim/latest/ros2_tutorials/tutorial_ros2_manipulation.html>`_
-on Omniverse.
+이 튜토리얼에서는 Panda 로봇을 로딩하고 ROS topic을 publish/subscribe하여 로봇을 제어하는 `OmniGraph <https://docs.omniverse.nvidia.com/isaacsim/latest/gui_tutorials/tutorial_gui_omnigraph.html>`_ 를 만드는 Python 스크립트를 포함하고 있습니다.
+OmniGraph는 또한 Panda 손에 장착된 카메라로부터 RGB 이미지와 Depth 이미지를 publish하는 node도 포함합니다.
+RGB 이미지는 topic ``/rgb`` 에, 카메라 정보는 ``/camera_info`` 에, Depth 이미지는 ``/depth`` 에 게시됩니다. 카메라 프레임의 프레임 ID는 ``/sim_camera`` 입니다.
+Isaac 시뮬레이터 로봇을 ROS 2와 통신하도록 설정하는 방법에 대해서는 Omniverse의 `Joint Control tutorial <https://docs.omniverse.nvidia.com/isaacsim/latest/ros2_tutorials/tutorial_ros2_manipulation.html>`_ 을 참조하십시오.
 
-Computer Setup
+Computer 설정
 --------------
 
-1. Install `Isaac Sim <https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html>`_.
+1. `Isaac Sim <https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html>`_ 설치하기
 
-2. Perform a shallow clone of the MoveIt 2 Tutorials repo.
+2. MoveIt 2 튜터리얼 저장소를 복제하기(shallow clone)
 
 .. code-block:: bash
 
   git clone https://github.com/ros-planning/moveit2_tutorials.git -b main
 
-3. Go to the folder in which you cloned the tutorials and then switch to the following directory.
+1. 복제한 폴더로 이동한 후 다음 디렉토리로 변경합니다.
 
 .. code-block:: bash
 
   cd moveit2_tutorials/doc/how_to_guides/isaac_panda
 
-4. Build the Docker image. This docker image also contains ``pytorch``.
+4. Docker 이미지를 빌드합니다. 이 이미지는 pytorch도 포함합니다.
+``pytorch``.
 
 .. code-block:: bash
 
   docker compose build base
 
 
-Running the MoveIt Interactive Marker Demo with Mock Components
+Mock 컴포넌트로 MoveIt 상호작용 Marker 데모 실행하기
 ---------------------------------------------------------------
 
-This section tests out the ``mock_components/GenericSystem`` hardware interface, as opposed to using Isaac Sim.
+이 섹션은 Isaac 시뮬레이션 대신 ``mock_components/GenericSystem`` 하드웨어 인터페이스를 테스트합니다.
 
-1. To test out the ``mock_components/GenericSystem`` hardware interface run:
+1. ``mock_components/GenericSystem`` 을 테스트하기 위해 하드웨어 인터페이스를 실행합니다.:
 
 .. code-block:: bash
 
   docker compose up demo_mock_components
 
-This will open up RViz with the Panda robot using ``mock_components`` to simulate the robot and execute trajectories.
+명령어를 실행하면 RViz가 열리고 Panda 로봇이 ``mock_components`` 를 사용하여 시뮬레이션되고 궤적이 실행됩니다.
 
-Please see the :doc:`Quickstart in RViz </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>`
-tutorial if this is your first time using MoveIt with RViz.
+처음으로 MoveIt을 RViz와 함께 사용하는 경우 :doc:`Quickstart in RViz </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>` 튜토리얼을 참고하세요.
 
-After you are done testing press ``Ctrl+C`` in the terminal to stop the container.
+테스트가 끝나면 터미널에서 ``Ctrl+C`` 를 눌러 컨테이너를 종료하십시오.
 
-Running the MoveIt Interactive Marker Demo with Isaac Sim
+Isaac 시뮬레이션으로 MoveIt 상호작용 Marker 데모 실행하기
 ---------------------------------------------------------
 
-1. On the host computer, go to the tutorials launch directory.
+1. 호스트 컴퓨터에서 튜토리얼 launch 디렉토리로 이동하십시오.
 
 .. code-block:: bash
 
   cd moveit2_tutorials/doc/how_to_guides/isaac_panda/launch
 
-2. Then run the following command to load the Panda Robot pre-configured to work with this tutorial.
+1. 다음 명령을 실행하여 이 튜토리얼과 함께 작동하도록 미리 설정된 Panda 로봇을 로딩하십시오.
 
-.. note:: This step assumes that a compatible version of Isaac Sim is installed on the host in the ``$HOME/.local/share/ov/pkg/" directory``.
-  This step also takes a few minutes to download the assets and setup Isaac Sim so please be
-  patient and don't click the ``Force Quit`` dialog that pops up while the simulator starts.
+.. note:: 이 단계는 호스트 시스템에 호환되는 버전의 Isaac Sim이  ``$HOME/.local/share/ov/pkg/" directory`` 에 설치되어 있다고 가정합니다.
+  또한 이 단계는 assets을 다운로드하고 Isaac Sim을 설정하는 데 몇 분이 소요되므로 참을성을 가지고 시뮬레이터가 시작되는 동안 나타나는 ``Force Quit`` (강제 종료) 대화 상자를 클릭하지 마십시오.
 
 .. code-block:: bash
 
   ./python.sh isaac_moveit.py
 
-3. From the ``moveit2_tutorials/doc/how_to_guides/isaac_panda`` directory start a container that connects to Isaac Sim using the ``topic_based_ros2_control/TopicBasedSystem`` hardware interface.
+1. ``moveit2_tutorials/doc/how_to_guides/isaac_panda`` 디렉토리로 이동하여 ``topic_based_ros2_control/TopicBasedSystem`` 하드웨어 인터페이스를 사용하여 Isaac Sim에 연결하는 컨테이너를 구동시킵니다.
 
 .. code-block:: bash
 
   docker compose up demo_isaac
 
-This will open up RViz with the Panda robot using the ``TopicBasedSystem`` interface to communicate with the simulated robot and execute trajectories.
+이는 RViz를 열어 시뮬레이션된 Panda 로봇과 통신하고  ``TopicBasedSystem`` 인터페이스를 사용하여 궤적을 실행합니다.
 
 .. raw:: html
 

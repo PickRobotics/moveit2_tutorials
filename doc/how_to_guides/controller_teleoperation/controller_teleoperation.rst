@@ -13,7 +13,7 @@ workspace에 필요한 패키지가 설치되어 있고 ROS2 joy를 지원하는
 - Ubuntu 22.04
 - ROS 2 Humble
 - MoveIt 2
-- MoveIt 2 Tutorials
+- MoveIt 2 튜터리얼
 - `ROS2 joy <https://index.ros.org/p/joy/>`_
 
 단계
@@ -25,33 +25,32 @@ workspace에 필요한 패키지가 설치되어 있고 ROS2 joy를 지원하는
 
   다음으로 ``colcon build`` 실행합니다. Then, run ``colcon build``.
 
-2. Plug in your gamepad.
-3. Source the install script and run the ``moveit_servo`` example file.
+2. 게임패드를 연결합니다.
+3. install 스크립트를 source하고 ``moveit_servo`` 예제 파일을 실행합니다.
 
   Run ``source install/setup.bash``, then ``ros2 launch moveit_servo servo_example.launch.py``
 
-4. Move the arm around, using the below image as a guide.
+4. 팔을 주위로 움직여봅니다. 아래 이미지를 참고하세요.
 
   .. image:: xboxcontroller.png
     :width: 600px
 
-The drawio document can be seen `here <https://drive.google.com/file/d/1Hr3ZLvkYo0y0fA3Qb1Nk_y7wag4UO8Al/view?usp=sharing>`__.
+drawio 문서는 `here <https://drive.google.com/file/d/1Hr3ZLvkYo0y0fA3Qb1Nk_y7wag4UO8Al/view?usp=sharing>`__ 를 참고하세요.
 
 Explanation
 -----------
 
-This section explains the launch file and the node that translates gamepad inputs to motion commands.
+이 섹션은 launch 파일과 게임패드 입력을 모션 명령어로 변환하는 node에 대해 설명합니다.
 
-Launch File
+Launch 파일
 ^^^^^^^^^^^
 
-The file that launches this example is
-``ws_moveit2/src/moveit2/moveit_ros/moveit_servo/launch/servo_example.launch.py``
+이 예제를 launch하는 파일은 ``ws_moveit2/src/moveit2/moveit_ros/moveit_servo/launch/servo_example.launch.py`` 입니다.
 
-This launch file launches everything needed for the panda arm planning, and also launches the ``joy`` node and the ``JoyToServoPub`` node (which is explained below).
+이 launch 파일은 panda arm planning에 필요한 모든 것을 실행하며, 또한 ``joy`` node와 아래 설명하는 ``JoyToServoPub`` node도 launch 시킵니다.
 
-Of primary interest is the section of code that launches the joy and ``JoyToServoPub`` nodes.
-They are both created as ``ComposableNode``\s. More information about ``ComposableNode``\s can be found `here <https://roscon.ros.org/2019/talks/roscon2019_composablenodes.pdf>`__ and `here <https://medium.com/@waleedmansoor/understanding-ros-nodelets-c43a11c8169e>`__.
+가장 중요한 부분은  joy node와 ``JoyToServoPub`` node를 launch시키는 코드 부분입니다.
+이 둘은 모두 ``ComposableNode``\s 로 생성됩니다. ``ComposableNode``\s 에 대한 자세한 내용은 `here <https://roscon.ros.org/2019/talks/roscon2019_composablenodes.pdf>`__ and `here <https://medium.com/@waleedmansoor/understanding-ros-nodelets-c43a11c8169e>`__ 링크에서 찾을 수 있습니다.
 
 .. code-block:: python
 
@@ -69,19 +68,14 @@ They are both created as ``ComposableNode``\s. More information about ``Composab
 JoyToServoPub
 ^^^^^^^^^^^^^
 
-The node that translates gamepad inputs to motion commands is
-``ws_moveit2/src/moveit2/moveit_ros/moveit_servo/src/teleop_demo/joystick_servo_example.cpp``
+게임패드 입력을 모션 명령어로 변환하는 node는 다음과 같습니다. ``ws_moveit2/src/moveit2/moveit_ros/moveit_servo/src/teleop_demo/joystick_servo_example.cpp``
 
-This node subscribes to the joy node (which publishes messages giving the state of the gamepad). It publishes ``TwistStamped`` messages, ``JointJog`` messages, and ``PlanningScene`` messages.
+이 node는 joy node (게임패드 상태 메시지를 publish)를 subscribe합니다. 이 node는 ``TwistStamped`` messages, ``JointJog`` messages, ``PlanningScene`` messages를 게시합니다.
 
-The ``PlanningScene`` message is only published once, when the JoyToServoPub is first constructed. It simply adds some obstacles into the planning scene.
+``PlanningScene`` 메시지는 JoyToServoPub이 처음 생성될 때 한 번만 publish됩니다. 간단히 말해 몇 가지 장애물을 계획 scene에 추가합니다.
 
-The difference between the ``JointJog`` and ``TwistStamped`` messages is
-that the inverse kinematic solver moves the joints to achieve the end
-effector motions defined by the ``TwistStamped`` messages, while the
-``JointJog`` messages directly move individual joints.
+``JointJog`` 와 ``TwistStamped`` 메시지의 차이점은 역 운동학 솔버(inverse kinematic solver)가 ``TwistStamped`` 메시지에 의해 정의된 end-effector 동작을 달성하기 위해 조인트를 이동시키는 반면
+``JointJog`` 메시지는 개별 조인트들을 직접 이동시킨다는 점입니다.
 
-The ``joyCB`` function is called when a message is published to the ``joy``
-topic, and translates the button presses from the gamepad into commands
-for the arm. If both ``JointJog`` and ``TwistStamped`` messages would be
-published by the inputs, only ``JointJog`` messages are published.
+``joyCB`` 함수는 ``joy`` topic으로 메시지가 publish될 때 호출되고, 게임 패드의 버튼 누름을 팔에 대한 명령으로 변환합니다.
+입력에 의해 ``JointJog`` 와 ``TwistStamped`` 메시지가 모두 publish되는 경우 ``JointJog`` 메시지만 게시됩니다.
