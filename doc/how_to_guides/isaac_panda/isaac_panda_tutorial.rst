@@ -1,5 +1,5 @@
-How To Command Simulated Isaac Robot
-====================================
+Issac 로봇 시뮬레이션에 명령 전달 방법
+=======================================
 
 이 튜터리얼을 진행하기 위해서는 컴퓨터에  ``Isaac Sim 2023.1.x`` (권장) 혹은 ``Isaac Sim 2022.2.x`` 가 설치되어 있어야 합니다.
 아이작 시뮬레이터의 요구사항 및 설치 방법은 `Omniverse 문서 <https://docs.omniverse.nvidia.com/isaacsim/latest/index.html>`_ 에서 확인하실 수 있습니다.

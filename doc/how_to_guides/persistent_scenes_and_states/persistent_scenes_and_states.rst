@@ -1,4 +1,4 @@
-Warehouse - Persistent Scenes and States
+Warehouse - 영구적인 Scenes와 상태
 ===========================================
 
 RViz의 "MotionPlanning" 플러그인은 완전한 계획 scene과 로봇 상태를 영구적으로 저장하는 기능을 제공합니다.
@@ -46,9 +46,6 @@ scenes와 states를 저장/로딩하기
 
 성공적으로 연결되었으므로 이제 로봇 상태와 계획된 scenes을 저장 및 복원할 수 있습니다.
 이는 RViz의 "Stored Scenes" 또는 "Stored States" 탭에서 수행할 수 있습니다.
-Now that you connected successfully,
-you can save and restore robot states and planned scenes.
-This can be done in the "Stored Scenes" resp. "Stored States" tab in RViz.
 
 시작 상태를 저장하려면 녹색 manipulator를 원하는 위치로 끌고 "Save Start" 버튼을 클릭하십시오.
 목표 상태 (오렌지색 manipulator)는 "Save Goal" 버튼을 사용하여 저장할 수 있습니다.
