@@ -3,7 +3,7 @@ pick_ik Kinematics Solver
 
 `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_ 은 PickNik Robotics가 개발한 MoveIt 2와 호환되는 inverse kinematics(IK) solver입니다. 강건하고 커스텀이 가능한 IK 솔루션을 제공하도록 설계되었으며 다양한 기능을 제공합니다.
 
-``pick_ik``의 솔버는 전역 최적화 알고리즘과 국부 최적화 알고리즘을 통합한 `bio_ik <https://github.com/TAMS-Group/bio_ik>`_ 을 재구현한 것입니다. 전역 최적화 알고리즘은 진화 알고리즘을 사용하여 해 공간 내의 대안 솔루션을 탐색하고 전역 최적값을 식별합니다. 전역 최적화 알고리즘에서 얻은 결과를 기반으로 국부 최적화 알고리즘은 경사 하강법(gradient descent)를 적용하여 솔루션을 반복적으로 개선합니다. 이는 전역 최적화 알고리즘에서 제공하는 잠재적인 최적 솔루션을 입력으로 받아 정확도를 향상시키고 궁극적으로 가장 최적의 솔루션으로 수렴하는 것을 목표로 합니다..
+``pick_ik`` 의 솔버는 전역 최적화 알고리즘과 국부 최적화 알고리즘을 통합한 `bio_ik <https://github.com/TAMS-Group/bio_ik>`_ 을 재구현한 것입니다. 전역 최적화 알고리즘은 진화 알고리즘을 사용하여 해 공간 내의 대안 솔루션을 탐색하고 전역 최적값을 식별합니다. 전역 최적화 알고리즘에서 얻은 결과를 기반으로 국부 최적화 알고리즘은 경사 하강법(gradient descent)를 적용하여 솔루션을 반복적으로 개선합니다. 이는 전역 최적화 알고리즘에서 제공하는 잠재적인 최적 솔루션을 입력으로 받아 정확도를 향상시키고 궁극적으로 가장 최적의 솔루션으로 수렴하는 것을 목표로 합니다..
 
 시작하기
 ---------------
@@ -89,29 +89,19 @@ pick_ik을 Kinematics 플러그인으로 사용하기
 
 - ``memetic_<property>``: ``global`` 솔버를 사용하는 경우에만 작동하는 모든 속성입니다. 주요 속성은 ``memetic_num_threads`` 이며, 진화 알고리즘이 여러 스레드에서 해결하도록 설정했습니다.
 
-- ``position_threshold`` / ``orientation_threshold``: 최적화는 포즈 차이가 각각 미터와 라디안 단위의 이 임계값보다 작을 때만 성공합니다.
-``position_threshold`` 가 0.001이면 1mm 정확도를 의미하며 ``orientation_threshold`` 가 0.01이면 0.01 라디안 정확도를 의미합니다.
+- ``position_threshold`` / ``orientation_threshold``: 최적화는 포즈 차이가 각각 미터와 라디안 단위의 이 임계값보다 작을 때만 성공합니다. ``position_threshold`` 가 0.001이면 1mm 정확도를 의미하며 ``orientation_threshold`` 가 0.01이면 0.01 라디안 정확도를 의미합니다.
 
-- ``cost_threshold``: 이 솔버는 포즈가 얼마나 먼지, 초기 추측치에 상대적으로 얼마나 많이 조인트가 움직이는지, 사용자가 추가할 수 있는 사용자 정의 비용 함수를 기반으로 비용 함수를 설정하여 작동합니다.
-최적화는 비용이 ``cost_threshold`` 보다 작을 때만 성공합니다. 커스텀 비용 함수를 추가하는 경우 이 임계값을 상당히 높게 설정하고
-결정 요인으로 ``position_threshold`` 및 ``orientation_threshold`` 를 사용하는 것이 좋지만 이는 더 가이드라인에 가깝습니다.
+- ``cost_threshold``: 이 솔버는 포즈가 얼마나 먼지, 초기 추측치에 상대적으로 얼마나 많이 조인트가 움직이는지, 사용자가 추가할 수 있는 사용자 정의 비용 함수를 기반으로 비용 함수를 설정하여 작동합니다. 최적화는 비용이 ``cost_threshold`` 보다 작을 때만 성공합니다. 커스텀 비용 함수를 추가하는 경우 이 임계값을 상당히 높게 설정하고 결정 요인으로 ``position_threshold`` 및 ``orientation_threshold`` 를 사용하는 것이 좋지만 이는 더 가이드라인에 가깝습니다.
 
 - ``approximate_solution_position_threshold`` / ``approximate_solution_orientation_threshold``:
-  end-point 서보 제어와 같은 응용 프로그램에서 근사 IK 솔루션을 사용할 때,
-``pick_ik`` 는 때때로 목표 프레임과 상당히 먼 솔루션을 반환할 수 있습니다.
-이러한 솔루션내에서의 점프 문제를 방지하기 위해 이러한 파라미터들은 최대 병진 및 회전 변위를 정의합니다.
-대부분의 응용 프로그램에서 몇 센티미터와 몇 도 정도의 값으로 설정하는 것이 좋습니다.
+  end-point 서보 제어와 같은 응용 프로그램에서 근사 IK 솔루션을 사용할 때, ``pick_ik`` 는 때때로 목표 프레임과 상당히 먼 솔루션을 반환할 수 있습니다. 이러한 솔루션내에서의 점프 문제를 방지하기 위해 이러한 파라미터들은 최대 병진 및 회전 변위를 정의합니다. 대부분의 응용 프로그램에서 몇 센티미터와 몇 도 정도의 값으로 설정하는 것이 좋습니다.
 
-- ``position_scale``: 회전만 IK를 원하는 경우 이 값을 0.0으로 설정합니다. 커스텀 ``IKCostFn`` (  ``setFromIK()`` 호출에서 제공)을 풀고 싶은 경우
-``position_scale`` 과 ``rotation_scale`` 모두 0.0으로 설정합니다. 또한 다른 값을 사용하여 위치 목표 가중치를 지정할 수도 있습니다.
-비용 함수의 일부입니다. ``position_scale = 0.0`` 을 사용하면 ``position_threshold`` 를 사용하는 모든 검사가 무시됩니다.
+- ``position_scale``: 회전만 IK를 원하는 경우 이 값을 0.0으로 설정합니다. 커스텀 ``IKCostFn`` (  ``setFromIK()`` 호출에서 제공)을 풀고 싶은 경우 ``position_scale`` 과 ``rotation_scale`` 모두 0.0으로 설정합니다. 또한 다른 값을 사용하여 위치 목표 가중치를 지정할 수도 있습니다. 비용 함수의 일부입니다. ``position_scale = 0.0`` 을 사용하면 ``position_threshold`` 를 사용하는 모든 검사가 무시됩니다.
 
+- ``rotation_scale``: 위치만 IK를 원하는 경우 이 값을 0.0으로 설정합니다. 위치와 방향을 동등하게 처리하려면 이 값을 1.0으로 설정합니다. 그 사이의 모든 값도 사용할 수 있습니다. 비용 함수의 일부입니다. ``rotation_scale = 0.0`` 을 사용하면 ``orientation_threshold`` 를 사용하는 모든 검사가 무시됩니다.
 
-- ``rotation_scale``: 위치만 IK를 원하는 경우 이 값을 0.0으로 설정합니다. 위치와 방향을 동등하게 처리하려면 이 값을 1.0으로 설정합니다.
-그 사이의 모든 값도 사용할 수 있습니다. 비용 함수의 일부입니다. ``rotation_scale = 0.0`` 을 사용하면 ``orientation_threshold`` 를 사용하는 모든 검사가 무시됩니다.
+- ``minimal_displacement_weight``: 이것은 초기 추측치와 솔루션 간의 조인트 각도 차이를 확인하는 표준 비용 함수 중 하나입니다. 먼 목표를 풀고 있다면 0으로 두십시오. 경로를 따라 데카르트 보간 또는 서보 제어를 위한 엔드포인트 조깅과 같은 작업을 수행하는 경우 작지만 0이 아닌 값 (예: 0.001)으로 유지하십시오.
 
-- ``minimal_displacement_weight``: 이것은 초기 추측치와 솔루션 간의 조인트 각도 차이를 확인하는 표준 비용 함수 중 하나입니다.
-먼 목표를 풀고 있다면 0으로 두십시오. 경로를 따라 데카르트 보간 또는 서보 제어를 위한 엔드포인트 조깅과 같은 작업을 수행하는 경우 작지만 0이 아닌 값 (예: 0.001)으로 유지하십시오.
 
 RViz에서 이 솔버를 실시간으로 테스트할 수 있습니다. 이 플러그인은 매번 풀이를 할때마다 파라미터 변경에 응답하기 위해 `generate_parameter_library <https://github.com/PickNikRobotics/generate_parameter_library>`_ 패키지를 사용합니다.
 즉, ROS 2 명령줄 인터페이스를 사용하여 즉시 값을 변경할 수 있습니다. 예를 들면:
