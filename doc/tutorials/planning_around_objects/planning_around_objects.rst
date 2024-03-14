@@ -2,7 +2,6 @@
 ==========================
 
 이 튜토리얼에서는 planning scene에 객체를 삽입하고 개체 주변을 planning하는 방법을 소개합니다.
-This tutorial will introduce you to inserting objects into the planning scene and planning around them.
 
 사전 요구사항
 -----------------
@@ -125,4 +124,3 @@ Further Reading
 
 다음 튜터리얼 :doc:`Pick and Place with MoveIt Task Constructor </doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor>` 에서, 더 어려운 모션 계획을 해결하도록 설계된 상위 계층 도구를 소개합니다.
 다음 튜토리얼에서는 물체를 집어서 놓는 프로그램을 만들 것입니다.
-
