@@ -1,16 +1,14 @@
-How to Teleoperate a Robotic Arm with a Gamepad
+게임패드로 로봇 팔 원격제어 방법
 ===============================================
 
-This guide will introduce you to using a gamepad to move the panda arm.
+이 가이드는 게임패드를 사용하여 Panda 팔을 움직이는 방법을 소개합니다.
 
-Prerequisites
+사전준비
 -------------
-Make sure your workspace has the required packages installed and that you
-have a gamepad supported by ROS2 joy. This can be tested by launching a
-``joy`` node and then running ``ros2 topic echo /joy`` to ensure your
-gamepad is detected by ``joy``.
+workspace에 필요한 패키지가 설치되어 있고 ROS2 joy를 지원하는 게임패드가 필요합니다.
+``joy`` node를 launch한 다음 ``ros2 topic echo /joy`` 를 실행하여 게임패드가 ``joy`` 에서 감지되었는지 확인할 수 있습니다.
 
-Requirements
+요구사항
 ------------
 - Ubuntu 22.04
 - ROS 2 Humble
@@ -18,14 +16,14 @@ Requirements
 - MoveIt 2 Tutorials
 - `ROS2 joy <https://index.ros.org/p/joy/>`_
 
-Steps
------
+단계
+------
 
-1. Build the MoveIt 2 workspace
+1. MoveIt 2 워크스페이스를 빌드합니다.
 
-  First, ``cd`` to the root directory of the moveit2 workspace. (if you followed the :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` tutorial, this will be ``~/ws_moveit/``).
+  먼저 moveit2 워크스페이스의 루트 디렉토리로 이동하는 ``cd`` 명령을 사용하십시오. (:doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 튜토리얼을 따랐다면 이 디렉토리는 ``~/ws_moveit/`` 입니다.)
 
-  Then, run ``colcon build``.
+  다음으로 ``colcon build`` 실행합니다. Then, run ``colcon build``.
 
 2. Plug in your gamepad.
 3. Source the install script and run the ``moveit_servo`` example file.
