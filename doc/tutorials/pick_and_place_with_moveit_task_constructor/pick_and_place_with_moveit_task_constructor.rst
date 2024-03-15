@@ -18,7 +18,7 @@ MTC의 기본적인 아이디어는 복잡한 모션 계획 문제를 더 간단
 스테이지 배열 순서는 결과가 전달되는 방향에 따라 제한됩니다.
 결과 흐름과 관련된 세 가지 가능한 스테이지 유형은 생성기(generator), 전파기(propagator), 연결기(connector) 스테이지입니다.:
 
-**발생기 (Generators)** 는 이웃하는 stages와 독립적으로 결과를 계산하고 양방향으로, 즉 앞뒤로 전달합니다.
+**생성기 (Generators)** 는 이웃하는 stages와 독립적으로 결과를 계산하고 양방향으로, 즉 앞뒤로 전달합니다.
 예를 들어, 접근 및 이탈 모션 (이웃 stages)이 솔루션에 따라 달라지는 기하학적 포즈에 대한 IK sampler가 있습니다.
 
 **전파기 (Propagators)** 는 한쪽 이웃 stage의 결과를 받고, 하위 문제를 해결한 다음 반대편 이웃에게 결과를 전파합니다.
@@ -684,7 +684,7 @@ stages를 태스크에 추가하는 대신에 관련 stages를 직렬 컨테이�
 
 
 
-c
+위의 포즈(pose)를 기반으로 역 운동학(inverse kinematics)을 계산하기 전에 먼저 프레임(frame)을 정의해야 합니다. 이 작업은 ``geometry_msgs`` 패키지의 ``PoseStamped`` 메시지로 수행할 수도 있지만, 이 경우에는 Eigen 변환 행렬과 관련 링크의 이름을 사용하여 변환(transform)을 정의합니다. 여기서는 변환 행렬을 정의하는 부분입니다.
 
 .. code-block:: c++
 
@@ -986,4 +986,3 @@ RViz GUI내에서 화살표를 통해 stage의 전파 방향을 쉽게 확인할
 뒤로 전파할 때는 많은 오퍼레이션의 로직이 반대가 됩니다.
 예를 들어, ``ModifyPlanningScene`` stage에서 물체와의 충돌을 허용하려면 ``allowCollisions(true)`` 가 아니라 ``allowCollisions(false)`` 를 호출해야 합니다.
 관련 내용은 `여기 <https://github.com/ros-planning/moveit_task_constructor/issues/349>`_ 를 참조하십시오.
-
