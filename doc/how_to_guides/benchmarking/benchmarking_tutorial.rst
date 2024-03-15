@@ -1,61 +1,59 @@
-How to benchmark your planning pipeline
+planning pipeline 벤치마킹 방법
 =======================================
 
-Getting Started
+시작하기
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+:doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 을 먼저 완료하세요.
 
-The :moveit_codedir:`benchmarking package <moveit_ros/benchmarks>` provides methods to benchmark a MoveIt planning pipeline and aggregate/plot statistics using the OMPL Planner Arena.
-The example below demonstrates how the benchmarking can be run.
+:moveit_codedir:`benchmarking 패키지 <moveit_ros/benchmarks>` 는 OMPL Planner Arena를 사용하여 MoveIt 계획 파이프라인을 벤치마킹하고 통계를 집계/플롯하는 방법을 제공합니다.
+아래 예시는 벤치마킹을 실행하는 방법을 보여줍니다.
 
-Example
+예제
 -------
 
-To run the example you need to install git lfs by running ``git lfs install`` and clone [moveit_benchmark_resources](https://github.com/ros-planning/moveit_benchmark_resources.git) into your workspace.
+예시를 실행하려면 ``git lfs install`` 명령어를 실행하여 git lfs를 설치하고 [moveit_benchmark_resources](https://github.com/ros-planning/moveit_benchmark_resources.git) 를 워크스페이스에 복제해야 합니다.
 
-Start the benchmarks by running: ::
+다음을 실행하여 벤치마크를 시작합니다.: ::
 
     ros2 launch moveit2_tutorials run_benchmarks.launch.py
 
 
-This will take a while depending on the settings in ``benchmarks.yaml``. The benchmark results will be saved in ``/tmp/moveit_benchmarks/``.
-To introspect the benchmark data, the log files need to be converted into a database. This can be done using a script provided in the moveit_ros_benchmarks package: ::
+이 작업은 ``benchmarks.yaml`` 의 설정에 따라 시간이 걸릴 수 있습니다. 벤치마킹 결과는 ``/tmp/moveit_benchmarks/`` 디렉토리에 저장됩니다.
+벤치마킹 데이터를 검토하려면 로그 파일을 데이터베이스로 변환해야 합니다. 이 작업은 moveit_ros_benchmarks 패키지에서 제공하는 스크립트를 사용하여 수행할 수 있습니다.: ::
 
     ros2 run moveit_ros_benchmarks moveit_benchmark_statistics.py LOG_FILE_1 ... LOG_FILE_N
 
-This command will create a database containing the data form all benchmark log files included. An easier way to create the database is to create it with all log files from a given repository.
-For example, the argument ``/tmp/moveit_benchmarks/*`` can be used to collect all log files in the given directory into a single database. This database is created in the location where the command
-above is run in a file names ``benchmark.db``.
-
-The database can be visualized by uploading the the file to `plannerarena.org <http://plannerarena.org>`_ and interactively visualizing the results.
+이 명령은 포함된 모든 벤치마킹 로그 파일의 데이터를 포함하는 데이터베이스를 생성합니다. 더 쉬운 방법은 지정된 저장소의 모든 로그 파일을 가지고 데이터베이스를 만드는 것입니다.
+예를 들어, 인수 ``/tmp/moveit_benchmarks/*`` 를 사용하여 지정된 디렉토리의 모든 로그 파일을 단일 데이터베이스로 수집할 수 있습니다. 이 데이터베이스는 명령이 실행된 위치에 ``benchmark.db`` 라는 이름으로 생성됩니다.
+데이터베이스는 파일을 `plannerarena.org <http://plannerarena.org>`_ 에 업로드하여 시각화하며 결과를 대화형으로 시각화할 수 있습니다.
 
 
 .. image:: planners_benchmark.png
    :width: 700px
 
-ROS 2 parameters to configure a benchmark
+ROS 2 parameters로 벤치마크 설정하기
 -----------------------------------------
 
-The benchmarks are configured by a set of ROS 2 parameters. You can learn more about these parameters in the :moveit_codedir:`BenchmarkOptions.h <moveit_ros/benchmarks/include/moveit/benchmarks/BenchmarkOptions.h>` file.
+벤치마킹은 ROS 2 파라미터 세트로 설정합니다. 이러한 매개변수에 대해서는 :moveit_codedir:`BenchmarkOptions.h <moveit_ros/benchmarks/include/moveit/benchmarks/BenchmarkOptions.h>` 파일에서 더 자세히 알아볼 수 있습니다.
 
 
 The BenchmarkExecutor Class
 ---------------------------
 
-This class creates a set of ``MotionPlanRequests`` that respect the parameters given in the supplied instance of ``BenchmarkOptions`` and then executes the requests on each of the planners specified.  From the ``BenchmarkOptions``, queries, ``goal_constraints``, and ``trajectory_constraints`` are treated as separate queries.  If a set of ``start_states`` is specified, each query, ``goal_constraint``, and ``trajectory_constraint`` is attempted with each start state (existing start states from a query are ignored).  Similarly, the (optional) set of path constraints is combined combinatorially with the start query and start ``goal_constraint`` pairs (existing ``path_constraint`` from a query are ignored).  The workspace, if specified, overrides any existing workspace parameters.
+이 클래스는 제공된 ``BenchmarkOptions`` 인스턴스에 지정된 매개변수을 보고 일련의 ``MotionPlanRequests`` 를 생성한 다음 지정된 각 플래너에 대해 요청을 실행합니다.  ``BenchmarkOptions`` 에서 쿼리, ``goal_constraints`` 및 ``trajectory_constraints`` 는 별도의 쿼리로 취급됩니다.  ``start_states`` 세트가 지정되면 각 쿼리, ``goal_constraint`` 및 ``trajectory_constraint`` 가 각 시작 상태(쿼리의 기존 시작 상태는 무시됨)와 함께 시도됩니다. 마찬가지로, (선택적) 경로 제약 세트는 시작 쿼리 및 시작 ``goal_constraint`` 쌍과 함께 조합적으로 결합됩니다(쿼리의 기존 ``path_constraint`` 는 무시됨). 워크스페이스가 지정되면 기존 워크스페이스 파라미터를 무시합니다.
 
-The benchmarking pipeline does not utilize ``MoveGroup``.
-Instead, the planning pipelines are initialized and run directly including all specified ``PlanningRequestAdapters``.
-This is especially useful for benchmarking the effects of smoothing adapters.
+벤치마킹 파이프라인은 ``MoveGroup`` 을 사용하지 않습니다.
+대신, 모든 지정된 ``PlanningRequestAdapters`` 를 포함하여 플래닝 파이프라인을 직접 초기화하고 실행합니다.
+이는 특히 smoothing 어댑터의 효과를 벤치마킹하는 데 유용합니다.
 
-It is possible to customize a benchmark run by deriving a class from ``BenchmarkExecutor`` and overriding one or more of the virtual functions.
-For instance, overriding the functions ``initializeBenchmarks()`` or ``loadBenchmarkQueryData()`` allows to specify the benchmark queries directly and to provide a custom planning scene without using ROS warehouse.
+``BenchmarkExecutor`` 클래스를 상속하고 하나 이상의 가상 함수를 재정의하면 벤치마크 실행을 커스터마이징할 수 있습니다.
+예를 들어, ``initializeBenchmarks()`` 혹은 ``loadBenchmarkQueryData()`` 함수를 재정의하면 ROS warehouse를 사용하지 않고 벤치마크 쿼리를 직접 지정하고 커스텀 planning scene을 제공할 수 있습니다.
 
-Additionally, a set of functions exists for ease of customization in derived classes:
+추가로, 상속받은 클래스에서 쉽게 커스텀할 수 있도록 다음과 같은 함수 세트가 있습니다.:
 
-- ``preRunEvent``: invoked immediately before each call to solve
-- ``postRunEvent``: invoked immediately after each call to solve
-- ``plannerSwitchEvent``: invoked when the planner changes during benchmarking
-- ``querySwitchEvent``: invoked before a new benchmark problem begin execution
+- ``preRunEvent``: solve를 호출하기 직전에 호출됩니다.
+- ``postRunEvent``: solve를 호출한 직후에 호출됩니다.
+- ``plannerSwitchEvent``: 벤치마킹 중 플래너가 변경될 때 호출됩니다.
+- ``querySwitchEvent``: 새로운 벤치마크 문제 실행이 시작되기 전에 호출됩니다.
 
-Note, in the above, a benchmark is a concrete instance of a ``PlanningScene``, start state, goal constraints / ``trajectory_constraints``, and (optionally) ``path_constraints``.  A run is one attempt by a specific planner to solve the benchmark.
+위의 내용에서 벤치마크는 ``PlanningScene`` , 시작 상태, 목표 제약 조건 / ``trajectory_constraints``, (옵션) ``path_constraints`` 의 구체적인 인스턴스입니다. 실행은 특정 플래너가 벤치마크를 해결하기 위해서 한 번 시도합니다.
