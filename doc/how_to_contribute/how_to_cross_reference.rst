@@ -1,35 +1,33 @@
 How to Cross-Reference Content
 ==============================
 
-This is a primer on how to successfully link to other documents on this website and the API.
+여기서는 이 웹사이트와 API 문서 간에 성공적으로 링크를 연결하는 방법에 대한 기본 지침입니다.I.
 
-There are many and maybe too many different ways to reference content and for new contributors it can be hard to understand what method to use.
-Some methods may even work locally but then silently fail to create functional links on the deployed website.
-For that reason, we are requesting contributors to only use the suggested Sphinx roles for cross-referencing content on this website.
+콘텐츠를 참조하는 방법은 다양하고 때로는 너무 많아서 새로운 기여자들이 어떤 방법을 사용해야 할지 혼란스러울 수도 있습니다.
+일부 방법은 로컬에서는 작동하지만 배포된 웹사이트에서는 링크 기능을 생성하지 못할 수도 있습니다.
+따라서 이 웹사이트의 콘텐츠를 크로스-레퍼런싱할 때는 제안된 Sphinx 역할만을 사용하도록 기여자 여러분께 요청합니다.
 
-Learning Objectives
+학습 목표
 -------------------
-* Linking to documents and sections using Sphinx's ``:ref:`` and ``:doc:`` roles
-* Using ``:ref:`` ids generated from the *autosectionlabel* extension
-* Referencing the C++ API using the ``:cpp_api:`` role from the *doxylink* extension
+* Sphinx의 :ref: 및 :doc: 역할을 사용하여 문서 및 섹션 링크
+* autosectionlabel 확장자에서 생성된 ``:ref:`` 사용
+* *doxylink*doxylink 확장자의 ``:cpp_api:`` 역할을 사용하여 C++ API 참조
 
-Linking to other Documents and Sections
+다른 문서나 섹션에 링크걸기
 ---------------------------------------
 
-Sphinx provides the ``:doc:`` and ``:ref:`` roles for `cross-referencing content <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#cross-referencing-using-roles>`_ and it's best to stick to them to ensure compatibility with other Sphinx extensions and multi-distro support.
+Sphinx는 콘텐츠 크로스-레퍼런싱을 위한 ``:doc:`` 와 ``:ref:`` 역할을 제공하며(`cross-referencing content <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#cross-referencing-using-roles>`_ ), 다른 Sphinx 확장 프로그램과의 호환성 및 다중 배포판 지원을 보장하기 위해 이 역할을 사용하는 것이 좋습니다.
 
-For linking to other documents, you can use the ``:doc:`` role like this: :doc:`/doc/tutorials/getting_started/getting_started` (``:doc:`/doc/tutorials/getting_started/getting_started```). The ``:ref:`` role accepts ids that link to explicit targets on a page.
-For convenience, we have enabled the Sphinx extension `autosectionlabel <https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html>`_ which creates unique and human-readable reference targets for all sections.
-Sections in all documents can be linked by providing the document path and the section title :ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>` (``:ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>```).
-Note that the ``:doc:`` role requires absolute paths to start with a ``/`` while the *autosectionlabel* extension builds ``:ref`` path labels without it.
+다른 문서에 링크하려면 다음과 같이 ``:doc:`` 역할을 사용할 수 있습니다: :doc:`/doc/tutorials/getting_started/getting_started` (``:doc:`/doc/tutorials/getting_started/getting_started```). ``:ref:`` 역할은 페이지의 명확한 대상에 링크하는 id를 허용합니다. 편의를 위해 모든 섹션에 대해 고유하고 사람이 읽을 수 있는 참조 대상을 만드는 Sphinx 확장 프로그램 `autosectionlabel <https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html>`_ 을 활성화했습니다. 모든 문서의 섹션은 문서 경로와 섹션 제목을 제공하여 링크할 수 있습니다: :ref:`이것처럼 <doc/tutorials/getting_started/getting_started:ROS 2 및 Colcon 설치>` (``:ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>```).
+``:doc:`` 역할은 절대 경로를 요구하며 ``/`` 로 시작해야 하지만, *autosectionlabel* 확장자는 이를 포함하지 않고 ``:ref`` 경로 레이블을 만듭니다.
 
-Referencing the API Documentation
+API 문서 참조
 ---------------------------------
 
-The API pages are generated using Doxygen and not Sphinx which means that ``:doc:`` and ``:ref:`` roles are not able to find any API pages.
-We are using `doxylink <https://sphinxcontrib-doxylink.readthedocs.io/en/stable/>`_ and the custom ``:cpp_api:`` role for generating links to the API pages from symbols.
+API 페이지는 Doxygen을 사용하여 생성되며 Sphinx를 사용하지 않으므로 ``:doc:`` 및 ``:ref:`` 역할은 API 페이지를 찾을 수 없습니다.
+우리는 `doxylink <https://sphinxcontrib-doxylink.readthedocs.io/en/stable/>`_ 와 커스텀 ``:cpp_api:`` 역할을 사용하여 심볼로부터 API 페이지에 대한 링크를 생성합니다.
 
-Here are some examples, take note that some links use titles and some not:
+다음은 몇 가지 예제이며, 일부 링크는 제목을 사용하고 일부는 사용하지 않습니다.:
 
 - namespaces: ``:cpp_api:`moveit::core``` -> :cpp_api:`moveit::core`
 - classes:
@@ -42,23 +40,23 @@ Here are some examples, take note that some links use titles and some not:
 - files:
   ``:cpp_api:`robot_model.cpp``` -> :cpp_api:`robot_model.cpp`
 
-If you are unsure about how to link certain symbols, you can find all Doxygen references inside the ``MoveIt.tag`` file.
-The file is located inside ``build/html/api/`` or ``build/html/<branch>/api/`` depending on the build type.
+특정 심볼 연결 방법에 확실하지 않은 경우, ``MoveIt.tag`` 파일 내에서 모든 Doxygen 참조를 찾을 수 있습니다.
+이 파일은 빌드 유형에 따라  ``build/html/api/`` 혹은 ``build/html/<branch>/api/`` 디렉토리 안에 위치합니다.
 
-Do's and Don'ts
+추천과 비추천
 ---------------
 
-Please **do**:
+이렇게 **하세요** :
 
-- Cross-reference as much as possible, especially code
-- Provide meaningful titles for links or shorten API symbols to improve readability
+- 가능한 한 교차 참조를 많이 사용하십시오. 특히 코드에 대한 참조가 중요합니다.
+- 링크 제목을 명확하게 하거나 API 심볼을 줄여 읽기 쉽게 만드십시오.
 
-Please **don't**:
+이렇게는 **하지 마세요** :
 
-- Use raw URLs for referencing tutorials or the API
-- Link to GitHub source files, prefer the Doxygen pages
+- 튜토리얼이나 API 참조 시 원래 URL을 사용합니다.
+- GitHub 소스 파일에 링크를 연결할 때는 Doxygen 페이지를 우선적으로 사용하십시오.
 
-Further Reading
+추가 읽을꺼리
 ---------------
 
 - :doc:`how_to_contribute_to_site`

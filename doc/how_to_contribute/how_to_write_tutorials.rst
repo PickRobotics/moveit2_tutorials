@@ -1,48 +1,48 @@
-How to Write a MoveIt Tutorial
+MoveIt 튜터리얼 작성 방법
 ==============================
 
-This guide explains how to write tutorials for the MoveIt documentation.
-Tutorials are one of the most useful contributions you can make because they are the first thing many new users see.
-This guide is intended for any contributor who wants to submit a new tutorial.
-There are many additional quality standards and how-tos for contributing to the tutorials located in this repository's `README <https://github.com/ros-planning/moveit2_tutorials/blob/main/README.md>`_.
+이 가이드는 MoveIt 문서에서 튜토리얼 작성 방법을 설명합니다.
+튜토리얼은 많은 새로운 사용자가 처음 접하는 부분이기 때문에 가장 유용한 기여 방식 중 하나입니다.
+이 가이드는 새로운 튜토리얼을 제출하고자 하는 모든 기여자를 위한 것입니다.
+이 저장소의 `README <https://github.com/ros-planning/moveit2_tutorials/blob/main/README.md>`_ 튜토리얼 기여에 대한 추가적인 품질 기준과 방법 설명이 많이 포함되어 있습니다.
 
-Learning Objectives
+학습 목표
 -------------------
-- The type of information that should be included in a tutorial.
-- Proper formatting for tutorials in the MoveIt documentation section.
+- 튜터리얼에 포함되어야 정보 유형
+- MoveIt 문서 섹션의 튜토리얼 올바른 형식
 
-Requirements
+요구사항
 ------------
 - Ubuntu 20.04
 - ROS 2 Galactic
 - MoveIt 2
 
-Steps
+단계
 -----
 
-1. Fork the `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_ and start a new branch with an intuitive name (e.g., ``jack/how-to-tutorials``).
+1. `MoveIt 2 튜터리얼 저장소 <https://github.com/ros-planning/moveit2_tutorials.git>`_ 를 fork하고 직관적인 이름의 새로운 브랜치를 생성합니다. (예: ``jack/how-to-tutorials`` ).
 
-#. Create a new file in the ``doc/tutorials`` directory with a ``.rst`` extension. The title should be a concise description (e.g., "MoveIt Quickstart in RViz").
+#. ``doc/tutorials`` 디렉토리에 ``.rst`` 확장자를 가진 새로운 파일을 만듭니다. 제목은 간결한 설명이어야 합니다. (예: "RViz를 이용한 MoveIt  시작")
 
-#. Add a link to your tutorial on the :doc:`tutorials page </doc/tutorials/tutorials>`.
+#. :doc:`tutorials page </doc/tutorials/tutorials>` 에 여러분의 튜토리얼 링크를 추가합니다.
 
-#. Write the introduction using reStructuredText (.rst) using the following guidelines:
+#. reStructuredText (.rst) 를 사용하여 다음과 같은 지침을 따르며 소개 부분을 작성합니다:
 
-   - The introduction should explain the purpose of this tutorial and the intended audience.
+   - 소개 부분은 이 튜토리얼의 목적과 대상 독자를 설명해야 합니다.
 
-   - If you think people may regularly find this particular guide by mistake, add links to the proper resource.
+   - 사용자가 실수로 이 가이드를 찾을 수 있다고 생각되면 적절한 리소스 링크를 추가합니다.
 
-#. Write the specific learning objectives (i.e., what will the reader know when they finish reading this tutorial).
+#. 독자가 튜토리얼을 읽고 난 후 무엇을 알게 될지, 구체적인 학습 목표를 작성합니다.
 
-#. Add any system or equipment requirements for this tutorial so users know if this tutorial is appropriate for them.
+#. 사용자가 이 튜토리얼이 자신에게 적합한지 알 수 있도록 시스템 또는 장비 요구 사항을 추가합니다.
 
-#. Layout the interactive steps to be followed with enough details that the reader can easily follow along.
+#. 독자가 쉽게 따라갈 수 있도록 충분한 세부 사항과 함께 수행해야 하는 대화형 단계를 구성합니다.
 
-#. Write a conclusion to summarize the tutorial and provide additional resources.
+#. 튜토리얼을 요약하고 추가 리소스를 제공하는 결론을 작성합니다.
 
-#. Add a link to the next tutorial the reader should follow.
+#. 독자가 따라야 하는 다음 튜토리얼 링크를 추가합니다.
 
-#. Submit the new page as a PR to the `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_.
+#. 새로운 페이지를 PR로 `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_ 에 제출합니다.
 
 Template
 --------

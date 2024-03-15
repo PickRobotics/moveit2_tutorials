@@ -1,51 +1,50 @@
-How to Write a MoveIt How-To Guide
+MoveIt 하우투 가이드 작성 방법
 ==================================
 
-This guide explains how to write How-To's for MoveIt documentation. This guide is primarily intended for use by employees at PickNik Robotics
-to assist in standardizing how-to documents but can be used by any contributor who wants to submit a new guide. If you are looking for
-how-to guides for using MoveIt, you can find them here: :doc:`/doc/how_to_guides/how_to_guides`.
+이 가이드에서는 MoveIt 문서 작성을 위한 방법 설명을 다루고 있습니다. 주된 목적은 PickNik Robotics 직원들이 사용 방법 문서를 표준화하는 것을 돕는 것이지만, 새로운 가이드를 제출하고 싶은 모든 기여자도 사용할 수 있습니다.
+MoveIt 사용 방법 가이드를 찾고 있다면 :doc:`/doc/how_to_guides/how_to_guides` 에서 확인하세요.
 
-Learning Objectives
+학습 목표
 -------------------
-- The type of information that should be included in a how-to.
-- Proper formatting for how-to guides in the MoveIt documentation section.
+- 사용 방법 가이드에 포함되어야 하는 정보 종류
+- MoveIt 문서 섹션에서의 적절한 포맷팅
 
-Requirements
+요구사항
 ------------
 - Ubuntu 20.04
 - ROS 2 Galactic
 - MoveIt 2
 
-Steps
+단계
 -----
 
-1. Fork the `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_ and start a new branch with an intuitive name (e.g., ``jack/how-to-write-how-tos``).
+1. `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_ 를 fork하고 직관적인 이름의 새로운 브랜치를 생성합니다 (예제: ``jack/how-to-write-how-tos`` ).
 
-#. Create a new file in the ``doc/how_to_guides`` directory with a ``.rst`` extension. The title should start with "How to" followed by the specific question being answered (e.g., "How to Write a MoveIt How-To Guide").
+#. .rst 확장자로 ``doc/how_to_guides`` 디렉토리에 새 파일을 만듭니다. 제목은 "How to" 다음에 해답하는 질문을 명확하게 명시합니다 (예제: "MoveIt 사용 방법 가이드 작성 방법").
 
-#. Add a link to your guide on the appropriate how-to guide page:
+#. 적절한 하우투 가이드 페이지에 여러분의 가이드에 대한 링크를 추가합니다.:
 
-   - :doc:`User Guides </doc/how_to_guides/how_to_guides>`
+   - :doc:`사용자 가이드 </doc/how_to_guides/how_to_guides>`
 
-   - :doc:`Contributor Guides </doc/how_to_contribute/how_to_contribute>`
+   - :doc:`기여자 가이드 </doc/how_to_contribute/how_to_contribute>`
 
-#. Write the introduction using reStructuredText (.rst) using the following guidelines:
+#. 다음과 같은 지침을 사용하여 reStructuredText (.rst)로 소개 부분을 작성합니다.:
 
-   - The title should have the same name as the file.
+   - 제목은 파일 이름과 동일해야 합니다.
 
-   - The introduction should explain the purpose of this how-to and the intended audience.
+   - 소개 부분에서는 이 사용 방법 가이드의 목적과 대상 독자를 설명해야 합니다.
 
-   - If you think people may regularly find this particular guide by mistake, add links to the proper resource.
+   - 실수로 이 가이드를 찾는 사람이 많을 것 같으면 적절한 리소스 링크를 추가합니다.
 
-#. Write the specific learning objectives (i.e., what the reader will know when they finish reading this how-to).
+#. 독자가 읽고 나면 알게 되는 내용 (즉, 학습 목표)을 구체적으로 명시합니다.
 
-#. Add any system or equipment requirements for this how-to so users know if this how-to is appropriate for them.
+#. 사용자가 이 가이드가 자신에게 적합한지 알 수 있도록 시스템 또는 장비 요구 사항을 추가합니다.
 
-#. Lay out the individual action steps and do not leave out necessary intermediate steps.
+#. 개별 작업 단계를 명확하게 설명하고 필요한 중간 단계를 생략하지 않습니다.
 
-#. Create a "Further Reading" section that links to amplifying information.
+#. 추가적인 정보를 제공하는 링크가 있는 "추가 읽을꺼리" 섹션을 만듭니다.
 
-#. Submit the new page as a PR to the `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_.
+#. 새로운 페이지를 `MoveIt 2 Tutorials repository <https://github.com/ros-planning/moveit2_tutorials.git>`_ 에 PR로 제출합니다.
 
 Template
 --------
