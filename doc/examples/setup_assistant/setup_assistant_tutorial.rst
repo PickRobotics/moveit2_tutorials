@@ -5,109 +5,97 @@ MoveIt Setup Assistant
    :width: 700px
    :align: center
 
-Overview
+개요
 --------
-The MoveIt Setup Assistant is a graphical user interface for configuring any robot for use with MoveIt.
-Its primary function is generating a Semantic Robot Description Format (SRDF) file for your robot,
-which specifies additional information required by MoveIt such as planning groups, end effectors, and various kinematic parameters.
-Additionally, it generates other necessary configuration files for use with the MoveIt pipeline.
-To use the MoveIt Setup Assistant, you will need to have a URDF file for your robot.
+MoveIt Setup Assistant는 로봇을 MoveIt과 함께 사용하도록 설정하는 그래픽 사용자 인터페이스입니다.
+주요 기능은 로봇에 대한 의미적 로봇 설명 형식(Semantic Robot Description Format(SRDF)) 파일을 생성하는 것으로, 이 파일은 planning group, end-effectors, 다양한 운동학 파라미터와 같이 MoveIt에 필요한 추가 정보를 지정합니다.
+또한 MoveIt pipeline과 함께 사용하는 데 필요한 다른 설정 파일도 생성합니다.
+MoveIt Setup Assistant를 사용하려면 로봇에 대한 URDF 파일이 필요합니다.
 
-Once you have a URDF file, you can open the MoveIt Setup Assistant and import your URDF.
-This tutorial will guide you through a series of steps to configure various aspects of your robot,
-such as defining its kinematic structure, specifying planning groups and end effectors, and collision checking related settings.
-To learn more about the URDF and SRDF, you can refer to the :doc:`URDF and SRDF Overview </doc/examples/urdf_srdf/urdf_srdf_tutorial>` page.
+URDF 파일이 있으면 MoveIt Setup Assistant를 열고 URDF를 가져올 수 있습니다.
+이 튜터리얼은 운동학 구조 정의, 계획 그룹 및 엔드 이펙터 지정, 충돌 검사 관련 설정과 같은 로봇의 여러 요소를 설정하는 일련의 단계를 안내합니다.
+URDF 및 SRDF에 대한 자세한 내용은 :doc:`URDF와 SRDF 개요 </doc/examples/urdf_srdf/urdf_srdf_tutorial>` 페이지를 참조하십시오.
 
-Getting Started
+시작하기
 ---------------
 
-MoveIt and ROS 2
+MoveIt 과 ROS 2
 
-* Follow the :doc:`instructions for installing MoveIt </doc/tutorials/getting_started/getting_started>`
-  first if you have not already done that.
+* :doc:`instructions for installing MoveIt </doc/tutorials/getting_started/getting_started>` 을 먼저 완료하세요.
 
-* We use the `moveit_resources_panda_description <https://github.com/ros-planning/moveit_resources/tree/humble/panda_description>`_
-  package. This package should already be included in your workspace if you've completed the MoveIt installation instructions.
+* 우리는 `moveit_resources_panda_description <https://github.com/ros-planning/moveit_resources/tree/humble/panda_description>`_ 패키지를 사용합니다. 이 패키지는 MoveIt 설치에 따라 완료했다면 이미 workspace에 포함되어 있습니다.
 
-Step 1: Start
+단계 1: 시작
 -------------
 
-* To start the MoveIt Setup Assistant: ::
+* MoveIt Setup Assistant를 시작하기 위해서: ::
 
    ros2 launch moveit_setup_assistant setup_assistant.launch.py
 
-* This will bring up the start screen with two choices: **Create New
-  MoveIt Configuration Package** or **Edit Existing MoveIt
-  Configuration Package**.
+* 이 패키지를 사용하면 두 가지 선택지를 제공하는 시작 화면이 나타납니다:
+**새로운 MoveIt Configuration Package 생성하기(Create New
+  MoveIt Configuration Package)** 또는 **기존 MoveIt 설정 패키지 편집(Edit Existing MoveIt
+  Configuration Package)**.
 
-* Click on the **Create New MoveIt Configuration Package** button to
-  bring up the following screen:
+* **Create New MoveIt Configuration Package** 를 클릭하면
+  다음과 같은 화면이 나타납니다.:
 
 .. image:: setup_assistant_create_package.png
    :width: 700px
    :align: center
 
-* Click on the **Browse** button and navigate to the ``panda.urdf`` file
-  from the ``moveit_resources_panda_description package`` available in the following path: ::
+* **Browse** 버튼을 클릭하고 다음 경로에 있는 ``moveit_resources_panda_description 패키지``의 ``panda.urdf`` 파일로 이동하십시오: ::
 
    ~/ws_moveit2/src/moveit_resources/panda_description/urdf/panda.urdf
 
-  Choose that file and then click **Load Files**. The
-  Setup Assistant will load the files (this might take a few seconds)
-  and present you with this screen:
+  해당 파일을 선택한 다음 **Load Files** 를 클릭하십시오. Setup Assistant는 파일을 로드할 것이며 (몇 초 정도 걸릴 수 있음),
+  이 화면이 나타납니다.:
 
 .. image:: setup_assistant_load_panda_urdf.png
    :width: 700px
    :align: center
 
-Step 2: Generate Self-Collision Matrix
+단계 2: Self-Collision 행렬 생성
 --------------------------------------
 
-The default Self-Collision matrix generator can help reduce motion planning time
-by disabling collision checking for pairs of links on the robot that are known to be safe.
-This is achieved by determining which pairs of links are always in collision, never in collision,
-in collision in the robot's default position, or adjacent to each other on the kinematic chain.
+기본 제공되는 self-collision 행렬 생성기는 로봇의 안전한 links 쌍에 대해 충돌 검사를 비활성화하여 모션 계획 시간을 단축하는 데 도움이 됩니다.
+이는 항상 충돌하는 links 쌍, 절대 충돌하지 않는 links 쌍, 로봇의 기본 위치에서 충돌하는 links 쌍, 또는 운동학 체인(Kinematic chain)에서 서로 인접한 links 쌍을 식별하여 수행됩니다.
 
-You can set the sampling density, which determines how many random robot positions are checked for self-collision.
-Although the generator checks 10,000 random positions by default, using maximum values for sampling density is
-recommended to ensure more accurate results. The collision checking is done in parallel to reduce the overall
-processing time for generating the collision matrix.
+샘플링 밀도를 설정할 수 있습니다. 샘플링 밀도는 self-collision 여부를 확인하기 위해 검사하는 로봇의 랜덤 위치 수를 결정합니다.
+기본적으로 생성기는 10,000개의 랜덤 위치를 검사하지만, 더 정확한 결과를 위해 샘플링 밀도의 최대값을 사용하는 것이 좋습니다.
+충돌 검사는 병렬 처리되어 충돌 행렬 생성을 위한 전체 처리 시간을 줄입니다.
 
-To generate the collision matrix, select the **Self-Collisions** pane on the left-hand side of the MoveIt Setup Assistant
-and adjust the self-collision sampling density. Then, click on the **Generate Collision Matrix** button to initiate the computation.
-The Setup Assistant will take a few seconds to compute the self-collision matrix, which involves checking for pairs
-of links that can be safely disabled from collision checking.
+충돌 행렬을 생성하려면 MoveIt Setup Assistant의 왼쪽 패널에서 **Self-Collisions** 창을 선택하고 자기 충돌 샘플링 밀도를 조정하십시오.
+그런 다음 충돌 **Generate Collision Matrix** 버튼을 클릭하여 계산을 시작하십시오.
+Setup Assistant은 몇 초 안에 self-collision 행렬을 계산합니다.
+self-collision 행렬은 충돌 검사를 안전하게 비활성화할 수 있는 링크 쌍을 확인하는 과정을 포함합니다.
 
 .. image:: collision_matrix/setup_assistant_panda_collision_matrix.png
    :width: 700px
    :align: center
 
-Once the computation is complete, the results will be presented in the main table.
-The table shows the pairs of links that have been identified as either safe or unsafe to disable from collision checking.
-Links that are safe to disable are marked with a checkmark. You can manually adjust the checkmarks as needed to
-enable or disable self-collision checking for specific link pairs.
+계산이 완료되면 결과가 메인 테이블에 표시됩니다.
+테이블은 충돌 검사로부터 비활성화 시키기 위해 안전하거나 안전하지 않은 것으로 확인된 links 쌍을 보여줍니다.
+비활성화하더라도 안전한 links는 체크 마크로 표시됩니다. 특정 links 쌍에 대한 자체 충돌 검사를 활성화 또는 비활성화하려면 필요에 따라 체크 마크를 수동으로 조정할 수 있습니다.
 
 .. image:: collision_matrix/setup_assistant_panda_collision_matrix_done.png
    :width: 700px
    :align: center
 
-Step 3: Add Virtual Joints
+단계 3: 가상 조인트 추가
 --------------------------
-Virtual joints are primarily used to connect robots to the world.
-In the case of the Panda arm, which is a fixed base manipulator, defining a fixed virtual joint
-is optional. However, we will define a ``fixed`` virtual joint that attaches the ``panda_link0``
-of the arm to the ``world`` frame. This virtual joint signifies that the base of the arm
-remains stationary in the world frame.
+가상 조인트는 주로 로봇을 world에 연결하는데 사용됩니다.
+베이스가 고정된 manipulator인 Panda arm의 경우, 고정 가상 조인트를 정의하는 것은 선택 사항입니다. 그러나 ``panda_link0`` 을 ``world`` 프레임에 연결하는 ``fixed`` 가상 조인트를 정의할 것입니다. 이 가상 조인트는 팔의 base 부분이 world 프레임에서 정지 상태를 유지한다는 것을 의미합니다.
 
-* Click on the **Virtual Joints** pane selector. Click on **Add Virtual Joint**.
+* **Virtual Joints** 창 선택기를 클릭하십시오. **Add Virtual Joint**를 클릭하십시오.
 
-* Set the joint name as ``virtual_joint``.
+* 조인트 이름을 ``virtual_joint`` 로 설정하십시오.
 
-* Set the child link as ``panda_link0`` and the parent frame name as ``world``.
+* 자식 link를 ``panda_link0`` 으로, 부모 프레임 이름을 ``world`` 로 설정하십시오.
 
-* Set the Joint Type as ``fixed``.
+* 조인트 타입을 ``fixed`` 로 설정하십시오.
 
-* Click **Save** and you should see this screen:
+* **Save** 을 클릭하면 다음 화면이 나타납니다.:
 
 .. image:: setup_assistant_panda_virtual_joints.png
    :width: 700px
