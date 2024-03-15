@@ -42,7 +42,8 @@ suppress_warnings = ["image.nonlocal_uri"]
 # General information about the project.
 project = "MoveIt documentation"
 author = "PickNik Robotics"
-copyright = "{}, {}".format(time.strftime("%Y"), author)
+kr_translator = "(한국어 버전 관리 : pickrobotics.kr)"
+copyright = "{}, {}, {}".format(time.strftime("%Y"), author, kr_translator)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
