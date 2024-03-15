@@ -11,14 +11,14 @@ How to Cross-Reference Content
 -------------------
 * Sphinx의 :ref: 및 :doc: 역할을 사용하여 문서 및 섹션 링크
 * autosectionlabel 확장자에서 생성된 ``:ref:`` 사용
-* *doxylink*doxylink 확장자의 ``:cpp_api:`` 역할을 사용하여 C++ API 참조
+* *doxylink* 확장자의 ``:cpp_api:`` 역할을 사용하여 C++ API 참조
 
 다른 문서나 섹션에 링크걸기
 ---------------------------------------
 
 Sphinx는 콘텐츠 크로스-레퍼런싱을 위한 ``:doc:`` 와 ``:ref:`` 역할을 제공하며(`cross-referencing content <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#cross-referencing-using-roles>`_ ), 다른 Sphinx 확장 프로그램과의 호환성 및 다중 배포판 지원을 보장하기 위해 이 역할을 사용하는 것이 좋습니다.
 
-다른 문서에 링크하려면 다음과 같이 ``:doc:`` 역할을 사용할 수 있습니다: :doc:`/doc/tutorials/getting_started/getting_started` (``:doc:`/doc/tutorials/getting_started/getting_started```). ``:ref:`` 역할은 페이지의 명확한 대상에 링크하는 id를 허용합니다. 편의를 위해 모든 섹션에 대해 고유하고 사람이 읽을 수 있는 참조 대상을 만드는 Sphinx 확장 프로그램 `autosectionlabel <https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html>`_ 을 활성화했습니다. 모든 문서의 섹션은 문서 경로와 섹션 제목을 제공하여 링크할 수 있습니다: :ref:`이것처럼 <doc/tutorials/getting_started/getting_started:ROS 2 및 Colcon 설치>` (``:ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>```).
+다른 문서에 링크하려면 다음과 같이 ``:doc:`` 역할을 사용할 수 있습니다: :doc:`/doc/tutorials/getting_started/getting_started` (``:doc:`/doc/tutorials/getting_started/getting_started```). ``:ref:`` 역할은 페이지의 명확한 대상에 링크하는 id를 허용합니다. 편의를 위해 모든 섹션에 대해 고유하고 사람이 읽을 수 있는 참조 대상을 만드는 Sphinx 확장 프로그램 `autosectionlabel <https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html>`_ 을 활성화했습니다. 모든 문서의 섹션은 문서 경로와 섹션 제목을 제공하여 링크할 수 있습니다: :ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>` (``:ref:`like this <doc/tutorials/getting_started/getting_started:Install ROS 2 and Colcon>```).
 ``:doc:`` 역할은 절대 경로를 요구하며 ``/`` 로 시작해야 하지만, *autosectionlabel* 확장자는 이를 포함하지 않고 ``:ref`` 경로 레이블을 만듭니다.
 
 API 문서 참조
