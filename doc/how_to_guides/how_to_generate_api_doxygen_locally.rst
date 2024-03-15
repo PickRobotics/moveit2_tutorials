@@ -1,34 +1,34 @@
-How To Generate API Doxygen Reference Locally
-=============================================
+API Doxygen 참조 문서를 로컬에서 생성하는 방법
+================================================
 
 
-Run doxygen in the root of the moveit2 repository.
+moveit2 저장소의 root에서 doxygen 실행
 
-Requirements
+요구사항
 ------------
 
-- Install ``doxygen`` and ``graphviz``:
+-  ``doxygen`` 와 ``graphviz`` 설치:
 
 .. code-block:: bash
 
     sudo apt-get install doxygen graphviz
 
-Steps
+단계
 -----
 
-- Navigate to the moveit2 repository:
+- moveit2 저장소로 이동:
 
 .. code-block:: bash
 
   cd ~/ws_moveit/src/moveit2
 
-- Run reference generation command with desired output directory path:
+- 원하는 출력 디렉토리 경로와 함께 레퍼런스 생성 명령어를 실행하세요.:
 
 .. code-block:: bash
 
   DOXYGEN_OUTPUT_DIRECTORY=~/docs doxygen
 
-- The documentation entrypoint in a browser is index.html which you can access with:
+- 브라우저에서 문서의 진입점은 index.html이며 다음과 같이 접근할 수 있습니다:
 
 .. code-block:: bash
 

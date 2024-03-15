@@ -1,43 +1,41 @@
-How-To Guide
-============
+하우투 가이드
+================
 
-The How-To Guides are distinctly different from tutorials in that they are directed towards a different audience.
-How-To Guides are **Problem-Oriented** and assume the reader came to this page to answer a specific question.
-These pages possess these qualities:
+하우투 가이드는 튜토리얼과는 명확한 차이가 있습니다. 가장 큰 차이점은 목표 독자가 다르다는 점입니다.
+하우투 가이드는 **문제 중심적** 이며, 독자가 특정 질문에 대한 답변을 얻기 위해 이 페이지를 방문했다고 가정합니다. 하우투 가이드는 다음과 같은 특징을 지니고 있습니다.:
 
-* a series of steps
-* a focus on the goal
-* addressing a specific question
-* no unnecessary explanation
-* a little flexibility
-* practical usability
-* good naming
+* 명확한 단계 설명
+* 목표에 대한 집중
+* 특정 질문 해결
+* 불필요한 설명 제외
+* 약간의 유연성
+* 실용적인 사용성
+* 명확한 제목
 
-In a tutorial, you carefully guide the reader through doing a set of steps with the goal of learning.
-Readers who are following tutorials don't yet know the terms or concepts well enough to ask specific questions.
-Readers of How-To guides are already using MoveIt but are looking for instructions on doing something specific.
+튜토리얼은 독자가 단계를 수행하면서 배우도록 안내하는 역할을 합니다.
+튜토리얼을 따라가는 독자는 아직 용어나 개념을 충분히 이해하지 못해 구체적인 질문을 던지기 어렵습니다.
+반면에 하우투 가이드 독자는 이미 MoveIt를 사용하고 있지만 특정 작업을 수행하기 위한 지침을 찾고 있습니다.
 
-Name Answers a User's Question
+사용자 질문 해결
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-How-To guides answer very specific questions and should capture Google searches.
-For that reason, naming is very important.
-Examples of good names are:
+하우투 가이드는 매우 구체적인 질문에 답변하며, Google 검색 결과에 포함될 수 있도록 제목을 명확하게 작성하는 것이 중요합니다.
+좋은 제목 예제:
 
-* How to Visualize Collisions in MoveIt
-* How to Grasp Objects with MoveIt
-* How to Run MoveIt with UR5
-* How to Fix a Segfault
-* How to Migrate from Foxy to Galactic
-* How to Run in Gazebo
-* How to Set Up a New Robot for MoveIt
-* How to Use the MoveIt RViz Plugin
-* How to Teleop a Robot Arm with a Controller
+* MoveIt에서 충돌을 시각화하는 방법
+* MoveIt으로 물체를 집는 방법
+* UR5로 MoveIt 실행하는 방법
+* 세그폴트(Segfault) 문제 해결 방법
+* Foxy에서 Galactic으로 마이그레이션하는 방법
+* Gazebo에서 실행하는 방법
+* 새로운 로봇에 MoveIt 설정하는 방법
+* MoveIt RViz 플러그인 사용하는 방법
+* 컨트롤러로 로봇 팔 원격 조종하는 방법
 
-Goal-Focused and Practical
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+목표 중심적이고 실용적인 가이드
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For these guides it is important that you focus specifically on solving the problem the user came to the site for.
-Because these users already have a deeper understanding of core concepts, you should present the user with some options when they will need to make a decision with tradeoffs.
-You should state what the assumed pre-requisites are in the introduction to the How-To Guide.
-By doing so, you avoid duplicating instructions on this site and you allow users who already know the prerequisites to jump right into solving their problem.
+하우투 가이드를 작성할 때는 사용자가 사이트를 방문한 이유, 즉 문제 해결에 집중하는 것이 중요합니다. 사용자는 이미 핵심 개념에 대한 이해가 있으므로 결정을 내려야 할 때 장단점을 비교하여 옵션을 제시해야 합니다.
+
+또한, 소개부에서 가이드 작성에 필요한 사전 지식을 명시하는 것이 좋습니다.
+이를 통해 사이트 내에서 중복되는 설명을 방지하고 사전 지식이 있는 사용자가 문제 해결 과정으로 바로 넘어갈 수 있도록 합니다.

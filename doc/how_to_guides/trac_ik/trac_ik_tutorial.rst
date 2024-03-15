@@ -11,7 +11,7 @@ TRAC-IK Kinematics Solver
   두 번째 방법은 비선형 최적화 접근법인 SQP(순차 이차 QP)를 사용하며, 준-뉴턴 방법을 통해 관절 제한을 더 잘 처리합니다.
   기본적으로 어느 알고리즘이든 답을 찾으면 즉시 IK 검색을 종료합니다.
   또한 최적의 IK 솔루션을 얻기 위해 거리 및 조작성과 같은 보조 제약 조건도 제공됩니다.
-(TRAC-IK) provides an alternative Inverse Kinematics solver to the popular inverse Jacobian methods in KDL.
+  (TRAC-IK) provides an alternative Inverse Kinematics solver to the popular inverse Jacobian methods in KDL.
   Specifically, KDL's convergence algorithms are based on Newton's method, which does not work well in the presence of joint limits --- common for many robotic platforms.
   TRAC-IK concurrently runs two IK implementations.
   One is a simple extension to KDL's Newton-based convergence algorithm that detects and mitigates local minima due to joint limits by random jumps.
