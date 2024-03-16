@@ -101,124 +101,104 @@ self-collision 행렬은 충돌 검사를 안전하게 비활성화할 수 있�
    :width: 700px
    :align: center
 
-.. note:: Virtual joints are particularly beneficial for robots with mobile bases,
-   such as mobile manipulators. They enable modeling the motion of the robot's base,
-   which is essential for motion planning and control. For instance, a virtual planar
-   joint can be used to connect the robot base frame to the odometry frame,
-   effectively representing the robot's movement in the environment.
+.. note:: 가상 관절은 모바일 베이스를 탑재한 로봇, 예를 들어 mobile manipulator에 특히 유용합니다. 이런 로봇들은 로봇의 베이스의 모션을 모델링할 수 있게 해주며, 이는 모션 계획 및 제어에 필수적입니다. 예제로, 가상 평면 관절(virtual planar joint)을 사용하여 로봇 베이스 프레임을 odometry 프레임에 연결하여 로봇의 환경 내 이동을 효과적으로 표현할 수 있습니다.
 
-Step 4: Add Planning Groups
----------------------------
+Step 4: Planning Groups 추가
+---------------------------------
 
-Planning groups in MoveIt semantically describe different parts of the robot,
-such as the arm or end effector, to facilitate motion planning.
+MoveIt의 Planning groups은 로봇의 팔이나 엔드 이펙터와 같은 다른 부분들을 의미론적으로 기술하여 모션 계획을 용이하게 합니다.
 
-A move group can be configured to correspond to a specific kinematic chain on the robot,
-which is a set of links and joints that define a sequence of transformations
-from the base of the robot to the end effector. For example, a move group might be defined to
-represent the arm of a robot, which would consist of all the links and joints necessary to move the arm.
+move group은 로봇의 특정 운동학 체인(kinematic chain)에 해당하도록 설정할 수 있습니다. kinematic 체인은 로봇의 베이스부터 엔드 이펙터까지의 일련의 변환을 정의하는 링크와 조인트의 집합입니다. 예를 들어, move group은 로봇의 팔을 나타내도록 정의될 수 있으며, 이는 팔을 움직이는 데 필요한 모든 링크와 조인트로 구성됩니다.
 
-Move groups can also be represented by sets of links or joints corresponding on the robot.
-For example, a move group might be defined to represent the gripper of a robot,
-which would consist of all the links or joints necessary to move together to realize a gripper opening or closing motion.
+Move groups은 또한 로봇에 관련된 링크 또는 조인트 세트로 표현될 수도 있습니다.
+예를 들어, Move groups은 로봇의 그리퍼(gripper)를 표현하도록 정의될 수 있으며, 이는 그리퍼의 열거나 닫는 모션을 실현하는 데 필요한 모든 링크 또는 조인트로 구성됩니다.
 
-* Click on the **Planning Groups** pane selector.
+* **Planning Groups** 창 선태기를 클릭하세요.
 
-* Click on **Add Group** and you should see the following screen:
+* **Add Group** 을 클릭하면 다음과 같은 화면이 나타납니다.:
 
 .. image:: planning_groups/setup_assistant_panda_planning_groups.png
    :width: 700px
    :align: center
 
-Add the arm group
+arm group 추가
 
-* We will first add Panda arm as a planning group
+* 먼저 Panda arm을 planning group에 추가할 예정입니다.
 
-  * Enter **Group Name** as ``panda_arm``.
+  * **Group Name** 에 ``panda_arm`` 을 입력합니다.
 
-  * Choose **kdl_kinematics_plugin/KDLKinematicsPlugin** as the kinematics solver, as this is the default for MoveIt.
-    Alternatively, you can use other plugins such as :doc:`IKFast </doc/examples/ikfast/ikfast_tutorial>` or `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_.
+  * 운동학 솔버(kinematics solver)에 MoveIt 기본값인 **kdl_kinematics_plugin/KDLKinematicsPlugin** 을 선택하세요.
+    대안으로 :doc:`IKFast </doc/examples/ikfast/ikfast_tutorial>` 혹은 `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_ 와 같은 다른 플러그인도 사용할 수 있습니다.
 
-  * Let **Kin. Search Resolution** and **Kin. Search Timeout** stay at
-    their default values.
+  * **Kin. Search Resolution** and **Kin. Search Timeout** 은 기본값 그대로 유지하세요.
 
 .. image:: planning_groups/setup_assistant_panda_arm_group.png
    :width: 700px
    :align: center
 
-* Now, click on the **Add Joints** button. You will see a
-  list of joints on the left-hand side. You need to choose all the
-  joints that belong to the arm and add them to the right-hand
-  side. The joints are arranged in the order that they are stored in
-  an internal tree structure. This makes it easy to select a serial
-  chain of joints.
+* 이제 **Add Joints** 버튼을 클립합니다. 왼쪽 창에는 모든 조인트 목록이 표시됩니다. 팔에 속하는 모든 조이트를 선택하여 오른쪽 창에 추가해야 합니다. 조인트는 내부 트리 구조에 저장된 순서대로 배열되어 있으므로, 직렬 연결(serial chain)의 조인트를 쉽게 선택할 수 있습니다.
 
-  * Click on ``virtual_joint``, hold down the **Shift**
-    button on your keyboard and then click on the
-    ``panda_joint8``. Now click on the **>** button to add these
-    joints into the list of **Selected Joints** on the right.
+  * ``virtual_joint`` 을 클릭하고, 키보드의 **Shift** 키를 누른 상태에서  ``panda_joint8`` 을 클릭하세요.  그 다음 **>** 버튼을 클릭하여 **Selected Joints** 의 목록(오른쪽)에 이 관절들을 추가하세요.
 
 .. image:: planning_groups/setup_assistant_panda_arm_group_joints.png
    :width: 700px
    :align: center
 
-* Click **Save** to save the selected group.
+* **Save** 를 클릭하여 선택한 그룹을 저장합니다.
 
 .. image:: planning_groups/setup_assistant_panda_arm_group_saved.png
    :width: 700px
    :align: center
 
-Add the end effector group
+end-effector group 추가
 
 .. image:: planning_groups/setup_assistant_panda_hand_group.png
    :width: 700px
    :align: center
 
 .. note:: The end effector is not made of links attached in a serial chain.
-   Therefore, the group's **Kinematic Solver** should be set to **None**.
+   따라서 그룹의 **Kinematic Solver**는 **None** 으로 설정되어 있어야만 한다.
 
-* Proceed with the following steps.
+* 다음 단계를 수행합니다.
 
-  * Click on the **Add Group** button.
+  * **Add Group** 버튼을 클릭합니다.
 
-  * Enter **Group Name** as ``hand``.
+  * **Group Name** 을 ``hand`` 로 입력합니다.
 
-  * Let **Kinematic Solver** stay at its default value, which is **None**.
+  * **Kinematic Solver** 는 기본값인 **None** 으로 유지하십시오.
 
-  * Let **Kin. Search Resolution** and **Kin. Search Timeout** stay at their default values.
+  * **Kin. Search Resolution** 와 **Kin. Search Timeout** 는 기본값으로 유지하십시오.
 
-  * Click on the **Add Links** button.
+  * **Add Links** 버튼을 클립하세요.
 
-  * Choose ``panda_hand``, ``panda_leftfinger``, and ``panda_rightfinger`` and add them
-    to the list of **Selected Links** on the right-hand side.
+  * ``panda_hand``, ``panda_leftfinger``, ``panda_rightfinger``를 선택하여 오른쪽 **Selected Links** 목록에 추가하십시오.
 
-  * Click **Save**.
+  * **Save** 를 클릭하세요.
 
 .. image:: planning_groups/setup_assistant_panda_hand_group_links.png
    :width: 700px
    :align: center
 
-After both arm and hand groups are added, the custom groups list should look as follows.
+두 팔과 손 그룹을 모두 추가한 후 커스텀 그룹 목록은 다음과 같이 표시됩니다.
 
 .. image:: planning_groups/setup_assistant_panda_planning_groups_done.png
    :width: 700px
    :align: center
 
 
-.. note:: It is possible to build move groups composed of other move groups with the **Add Subgroup** option.
-   This can be beneficial in cases where multiple move groups need to be controlled together,
-   such as when planning for simultaneous motions of multi-arm systems.
+.. note:: **Add Subgroup** 옵션을 사용하여 다른 move groups으로 구성된 move groups을 만들 수 있습니다.
+   이는 다중 팔 시스템의 동시 모션을 계획할 때와 같이 여러 move groups을 함께 제어해야 하는 경우에 유용합니다.
 
-Step 5: Add Robot Poses
------------------------
+Step 5: Robot Poses 추가
+---------------------------
 
-The Setup Assistant allows you to add predefined poses to the robot's configuration,
-which can be useful for defining specific initial or ready poses.
-Later, the robot can be commanded to move to these poses using the MoveIt API.
+Setup Assistant를 사용하면 로봇 설정에 사전 정의된 포즈를 추가할 수 있으며,
+이는 특정 초기 포즈 또는 준비 포즈를 정의하는 데 유용합니다.
+나중에 MoveIt API를 사용하여 로봇에게 이러한 포즈로 이동하도록 명령할 수 있습니다.
 
-Add ready pose for the arm
+팔에 대한 ready pose 추가
 
-* Click on the **Robot Poses** pane.
+* **Robot Poses** 창을 클릭합니다..
 
 * Click **Add Pose**. Choose a name for the pose. The robot will be
   in the default pose, with all joints set to their zero values.
