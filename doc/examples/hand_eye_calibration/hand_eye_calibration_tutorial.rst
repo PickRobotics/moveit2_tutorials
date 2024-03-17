@@ -82,14 +82,13 @@ Geometric Context
 
 .. image:: images/context_tab.png
 
-The FOV section controls the rendering of the camera's field of view in RViz. To see the FOV, add a "MarkerArray"
-display, and set it to listen to the "/rviz_visual_tools" topic. (It may not appear immediately.)
+FOV 섹션은 RViz에서 카메라의 시야각 렌더링을 제어합니다. FOV를 확인하려면 "MarkerArray" 디스플레이를 추가하고 "/rviz_visual_tools" topic을 수신하도록 설정하십시오.(즉시 나타나지 않을 수도 있음)
 
-Finally, it is not necessary to set an initial guess for the camera pose, but it is worth noting that once a calibration
-has been calculated, these fields will be updated with the new calibration.
+마지막으로 초기 카메라 포즈에 대한 추측값을 설정하지 않아도 되지만, 캘리브레이션을 계산한 후에는 이 필드가 새로운 캘리브레이션 값으로 업데이트된다는 점에 유의하십시오.
 
 Collect Dataset
 ---------------
+다음으로 캘리브레이션 데이터셋을 캡쳐합니다. 칼리브레이션을 잘 하려면 여러 샘플을 캡쳐해야합니다. 로봇 운동학은 로봇 base 프레임에서 엔드 이펙터의 포즈를 제공하며, 캘리브레이션 타겟의 포즈는 앞서 언급한 대로 카메라 프레임에서 추정할 수 있습니다. 로봇 기본 프레임에서 타겟의 포즈를 정확하게 알고 있다면, 카메라-대-엔드-이펙터 변환을 복원하는 데 단일 카메라-타겟 변환 관찰만 필요합니다. 직접적인 카메라-대-엔드-이펙터 변환은 복합적인 카메라-타겟-베이스-링크-엔드-이펙터 변환과 동일합니다. 하지만 `Kostas Daniilidis의 논문 <https://scholar.google.com/scholar?cluster=11338617350721919587>`_ 에서 설명된 것처럼 여러 포즈의 정보를 결합하여 방정식에서 기본 프레임에서의 타겟 포즈를 제거하는 것이 더 나은 선택입니다.
 Next, we will capture a calibration dataset. We need to capture several samples to ensure a good calibration. The robot
 kinematics provide the end-effector's pose in the robot base frame, and the calibration target's pose in the camera
 frame can be estimated, as mentioned above. If the target's pose in the robot base frame were known accurately, only a
@@ -99,22 +98,23 @@ camera-to-target-to-base-link-to-end-effector transform. A better option, howeve
 several poses to eliminate the target pose in the base frame from the equation, as described in `this paper by Kostas
 Daniilidis <https://scholar.google.com/scholar?cluster=11338617350721919587>`_.
 
+따라서 캘리브레이션 데이터셋의 각 샘플은 로봇 기본 프레임에서의 엔드 이펙터 포즈와 카메라 프레임에서의 캘리브레이션 타겟 포즈의 쌍으로 구성됩니다. 이러한 샘플 5개를 수집하면 캘리브레이션을 계산할 수 있습니다.
 Each sample in our calibration dataset, then, comprises a pair of poses: the end-effector's pose in the robot base frame
 paired with the calibration target's pose in the camera frame. Once five such samples have been collected, the
 calibration can be calculated.
 
-The "Calibrate" tab provides the tools to collect the dataset and calculate and export the calibration. At this point,
+"캘리브레이션" 탭은 데이터셋을 수집하고 캘리브레이션을 계산 및 내보내는 도구를 제공합니다. 이 시점에서 RViz 디스플레이에 이미지 패널을 추가하여 /handeye_calibration/target_detection에 게시된 카메라 뷰에서 타겟 감지를 확인하는 것이 유용합니다.The "Calibrate" tab provides the tools to collect the dataset and calculate and export the calibration. At this point,
 it is also helpful to add an image panel to the RViz display to see the target detection in the camera view, which is
 published on ``/handeye_calibration/target_detection``.
 
 .. image:: images/calibrate_tab.png
 
-On the "Calibrate" tab, you can select which calibration solver to use in the "AX=XB Solver" drop-down. The Daniilidis
+"캘리브레이션" 탭에서 "AX=XB 솔버" 드롭다운 메뉴를 사용하여 사용할 캘리브레이션 솔버를 선택할 수 있습니다. Daniilidis 솔버(위의 참조 논문)가 기본값이며 대부분 상황에서 좋은 선택입니다. "플래닝 그룹"은 기록될 조인트 그룹이므로 팔에 적합한 그룹으로 설정해야 합니다(panda_moveit_config 패키지에서 panda_arm 그룹을 사용해야 함).On the "Calibrate" tab, you can select which calibration solver to use in the "AX=XB Solver" drop-down. The Daniilidis
 solver (from the paper referenced, above) is the default and is a good choice in most situations. The "Planning Group"
 is the joint group that will be recorded, so should be set to the appropriate group for the arm (in the
 ``panda_moveit_config`` package, the ``panda_arm`` group should be used).
 
-When the target is visible in the arm camera, and the axis is rendered on the target in the target detection image, you
+타겟이 암 카메라에 표시되고 축이 타겟 감지 이미지의 타겟에 렌더링되면 첫 번째 캘리브레이션 샘플(포즈 쌍)을 캡처할 준비가 된 것입니다. "수동 캘리브레이션" 섹션에서 "샘플 캡처" 버튼을 클릭하면 패널 왼쪽의 "포즈 샘플" 목록에 새로운 샘플이 추가됩니다. 샘플을 확장하면 베이스-투-엔드-이펙터와 카메라-투-타겟의 두 변환을 포함하고 있음을 확인할 수 있습니다.When the target is visible in the arm camera, and the axis is rendered on the target in the target detection image, you
 are ready to take your first calibration sample (pose pair). Click the "Take sample" button in the "Manual calibration"
 section, and a new sample will be added to the "Pose samples" list on the left side of the panel. If you expand a
 sample, you will see it contains two transforms, base-to-end-effector, and camera-to-target.
