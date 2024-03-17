@@ -5,59 +5,52 @@
 
 Hand-Eye Calibration
 ====================
-The `MoveIt Calibration <http://www.github.com/ros-planning/moveit_calibration>`_ package provides plugins and a graphical
-interface for conducting a hand-eye camera calibration. Calibrations can be performed for cameras rigidly mounted in the
-robot base frame (eye-to-hand) and for cameras mounted to the end effector (eye-in-hand). This tutorial presents the
-eye-in-hand case.
+`MoveIt Calibration <http://www.github.com/ros-planning/moveit_calibration>`_ 패키지는 플러그인과 그래픽 인터페이스를 제공하여 손-눈 카메라 캘리브레이션을 수행할 수 있게 해줍니다.
+캘리브레이션은 로봇 베이스 프레임에 단단히 장착된 카메라 (eye-to-hand)와 end-effector에 장착된 카메라 (eye-in-hand)에 대해 수행할 수 있습니다.
+이 튜토리얼에서는 eye-in-hand 케이스를 다루고 있습니다.
 
 .. image:: images/hand_eye_calibration_demo.jpg
 
-Getting Started
+시작하기
 ---------------
-While it is possible to go through most of this tutorial using just a simulation, to actually complete a calibration you
-will need a robotic arm and a camera.
+대부분의 튜토리얼은 시뮬레이션만으로도 진행할 수 있지만, 실제 캘리브레이션을 완료하려면 로봇 팔과 카메라가 필요합니다.
 
-If you haven't already done so, be sure to complete the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
-Also, set your arm up to work with MoveIt (as described in the :doc:`Setup Assistant Tutorial </doc/examples/setup_assistant/setup_assistant_tutorial>`).
+:doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 을 먼저 완료하세요.
+또한 :doc:`Setup Assistant Tutorial </doc/examples/setup_assistant/setup_assistant_tutorial>` 에 설명된대로 MoveIt와 함께 작동하도록 arm을 설정하십시오.
 
-This tutorial also requires a camera, publishing images and a ``sensor_msgs/CameraInfo`` topic with good intrinsic
-calibration parameters and an accurate coordinate frame. (Conduct an intrinsic camera calibration by using the
-`camera_calibration <http://wiki.ros.org/camera_calibration>`_ package, if necessary.)
+이 튜토리얼에서는 또한 카메라, 이미지 publish, 우수한 내부 캘리브레이션 매개 변수와 정확한 좌표 프레임을 가진 ``sensor_msgs/CameraInfo`` topic을 필요로 합니다. (필요한 경우 `camera_calibration <http://wiki.ros.org/camera_calibration>`_ 패키지를 사용하여 내부 카메라 캘리브레이션을 수행하십시오.)
 
-Clone and Build the MoveIt Calibration Repo
+MoveIt Calibration 저장소 복제 및 빌드하기
 -------------------------------------------
-In your workspace ``src`` directory, clone MoveIt Calibration::
+워크스페이스의 ``src`` 디렉토리에 MoveIt Calibration을 복제합니다.::
 
   git clone git@github.com:ros-planning/moveit_calibration.git
 
-Then, make sure you have the appropriate dependencies and build the package::
+다음으로 필요한 의존성 라이브러리가 설치되어 있는지 확인하고 패키지를 빌드합니다. ::
 
   rosdep install -y --from-paths . --ignore-src --rosdistro melodic
   catkin build
   source devel/setup.sh
 
-Launch RViz and Load Calibration Plugin
----------------------------------------
-Launch the appropriate MoveIt demo for your robot. For instance, ``roslaunch panda_moveit_config demo.launch``.
-In the RViz "Panels" menu, choose "Add New Panel":
+RViz 실행 및 Calibration 플러그인 로드하기
+--------------------------------------------------
+로봇에 맞는 MoveIt 데모를 launch하세요. 예를 들어 ``roslaunch panda_moveit_config demo.launch`` 명령어를 사용할 수 있습니다.
+RViz의 "Panels" 메뉴에서 "Add New Panel"를 선택하십시오.:
 
 .. image:: images/choose_new_panel.png
 
-Then, select the "HandEyeCalibration" panel type:
+그런 다음 "HandEyeCalibration" 패널 타입을 선택하십시오.:
 
 .. image:: images/add_handeye_panel.png
 
-The panel will be added with the "Target" tab active.
+"Target" 탭이 활성화된 상태로 패널이 추가됩니다.
 
-Create and Print a Target
+타겟 생성 및 프린트
 -------------------------
-Now we will create a visual calibration target. This target has distinctive patterns that are easy to identify in the
-image data, and by providing a measurement of the target size, the pose of the target in the camera's coordinate frame
-can be estimated. When conducting a hand-eye calibration, we do not need to know the target's precise location--as long
-as the target is stationary in the robot's base frame, the hand-eye calibration can be estimated from a sequence of 5 or
-more poses.
+이제 시각적 calibration 타겟을 만들어 보겠습니다. 이 타겟은 이미지 데이터에서 쉽게 식별할 수 있는 독특한 패턴을 가지고 있으며, 타겟 크기를 측정하여 카메라 좌표계에서 타겟의 위치를 추정할 수 있습니다.
+손-눈 calibration을 수행할 때, 타겟의 정확한 위치를 알 필요가 없습니다. 타겟이 로봇의 base 프레임에서 정지 상태만 유지되면 5개 이상의 포즈 시퀀스에서 손-눈 calibration을 추정할 수 있습니다.
 
-In the "Target Params" section of the "Target" tab, we will use the default target parameters:
+"Target" 탭의 "Target Params" 섹션에서 기본 타겟 파라미터를 사용합니다.:
 
 - **markers, X**: 3
 - **markers, Y**: 4
@@ -66,31 +59,26 @@ In the "Target Params" section of the "Target" tab, we will use the default targ
 - **marker border (bits)**: 1
 - **ArUco dictionary**: DICT_5X5_250
 
-Press the "Create Target" button to create the target image:
+타겟 이미지를 생성하기 위해서 "Create Target" 버튼을 누릅니다.:
 
 .. image:: images/aruco_target_handeye_panel.png
 
-Save the target image using the "Save Target" button, and print out the image. Feel free to experiment with the target
-parameters to see how they affect the target, but be sure to remember the parameters used for the target you print--you
-will need to input the same parameters for the target to be recognized.
+"Save Target" 버튼을 이용하여 타겟 이미지를 저장하고 출력하세요. 타겟 파라미터를 조정하며 어떤 영향을 미치는지 실험해보세요. 하지만 출력한 타겟에 사용된 파라미터 값을 반드시 기억하세요. 타겟을 인식하려면 동일한 파라미터 값을 입력해야 합니다.
 
-The target must be flat to be reliably localized by the camera. Laying it on a flat surface is sufficient, or it can be
-mounted to a board. Measure the marker width (the outside dimension of one of the black squares), as well as the
-separation distance between markers. Enter these values, in meters, in the appropriate boxes in the "Target Params"
-section. Also, select the appropriate topics in the "Image Topic" and "CameraInfo Topic" drop-down menus.
+카메라가 타겟을 정확하게 인식하려면 타겟이 평평해야 합니다. 평평한 바닥에 놓거나 판에 부착하는 것만으로도 충분합니다. 마커 너비(검은색 사각형 하나의 외곽 치수)와 마커 간의 간격 거리를 측정하세요. 측정한 값을 미터 단위로 "Target Params" 섹션의 해당 입력란에 입력하고, "Image Topic" 및 "CameraInfo Topic" 드롭다운 메뉴에서 적합한 항목을 선택하세요.
 
-Finally, place the target near the robot, where it can be easily seen by the camera.
+마지막으로 로봇 근처에 타겟을 놓아서 카메라가 쉽게 볼 수 있어야 합니다.
 
 Geometric Context
 -----------------
-The second tab, labeled "Context", contains the geometric information necessary to conduct the calibration.
+두 번째 탭인 "Context"에는 캘리브레이션 수행에 필요한 기하학적 정보가 포함되어 있습니다.
 
-1. Set the "Sensor configuration" to "Eye-in-hand".
-2. The "Sensor frame" is the camera optical frame (using the right-down-forward standard, as specified in `REP 103
-   <https://www.ros.org/reps/rep-0103.html>`_).
-3. The "Object frame" is the frame defined by the calibration target, which is called "handeye_target" by default.
-4. The "End-effector frame" is the robot link rigidly attached to the camera.
-5. The "Robot base frame" is the frame in which the calibration target is stationary.
+1. "Sensor configuration" 을 "Eye-in-hand" 로 설정하세요.
+2. "Sensor frame" 은 카메라 광학 프레임입니다.( `REP 103
+   <https://www.ros.org/reps/rep-0103.html>`_ 에 명시된 바와 같이 우측-하단-전방 기준을 사용합니다.)
+3. "Object frame" 은 calibration 타겟에 의해 정의된 프레임이며, 기본적으로 "handeye_target"이라고 불립니다.
+4. "End-effector frame"은 카메라에 견고하게 연결된 로봇 링크입니다.
+5. "Robot base frame"은 calibration 타겟이 정지 상태인 프레임입니다.
 
 .. image:: images/context_tab.png
 
