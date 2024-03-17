@@ -1,43 +1,43 @@
 Low Level Controllers
 =====================
-MoveIt typically publishes manipulator motion commands to a `JointTrajectoryController <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`_. This tutorial assumes MoveGroup is being used to control the robot rather than MoveItCpp or MoveIt Servo. A minimal setup is as follows:
+MoveIt은 일반적으로 manipulator의 동작 명령을 `JointTrajectoryController <https://github.com/ros-controls/ros2_controllers/tree/master/joint_trajectory_controller>`_ 에게 publish합니다. 이 튜토리얼은 MoveGroup을 사용하여 로봇을 제어하는 것을 가정하며 MoveItCpp 또는 MoveIt Servo는 사용하지 않습니다. 최소 설정은 다음과 같습니다.:
 
-#. A YAML config file. As best practice, we suggest naming this :code:`moveit_controllers.yaml`. It tells MoveIt which controllers are available, which joints are associated with each, and the MoveIt controller interface type (:code:`FollowJointTrajectory` or :code:`GripperCommand`). `Example controller config file <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/config/moveit_controllers.yaml>`_.
+#. YAML 설정 파일. 모범 사례로, 이 파일의 이름을 :code:`moveit_controllers.yaml` 로 지정하는 것을 권장합니다. 이 파일은 MoveIt에게 사용 가능한 컨트롤러, 각 컨트롤러와 연결된 조인트, 그리고 MoveIt 컨트롤러 인터페이스 타입(:code:`FollowJointTrajectory` 또는 :code:`GripperCommand`)을 알려줍니다. (`예제 컨트롤러 설정 파일 <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/config/moveit_controllers.yaml>`_).
 
-#. A launch file. This launch file must load the :code:`moveit_controllers` yaml file and specify the :code:`moveit_simple_controller_manager/MoveItSimpleControllerManager`. After these yaml files are loaded, they are passed as parameters to the Move Group node. `Example Move Group launch file <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/launch/demo.launch.py>`_.
+#. launch 파일. 이 launch 파일은 :code:`moveit_controllers.yaml` 파일을 로딩하고 :code:`moveit_simple_controller_manager/MoveItSimpleControllerManager` 를 지정해야 합니다. 이러한 yaml 파일이 로딩된 후에는 Move Group node에 파라미터로 전달됩니다. (`예제 Move Group launch 파일 <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/launch/demo.launch.py>`_).
 
-#. Launch the corresponding :code:`ros2_control` JointTrajectoryControllers. This is separate from the MoveIt 2 ecosystem. `Example ros2_control launching <https://github.com/ros-controls/ros2_control_demos>`_. Each JointTrajectoryController provides an action interface. Given the yaml file above, MoveIt automatically connects to this action interface.
+#. 해당 :code:`ros2_control` JointTrajectoryControllers를 launch합니다. 이는 MoveIt 2 에코시스템과 별개입니다. (`예제 ros2_control launching <https://github.com/ros-controls/ros2_control_demos>`_) 각 JointTrajectoryController는 action 인터페이스를 제공합니다. 위의 yaml 파일을 기반으로 MoveIt은 자동으로 이 action 인터페이스에 연결됩니다.
 
-#. Note: it is not required to use :code:`ros2_control` for your robot. You could write a proprietary action interface. In practice, 99% of users choose :code:`ros2_control`.
+#. 참고: 여러분의 로봇에 :code:`ros2_control` 을 사용할 필요는 없습니다. 여러분이 독점적인 action 인터페이스를 작성할 수도 있습니다. 실제로는 99%의 사용자가 ros2_control을 선택합니다.
 
 MoveIt Controller Managers
 --------------------------
-The base class of controller managers is called MoveItControllerManager (MICM). One of the child classes of MICM is known as Ros2ControlManager (R2CM) and it is the best way to interface with ros2_control. The R2CM can parse the joint names in a trajectory command coming from MoveIt and activate the appropriate controllers. For example, it can automatically switch between controlling two manipulators in a single joint group at once to a single manipulator. To use a R2CM, just set :code:`moveit_manage_controllers = true` in the launch file. `Example R2CM launch file <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/launch/demo.launch.py>`_.
+controller manager의의 base 클래스는 MoveItControllerManager (MICM)라고 불립니다. MICM의 자식 클래스 중 하나는 Ros2ControlManager (R2CM)이며 ros2_control과의 인터페이스에 가장 적합합니다. R2CM은 MoveIt으로 들어오는 궤적 명령내에 있는 조인트 이름을 파싱하고, 적합한 컨트롤러를 활성화할 수 있습니다. 예를 들어, 단일 조인트 그룹내에 있는 두 개의 manipulators 제어를 바로 단일 manipulator로 전환할 수 있습니다. R2CM을 사용하려면 launch 파일에서 :code:`moveit_manage_controllers = true` 를 설정하면 됩니다. `예제 R2CM launch 파일 <https://github.com/ros-planning/moveit_resources/blob/ros2/panda_moveit_config/launch/demo.launch.py>`_.
 
 MoveIt Controller Interfaces
 ----------------------------
 
-The text above describes launching of a joint trajectory controller action interface. In addition, MoveIt supports parallel-jaw gripper control via action interface. This section describes the parameters of these two options.
+위 내용은 조인트 궤적 컨트롤러 액션(joint trajectory controller action) 인터페이스의 실행에 대해  설명합니다. 또한 MoveIt은 action 인터페이스를 통한 parallel-jaw gripper control를 지원합니다. 이 섹션에서는 이 두 옵션의 파라미터에 대해 설명합니다.
 
 #. FollowJointTrajectory Controller Interface
 
 The parameters are:
- * *name*: The name of the controller.  (See debugging information below for important notes).
- * *action_ns*: The action namespace for the controller. (See debugging information below for important notes).
- * *type*: The type of action being used (here FollowJointTrajectory).
- * *default*: The default controller is the primary controller chosen by MoveIt for communicating with a particular set of joints.
- * *joints*: Names of all the joints that are being addressed by this interface.
+ * *name*: 컨트롤러의 이름  (중요 참고사항은 아래 디버깅 정보 참조)
+ * *action_ns*: 컨트롤러의 action 네임스페이스 (중요 참고사항은 아래 디버깅 정보 참조)
+ * *type*: 사용하는 action의 타입 (여기서는 FollowJointTrajectory).
+ * *default*: 기본 컨트롤러는 MoveIt에서 특정 조인트 세트와 통신하기 위해 선택한 기초 컨트롤러
+ * *joints*: 이 인터페이스에서 접근할 수 있는 모든 조인트의 이름
 
 #. GripperCommand Controller Interface
 
 The parameters are:
- * *name*: The name of the controller.  (See debugging information below for important notes).
- * *action_ns*: The action namespace for the controller. (See debugging information below for important notes).
- * *type*: The type of action being used (here GripperCommand).
- * *default*: The default controller is the primary controller chosen by MoveIt for communicating with a particular set of joints.
- * *joints*: Names of all the joints that are being addressed by this interface.
- * *command_joint*: The single joint, controlling the actual state of the gripper. This is the only value that is sent to the controller. Has to be one of the joints above. If not specified, the first entry in *joints* will be used instead.
- * *parallel*: When this is set, *joints* should be of size 2, and the command will be the sum of the two joints.
+ * *name*: 컨트롤러의 이름  (중요 참고사항은 아래 디버깅 정보 참조)
+ * *action_ns*: 컨트롤러의 action 네임스페이스 (중요 참고사항은 아래 디버깅 정보 참조)
+ * *type*: 사용하는 action의 타입 (여기서는 GripperCommand).
+ * *default*: 기본 컨트롤러는 MoveIt에서 특정 조인트 세트와 통신하기 위해 선택한 기초 컨트롤러
+ * *joints*: 이 인터페이스에서 접근할 수 있는 모든 조인트의 이름
+ * *command_joint*: 실제 그리퍼 상태를 제어하는 단일 조인트입니다. 이것은 컨트롤러에게 전송되는 유일한 값입니다. 위의 조인트 중 하나여야 합니다. 지정하지 않으면 대신 *joints* 의 첫 번째 항목이 사용됩니다.
+ * *parallel*: 이 옵션을 설정하면 *joints* 의 크기는 2여야 하며, 명령은 해당 2개 조인트의 합이 됩니다.
 
 Optional Allowed Trajectory Execution Duration Parameters
 ---------------------------------------------------------
