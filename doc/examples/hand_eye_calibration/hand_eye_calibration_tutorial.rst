@@ -88,50 +88,33 @@ FOV 섹션은 RViz에서 카메라의 시야각 렌더링을 제어합니다. FO
 
 Collect Dataset
 ---------------
-다음으로 캘리브레이션 데이터셋을 캡쳐합니다. 칼리브레이션을 잘 하려면 여러 샘플을 캡쳐해야합니다. 로봇 운동학은 로봇 base 프레임에서 엔드 이펙터의 포즈를 제공하며, 캘리브레이션 타겟의 포즈는 앞서 언급한 대로 카메라 프레임에서 추정할 수 있습니다. 로봇 기본 프레임에서 타겟의 포즈를 정확하게 알고 있다면, 카메라-대-엔드-이펙터 변환을 복원하는 데 단일 카메라-타겟 변환 관찰만 필요합니다. 직접적인 카메라-대-엔드-이펙터 변환은 복합적인 카메라-타겟-베이스-링크-엔드-이펙터 변환과 동일합니다. 하지만 `Kostas Daniilidis의 논문 <https://scholar.google.com/scholar?cluster=11338617350721919587>`_ 에서 설명된 것처럼 여러 포즈의 정보를 결합하여 방정식에서 기본 프레임에서의 타겟 포즈를 제거하는 것이 더 나은 선택입니다.
-Next, we will capture a calibration dataset. We need to capture several samples to ensure a good calibration. The robot
-kinematics provide the end-effector's pose in the robot base frame, and the calibration target's pose in the camera
-frame can be estimated, as mentioned above. If the target's pose in the robot base frame were known accurately, only a
-single observation of the camera-target transform would be necessary to recover the camera's pose in the end-effector
-frame. The direct camera-to-end-effector transform is equivalent to the composite
-camera-to-target-to-base-link-to-end-effector transform. A better option, however, is to combine the information from
-several poses to eliminate the target pose in the base frame from the equation, as described in `this paper by Kostas
-Daniilidis <https://scholar.google.com/scholar?cluster=11338617350721919587>`_.
+다음으로 캘리브레이션 데이터셋을 캡쳐합니다. 칼리브레이션을 잘 되려면 여러 샘플을 캡쳐해야합니다. 로봇 운동학은 로봇 base 프레임에서 엔드 이펙터의 포즈를 제공하며, 캘리브레이션 타겟의 포즈는 앞서 언급한 대로 카메라 프레임에서 추정할 수 있습니다.
+로봇 base 프레임에서 타겟의 포즈를 정확하게 알고 있다면, 엔드-이펙터에 대한 카메라 포즈 변환을 복원하는 데 한번의 카메라-타겟 변환 관찰만으로 가능하다. 직접적인 카메라-대-엔드이펙터 변환은 복합적인 카메라-타겟-베이스-링크-엔드이펙터 변환과 동일합니다. 하지만 `Kostas Daniilidis의 논문 <https://scholar.google.com/scholar?cluster=11338617350721919587>`_ 에서 설명된 것처럼 여러 포즈의 정보를 결합하여 방정식에서 base 프레임에서의 타겟 포즈를 제거하는 것이 더 나은 선택입니다.
 
-따라서 캘리브레이션 데이터셋의 각 샘플은 로봇 기본 프레임에서의 엔드 이펙터 포즈와 카메라 프레임에서의 캘리브레이션 타겟 포즈의 쌍으로 구성됩니다. 이러한 샘플 5개를 수집하면 캘리브레이션을 계산할 수 있습니다.
-Each sample in our calibration dataset, then, comprises a pair of poses: the end-effector's pose in the robot base frame
-paired with the calibration target's pose in the camera frame. Once five such samples have been collected, the
-calibration can be calculated.
+따라서 캘리브레이션 데이터셋의 각 샘플은 : 로봇 base 프레임에서의 엔드 이펙터 포즈와 카메라 프레임에서의 캘리브레이션 타겟 포즈의 쌍으로 구성됩니다.
+이러한 샘플 5개를 수집하면 캘리브레이션을 계산할 수 있습니다.
 
-"캘리브레이션" 탭은 데이터셋을 수집하고 캘리브레이션을 계산 및 내보내는 도구를 제공합니다. 이 시점에서 RViz 디스플레이에 이미지 패널을 추가하여 /handeye_calibration/target_detection에 게시된 카메라 뷰에서 타겟 감지를 확인하는 것이 유용합니다.The "Calibrate" tab provides the tools to collect the dataset and calculate and export the calibration. At this point,
-it is also helpful to add an image panel to the RViz display to see the target detection in the camera view, which is
-published on ``/handeye_calibration/target_detection``.
+"Calibrate" 탭은 데이터셋을 수집하고 캘리브레이션을 계산 및 내보내는 도구를 제공합니다.
+이 시점에서 RViz 디스플레이에 이미지 패널을 추가하여 ``/handeye_calibration/target_detection`` 로 publish되는 카메라 뷰에서 타겟 감지를 확인하는 것이 유용합니다.
 
 .. image:: images/calibrate_tab.png
 
-"캘리브레이션" 탭에서 "AX=XB 솔버" 드롭다운 메뉴를 사용하여 사용할 캘리브레이션 솔버를 선택할 수 있습니다. Daniilidis 솔버(위의 참조 논문)가 기본값이며 대부분 상황에서 좋은 선택입니다. "플래닝 그룹"은 기록될 조인트 그룹이므로 팔에 적합한 그룹으로 설정해야 합니다(panda_moveit_config 패키지에서 panda_arm 그룹을 사용해야 함).On the "Calibrate" tab, you can select which calibration solver to use in the "AX=XB Solver" drop-down. The Daniilidis
-solver (from the paper referenced, above) is the default and is a good choice in most situations. The "Planning Group"
-is the joint group that will be recorded, so should be set to the appropriate group for the arm (in the
-``panda_moveit_config`` package, the ``panda_arm`` group should be used).
+"Calibrate" 탭에서 "AX=XB Solver" 드롭다운 메뉴를 사용하여 사용할 캘리브레이션 solver를 선택할 수 있습니다. Daniilidis solver(위의 참조 논문)가 기본값이며 대부분 상황에서 좋은 선택입니다. "Planning Group" 은 기록될 조인트 그룹이므로 팔에 대해서 적합한 그룹으로 설정해야 합니다(``panda_moveit_config`` package, ``panda_arm`` group 을 사용해야 함).
 
-타겟이 암 카메라에 표시되고 축이 타겟 감지 이미지의 타겟에 렌더링되면 첫 번째 캘리브레이션 샘플(포즈 쌍)을 캡처할 준비가 된 것입니다. "수동 캘리브레이션" 섹션에서 "샘플 캡처" 버튼을 클릭하면 패널 왼쪽의 "포즈 샘플" 목록에 새로운 샘플이 추가됩니다. 샘플을 확장하면 베이스-투-엔드-이펙터와 카메라-투-타겟의 두 변환을 포함하고 있음을 확인할 수 있습니다.When the target is visible in the arm camera, and the axis is rendered on the target in the target detection image, you
-are ready to take your first calibration sample (pose pair). Click the "Take sample" button in the "Manual calibration"
-section, and a new sample will be added to the "Pose samples" list on the left side of the panel. If you expand a
-sample, you will see it contains two transforms, base-to-end-effector, and camera-to-target.
+타겟이 암 카메라에 표시되고 축이 타겟 감지 이미지의 타겟에 렌더링되면 첫 번째 캘리브레이션 샘플(포즈 쌍)을 캡처할 준비가 된 것입니다.
+"Manual calibration" 섹션에서 "Take sample" 버튼을 클릭하면 패널 왼쪽의 "Pose samples" 목록에 새로운 샘플이 추가됩니다.
+샘플을 확장하면 Base-to-EndEffector와 Camera-to-Target의 두 변환을 포함하고 있음을 확인할 수 있습니다.
 
-Next, you can move the arm to a new pose using the "MotionPlanning" panel, or use your robot's teaching pendant or free
-drive mode, if it has one, and click "Take sample" again. Be sure to include some rotation between each pair of poses,
-and don't always rotate around the same axis--at least two rotation axes are needed to uniquely solve for the
-calibration (see the Daniilidis paper, linked above, for the explanation why).
+다음으로 "MotionPlanning" 패널을 사용하여 로봇 팔을 새로운 포즈로 이동하거나, 로봇의 티칭 펜던트 또는 프리 드라이브 모드(있는 경우)를 사용하여 다시 "Take sample" 버튼을 클릭할 수 있습니다.
+각 포즈 쌍 사이에 약간의 회전을 포함시키고, 항상 동일한 축을 중심으로 회전하지 마십시오. 최소한 두 개의 회전 축이 필요합니다 (그 이유는 위의 링크된 Daniilidis 논문 참조).
 
-As you take manual samples, the robot joint states are recorded, so that the same poses can be used again to
-recalibrate in the future. The number of recorded states is shown to the right of the progress bar at the bottom of the
-panel, and the states can be saved to a file using the "Save joint states" button in the "Settings" section.
+수동 샘플을 가져오면 로봇 조인트 상태가 기록되므로 동일한 포즈를 다시 사용하여 향후에 다시 칼리브레이션을 할 수 있습니다.
+기록된 상태의 수는 패널 하단의 진행률 표시줄 오른쪽에 표시되며, 해당 상태들은 "Settings" 섹션의 "Save joint states" 버튼을 사용하여 파일에 저장할 수 있습니다.
 
-Calculate a Calibration
+칼리브레이션 계산하기
 -----------------------
-Once you have collected five samples, a calibration will be performed automatically, and updated each time a new sample
-is added. The calibration will improve significantly with a few more samples, and will typically plateau after about 12
-or 15 samples. The position and orientation will be displayed on the "Context" tab, as mentioned above, and the
-published TF will be updated as well. Click "Save camera pose" to export the calibration result. This will create a
-launch file with a static transform publisher containing the calibrated camera transform.
+다섯 개의 샘플을 수집하면, 칼리브레이션이 자동으로 수행되고, 새 샘플이 추가될 때마다 업데이트됩니다.
+칼리브레이션은 몇 개 더 많은 샘플로 크게 향상되며 일반적으로 약 12~15개의 샘플 후에 정체됩니다.
+위에서 언급한 대로 위치와 방향은 "Context" 탭에 표시되며 publish된 TF도 업데이트됩니다.
+칼리브레이션 결과를 내보내려면 "Save camera pose"을 클릭하십시오.
+이렇게하면 칼리브레이션된 카메라 변환을 포함하는 static transform(정적 변환) publisher를 가진 launch 파일이 생성되게 됩니다.
