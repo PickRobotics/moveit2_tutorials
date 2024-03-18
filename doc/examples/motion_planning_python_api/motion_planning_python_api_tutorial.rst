@@ -5,39 +5,39 @@ Motion Planning Python API
 
         <iframe width="560" height="315" src="https://www.youtube.com/embed/7KvF7Dj7bz0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-In this tutorial, we will cover the basics of the motion planning API for ``moveit_py``.
-This tutorial is broken down into the following sections:
+이 튜터리얼에서 모션 플래닝 API ``moveit_py`` 의 기본 사항을 다루고 있습니다.
+이 튜토리얼은 다음과 같은 섹션으로 구성되어 있습니다:
 
-* **Getting Started:** An outline of the tutorial setup requirements.
-* **Understanding Planning Parameters:** An outline of setting parameters for supported planners.
-* **Single Pipeline Planning (Default Configurations):** Planning using prespecified robot configurations.
-* **Single Pipeline Planning (Robot State):** Planning using a robot state instance.
-* **Single Pipeline Planning (Pose Goal):** Planning using a pose goal.
-* **Single Pipeline Planning (Custom Constraints):** Planning using custom constraints.
-* **Multi Pipeline Planning:** Running multiple planning pipelines in parallel.
-* **Using a Planning Scene:** Adding and removing collision objects and collision checking.
+* **시작하기:** 튜터리얼 설정 요구사항 개요
+* **Planning 파라미터 이해:** 지원되는 모션 플래너의 파라미터 설정 개요
+* **단일 파이프라인 Planning (기본 설정):** 미리 정의된 로봇 구성을 사용하여 플래닝
+* **단일 파이프라인 Planning (Robot State):** 로봇 상태 인스턴스를 사용하여 플래닝
+* **단일 파이프라인 Planning (Pose Goal):** 포즈 목표를 사용하여 플래닝
+* **단일 파이프라인 Planning (커스텀 Constraints):** 커스텀 제약 조건을 사용하는 플래닝
+* **다중 파이프라인 Planning:** 여러 플래닝 파이프라인을 병렬로 실행
+* **Planning Scene 사용하기:** 충돌 물체 추가/제거와 충돌 검사
 
 :doc:`/doc/examples/moveit_cpp/moveitcpp_tutorial` and
 :doc:`/doc/examples/move_group_interface/move_group_interface_tutorial`
 
-The code for this tutorial can be found :codedir:`here in the moveit2_tutorials GitHub project<examples/motion_planning_python_api>`.
+이 튜터리얼의 코드는 :codedir:`moveit2_tutorials GitHub project<examples/motion_planning_python_api>` 에서 찾을 수 있습니다.
 
-Getting Started
+시작하기
 -----------------------------------------------
-To complete this tutorial, you must have set up a workspace that includes MoveIt 2 and its corresponding tutorials.
-An outline on how to set up such a workspace is provided in the :doc:`Getting Started Guide </doc/tutorials/getting_started/getting_started>`, please consult this guide for further information.
+이 튜토리얼을 완료하려면 MoveIt 2 및 해당 튜토리얼을 포함하는 워크스페이스를 설정해야만 합니다.
+워크스페이스를 설정하는 방법은 :doc:`Getting Started Guide </doc/tutorials/getting_started/getting_started>` 에 설명되어 있으며, 자세한 내용은 이 가이드를 참조하십시오.
 
-Once you have set up your workspace, you can execute the code for this tutorial by running the following command: ::
+워크스페이스를 설정한 후, 다음 명령을 실행하여 이 튜토리얼의 코드를 실행할 수 있습니다: ::
 
         ros2 launch moveit2_tutorials motion_planning_python_api_tutorial.launch.py
 
-Understanding Planning Parameters
+Planning 파라미터 이해
 ----------------------------------------------------
-MoveIt supports the use of multiple planning libraries out of the box and it is important that we provide settings/parameters for the planners we wish to use.
+MoveIt은 기본적으로 여러 모션 플래닝 라이브러리를 지원하며, 사용하려는 플래너에 대한 설정/파라미터를 제공하는 것이 중요합니다.
 
-To accomplish this we specify a yaml configuration file that defines the parameters associated with our ``moveit_py`` node.
+이를 위해 우리는 ``moveit_py`` node와 관련된 파라미터를 정의하는 yaml 설정 파일을 지정합니다.
 
-An example of such a configuration file is given below: ::
+설정 파일 예제는 다음과 같습니다.: ::
 
         planning_scene_monitor_options:
                 name: "planning_scene_monitor"
@@ -93,7 +93,7 @@ An example of such a configuration file is given below: ::
                         planning_time: 1.5
 
 
-The first block of the configuration file sets the planning scene monitor options such as the topics that it subscribes to (Note: if you aren't familiar with the planning scene monitor, consider reviewing :doc:`this tutorial </doc/examples/planning_scene_monitor/planning_scene_monitor_tutorial>` ): ::
+설정 파일의 첫 번째 블록은 subscribe하는 topic과 같은 플래닝 씬 모니터 옵션(planning scene monitor option)을 설정합니다 (참고: 플래닝 씬 모니터에 익숙하지 않은 경우 :doc:`this tutorial </doc/examples/planning_scene_monitor/planning_scene_monitor_tutorial>` 을 살펴보세요): ::
 
         planning_scene_monitor_options:
                 name: "planning_scene_monitor"
@@ -104,14 +104,14 @@ The first block of the configuration file sets the planning scene monitor option
                 monitored_planning_scene_topic: "/moveit_cpp/monitored_planning_scene"
                 wait_for_initial_state_timeout: 10.0
 
-The second block of the configuration file sets the planning pipelines that we wish to use.
-MoveIt supports multiple motion planning libraries including OMPL, Pilz Industrial Motion Planner, Stochastic Trajectory Optimization for Motion Planning (STOMP), Search-Based Planning Library (SBPL), and Covariant Hamiltonian Optimization for Motion Planning (CHOMP) to name a few.
-When configuring our ``moveit_py`` node, we need to specify the configuration for planning pipelines we wish to use: ::
+설정 파일의 두 번째 블록은 사용하고자 하는 계획 파이프라인을 설정합니다.
+MoveIt은 OMPL, Pilz 산업용 모션 플래너, 확률론적 궤적 최적화 모션 플래너 (STOMP), 검색 기반 계획 라이브러리 (SBPL), 공분산 하밀토니안 최적화 모션 플래너 (CHOMP) 등 여러 모션 계획 라이브러리를 지원합니다.
+``moveit_py`` node를 구성할 때, 사용하려는 계획 파이프라인의 설정을 지정해야 합니다.: ::
 
         planning_pipelines:
                 pipeline_names: ["ompl", "pilz_industrial_motion_planner", "chomp", "ompl_rrt_star"]
 
-For each of these named pipelines we must provide a configuration that identifies the planner to use via the planner_id and other settings such as the number of planning attempts: ::
+이러한 이름이 지정된 파이프라인 각각에 대해서는 planner_id 및 계획 시도 횟수와 같은 다른 설정값을 통해 사용할 플래너를 식별하는 설정을 제공해야 합니다.: ::
 
         ompl_rrtc:
                 plan_request_params:
@@ -148,13 +148,13 @@ For each of these named pipelines we must provide a configuration that identifie
                         max_acceleration_scaling_factor: 1.0
                         planning_time: 1.5
 
-These specified parameters will be made available as ``moveit_py`` node parameters and will be leveraged at runtime when performing planning.
-This is what we will investigate next.
+지정된 이러한 파라미터는 ``moveit_py`` node 파라미터로 사용할 수 있으며, 런타임에서 계획을 수행할 때 활용됩니다.
+바로 이 부분을 다음으로 살펴보겠습니다.
 
-Instantiating moveit_py and planning component
+moveit_py 와 planning 컴포넌트를 인스턴스화하기
 ----------------------------------------------------
-Before we can plan motions, we need to instantiate a ``moveit_py`` node and its derived planning component.
-We will also instantiate a ``rclpy`` logger object: ::
+모션을 계획하기 전에, ``moveit_py`` node와 그 파생된 계획 컴포넌트를 인스턴스화해야 합니다.
+또한 ``rclpy`` 로거 객체도 인스턴스화할 것입니다.: ::
 
         rclpy.init()
         logger = rclpy.logging.get_logger("moveit_py.pose_goal")
@@ -164,8 +164,8 @@ We will also instantiate a ``rclpy`` logger object: ::
         panda_arm = panda.get_planning_component("panda_arm")
         logger.info("MoveItPy instance created")
 
-Using the planning component represented by the ``panda_arm`` variable, we can begin to perform motion planning.
-We also define a helper function for planning and executing motions: ::
+``panda_arm`` 변수로 표현되는 계획 컴포넌트를 사용하여, 모션 계획을 시작할 수 있습니다.
+또한 모션을 계획 및 실행을 위해서 helper 함수도 정의합니다.: ::
 
         def plan_and_execute(
                 robot,
@@ -196,9 +196,9 @@ We also define a helper function for planning and executing motions: ::
                 else:
                         logger.error("Planning failed")
 
-Single Pipeline Planning - Default Configurations
+단일 파이프라인 Planning - 기본 설정
 ----------------------------------------------------
-We start exploring the ``moveit_py`` motion planning API through executing a single planning pipeline which will plan to a predefined robot configuration (defined in the srdf file): ::
+우리는 미리 정의된 로봇 구성 (srdf 파일에서 정의)으로 단일 계획 파이프라인을 실행하여 ``moveit_py`` 모션 계획 API를 탐색하기 시작합니다.: ::
 
         # set plan start state using predefined state
         panda_arm.set_start_state(configuration_name="ready")
@@ -209,12 +209,12 @@ We start exploring the ``moveit_py`` motion planning API through executing a sin
         # plan to goal
         plan_and_execute(panda, panda_arm, logger)
 
-Single Pipeline Planning - Robot State
+단일 파이프라인 Planning - Robot State
 ----------------------------------------------------
-Next, we will plan to a robot state.
-Such a method is quite flexible as we can alter the robot state configuration as we wish (e.g., through setting joint values).
-Here, we will use the ``set_start_state_to_current_state`` method to set the start state of the robot to its current state and the ``set_goal_state`` method to set the goal state to a random configuration.
-We will then plan to the goal state and execute the plan: ::
+다음으로 로봇 상태를 목표로 계획합니다.
+이러한 방법은 우리가 원하는대로 로봇 상태 설정을 변경할 수 있기 때문에 매우 유연합니다 (예: 조인트 값 설정을 통해).
+여기서는 ``set_start_state_to_current_state`` 메서드를 사용하여 로봇의 시작 상태를 현재 상태로 설정하고 ``set_goal_state`` 메서드를 사용하여 목표 상태를 임의의 설정값으로 설정합니다.
+그런 다음 목표 상태로 계획하고 계획을 실행합니다.: ::
 
         # instantiate a RobotState instance using the current robot model
         robot_model = panda.get_robot_model()
@@ -233,10 +233,10 @@ We will then plan to the goal state and execute the plan: ::
         # plan to goal
         plan_and_execute(panda, panda_arm, logger)
 
-Single Pipeline Planning - Pose Goal
+단일 파이프라인 Planning - Pose Goal
 ----------------------------------------------------
-Another common way to specify a goal state is via a ROS message representing the pose goal.
-Here we demonstrate how to set a pose goal for the end effector of the robot: ::
+목표 상태를 지정하는 또 다른 일반적인 방법은 포즈 목표를 표현하는 ROS 메시지를 사용하는 것입니다.
+여기에서는 로봇의 엔드 이펙터에 대한 포즈 목표를 설정하는 방법을 보여줍니다.: ::
 
         # set plan start state to current state
         panda_arm.set_start_state_to_current_state()
@@ -253,10 +253,10 @@ Here we demonstrate how to set a pose goal for the end effector of the robot: ::
         # plan to goal
         plan_and_execute(panda, panda_arm, logger)
 
-Single Pipeline Planning - Custom Constraints
+단일 파이프라인 Planning - 커스텀 Constraints
 ----------------------------------------------------
-You can also control the output of motion planning via custom constraints.
-Here we demonstrate planning to a configuration that satisfies a set of joint constraints: ::
+커스텀 제약 조건을 통해 모션 계획의 출력을 제어할 수도 있습니다.
+여기에서는 일련의 조인트 제약 조건을 만족하는 설정으로 계획하는 것을 보여줍니다.: ::
 
         # set plan start state to current state
         panda_arm.set_start_state_to_current_state()
@@ -281,11 +281,11 @@ Here we demonstrate planning to a configuration that satisfies a set of joint co
         # plan to goal
         plan_and_execute(panda, panda_arm, logger)
 
-Multi Pipeline Planning
+다중 파이프라인 Planning
 ----------------------------------------------------
-A recent addition to ``moveit_cpp`` and ``moveit_py`` is the ability to execute multiple planning pipelines in parallel and select the resulting motion plan amongst all generated motion plans that best satisfies your task requirements.
-In previous sections, we defined a set of planning pipelines.
-Here we will see how to plan in parallel with several of these pipelines: ::
+``moveit_cpp`` 와 ``moveit_py``의 최근 추가 기능은 여러 계획 파이프라인을 병렬로 실행하고 생성된 모든 모션 계획 중 작업 요구 사항을 가장 잘 충족하는 모션 계획을 선택하는 기능입니다.
+이전 섹션에서 우리는 일련의 계획 파이프라인을 정의했습니다.
+여기서는 이러한 파이프라인 중 몇 개와 함께 병렬로 계획하는 방법을 살펴볼 것입니다.: ::
 
         # set plan start state to current state
         panda_arm.set_start_state_to_current_state()
@@ -311,19 +311,19 @@ Here we will see how to plan in parallel with several of these pipelines: ::
                 logger.info("Executing plan")
                 panda_arm.execute()
 
-Using a Planning Scene
+Planning Scene 사용하기
 ----------------------------------------------------
-The code for this section requires you to run a different Python file, which you can specify as follows ::
+이 섹션의 코드는 다음과 같이 다른 파이썬 파일을 실행하도록 요구합니다. 사용자는 다음과 같이 파일을 지정할 수 있습니다.: ::
 
         ros2 launch moveit2_tutorials motion_planning_python_api_tutorial.launch.py example_file:=motion_planning_python_api_planning_scene.py
 
-Interacting with a planning scene requires you to create a planning scene monitor: ::
+planning scene과 상호 작용하려면 planning scene monitor를 만들어야 합니다.: ::
 
         panda = MoveItPy(node_name="moveit_py_planning_scene")
         panda_arm = panda.get_planning_component("panda_arm")
         planning_scene_monitor = panda.get_planning_scene_monitor()
 
-You can then add collision objects to a planning scene using the planning scene monitor's ``read_write`` context: ::
+그런 다음 planning scene monitor의 ``read_write`` 컨텍스트를 사용하여 planning scene에 충돌 물체를 추가할 수 있습니다.: ::
 
         with planning_scene_monitor.read_write() as scene:
                 collision_object = CollisionObject()
@@ -346,14 +346,14 @@ You can then add collision objects to a planning scene using the planning scene 
                 scene.apply_collision_object(collision_object)
                 scene.current_state.update()  # Important to ensure the scene is updated
 
-Removing objects can be achieved similarly using the ``CollisionObject.REMOVE`` operation, or by removing all objects from the scene: ::
+객체 제거는 ``CollisionObject.REMOVE`` 연산을 사용하거나, scene에서 모든 객체를 제거하는 방법으로도 수행할 수 있습니다.: ::
 
         with planning_scene_monitor.read_write() as scene:
                 scene.remove_all_collision_objects()
                 scene.current_state.update()
 
-You can also use the ``read_only`` context of a planning scene monitor for tasks that do not require modifying the scene, such as collision checking.
-For example: ::
+scene을 수정하지 않아도 되는 태스크(예: 충돌 검사)에 대해서 planning scene monitor의 ``read_only`` 컨텍스트를 사용할 수 있다.
+예제: ::
 
         with planning_scene_monitor.read_only() as scene:
                 robot_state = scene.current_state
