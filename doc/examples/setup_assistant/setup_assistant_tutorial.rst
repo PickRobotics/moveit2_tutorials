@@ -33,12 +33,10 @@ MoveIt 과 ROS 2
    ros2 launch moveit_setup_assistant setup_assistant.launch.py
 
 * 이 패키지를 사용하면 두 가지 선택지를 제공하는 시작 화면이 나타납니다:
-**새로운 MoveIt Configuration Package 생성하기(Create New
-  MoveIt Configuration Package)** 또는 **기존 MoveIt 설정 패키지 편집(Edit Existing MoveIt
-  Configuration Package)**.
+   **새로운 MoveIt Configuration Package 생성하기(Create New MoveIt Configuration Package)** 또는 **기존 MoveIt 설정 패키지 편집(Edit Existing MoveIt Configuration Package)** 
 
 * **Create New MoveIt Configuration Package** 를 클릭하면
-  다음과 같은 화면이 나타납니다.:
+   다음과 같은 화면이 나타납니다.:
 
 .. image:: setup_assistant_create_package.png
    :width: 700px
@@ -87,7 +85,7 @@ self-collision 행렬은 충돌 검사를 안전하게 비활성화할 수 있�
 가상 조인트는 주로 로봇을 world에 연결하는데 사용됩니다.
 베이스가 고정된 manipulator인 Panda arm의 경우, 고정 가상 조인트를 정의하는 것은 선택 사항입니다. 그러나 ``panda_link0`` 을 ``world`` 프레임에 연결하는 ``fixed`` 가상 조인트를 정의할 것입니다. 이 가상 조인트는 팔의 base 부분이 world 프레임에서 정지 상태를 유지한다는 것을 의미합니다.
 
-* **Virtual Joints** 창 선택기를 클릭하십시오. **Add Virtual Joint**를 클릭하십시오.
+* **Virtual Joints** 창 선택기를 클릭하십시오. **Add Virtual Joint** 를 클릭하십시오.
 
 * 조인트 이름을 ``virtual_joint`` 로 설정하십시오.
 
@@ -171,7 +169,7 @@ end-effector group 추가
 
   * **Add Links** 버튼을 클립하세요.
 
-  * ``panda_hand``, ``panda_leftfinger``, ``panda_rightfinger``를 선택하여 오른쪽 **Selected Links** 목록에 추가하십시오.
+  * ``panda_hand``, ``panda_leftfinger``, ``panda_rightfinger`` 를 선택하여 오른쪽 **Selected Links** 목록에 추가하십시오.
 
   * **Save** 를 클릭하세요.
 
@@ -370,7 +368,7 @@ hand MoveIt 컨트롤러 추가
 
 * **Add Controller** 를 클릭하여 새로운 컨트롤러를 생성하십시오.
 
-* **Controller Name**을 ``hand_controller`` 로 입력하십시오.
+* **Controller Name** 을 ``hand_controller`` 로 입력하십시오.
 
 * 컨트롤러 유형에서 **Gripper Command** 를 선택하십시오.
 
@@ -440,7 +438,7 @@ Step 14: 설정 파일 생성
 
 panda_moveit_config 패키지를 빌드하고 데모 실행하기
 ----------------------------------------------------------
-생성된 `panda_moveit_config`` 패키지만 빌드하고 데모를 실행하려면 다음 단계를 따르세요. ::
+생성된 ``panda_moveit_config`` 패키지만 빌드하고 데모를 실행하려면 다음 단계를 따르세요. ::
 
    cd ~/ws_moveit2
    colcon build --packages-select panda_moveit_config
