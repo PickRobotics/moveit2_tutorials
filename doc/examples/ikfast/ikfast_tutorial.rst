@@ -9,97 +9,97 @@ IKFast Kinematics Solver
 .. image:: openrave_panda.png
    :width: 700px
 
-In this section, we will walk through configuring an IKFast plugin for MoveIt.
+이 섹션에서는 MoveIt을 위한 IKFast 플러그인 설정 방법을 소개합니다.
 
-What is IKFast?
+IKFast란?
 ---------------
 
-IKFast, the Robot Kinematics Compiler, is a powerful inverse kinematics solver provided within Rosen Diankov's `OpenRAVE <http://openrave.org>`_ motion planning software. IKFast automatically analyses any complex kinematic chain for common patterns that allow for an analytic solution and generates C++ code to find them.
-As a consequence, IKFast provides extremely stable solutions that can be found in a few microseconds on recent processors.
+IKFast(Robot Kinematics Compiler)는 Rosen Diankov의 `OpenRAVE <http://openrave.org>`_ 모션 플래닝 소프트웨어에서 제공되는 강력한 역 운동학 솔버(inverse kinematics solver)입니다. IKFast는 일반적인 패턴을 가진 모든 복잡한 운동학 체인을 자동으로 분석하여 해석 솔루션을 생성하고 이를 찾는 C++ 코드를 생성합니다.
+결과적으로 IKFast는 최근 프로세서에서 몇 마이크로초 내에 찾을 수 있는 매우 안정적인 솔루션을 제공합니다.
 
 MoveIt IKFast
 ---------------
 
-MoveIt provides tools to generate an IKFast kinematics plugin for MoveIt using the OpenRAVE generated cpp files.
-This tutorial will step you through setting up your robot to utilize the power of IKFast.
-MoveIt IKFast is tested on ROS Melodic with a 6DOF and 7DOF robot arm manipulator.
-While it works in theory, MoveIt IKFast doesn't currently support >7 degree of freedom arms.
+MoveIt는 OpenRAVE에서 생성된 cpp 파일을 사용하여 MoveIt용 IKFast 운동학 플러그인을 생성하는 도구를 제공합니다.
+이 튜터리얼에서는 로봇을 설정하여 IKFast의 기능을 활용하도록 안내합니다.
+MoveIt IKFast는 ROS Melodic에서 6자유도 및 7자유도 로봇 암 manipulator에서 테스트되었습니다.
+이론적으로는 작동하지만 현재 MoveIt IKFast는 7자유도 이상의 팔을 지원하지 않습니다.
 
-Getting Started
+시작하기
 -----------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+:doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 을 먼저 완료하세요.
 
-You should have a MoveIt configuration package for your robot that was created by using the :doc:`Setup Assistant </doc/examples/setup_assistant/setup_assistant_tutorial>`.
+:doc:`Setup Assistant </doc/examples/setup_assistant/setup_assistant_tutorial>` 을 사용하여 생성된 로봇용 MoveIt 설정 패키지가 있어야 합니다.
 
-OpenRAVE is a planning framework as complex as MoveIt itself and installing it is tricky -- particularly because its public documentation is not maintained anymore.
-Fortunately, personalrobotics provide a `docker image <https://hub.docker.com/r/personalrobotics/ros-openrave>`_ based on Ubuntu 14.04 with OpenRAVE 0.9.0 and ROS Indigo installed, which can be used to generate the solver code once.
+OpenRAVE는 MoveIt 자체만큼이나 복잡한 플래닝 프레임워크이며 설치가 다소 어렵습니다. 특히 공개 문서가 더 이상 유지 관리되지 않기 때문입니다.
+다행히 personalrobotics는 Ubuntu 14.04에 OpenRAVE 0.9.0과 ROS Indigo가 설치된 `docker image <https://hub.docker.com/r/personalrobotics/ros-openrave>`_ 를 제공하며, 이를 사용하여 solver 코드를 한 번 생성할 수 있습니다.
 
-So the easiest way to run the IKFast code generator is through this docker image.
-For manual building instructions (tailored towards Ubuntu 16.04), please see the `Kinetic version of this tutorial <http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ikfast/ikfast_tutorial.html>`_.
-To follow the recommended, docker-based approach, ensure you have docker installed and started: ::
+따라서 IKFast 코드 생성기를 실행하는 가장 쉬운 방법은 이 docker 이미지를 통하는 것입니다.
+수동 빌드 지침(Ubuntu 16.04에 맞춤)은 `Kinetic version 튜터리얼 <http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ikfast/ikfast_tutorial.html>`_ 을 참조하십시오.
+추천하는 docker 기반 접근법을 따른다면, docker가 설치되고 시작되었는지 아래와 같이 확인하세요.: ::
 
  sudo apt-get install docker.io
  sudo service docker start
 
-The following command will ensure that you can run docker with your user account (adding $USER to the docker group): ::
+다음 명령은 사용자 계정으로 docker를 실행할 수 있도록 해줍니다 ($USER를 docker 그룹에 추가합니다): ::
 
  sudo usermod -a -G docker $USER
 
-You need to log off/log on in order to actually activate this permission change.
+실제로 이 권한 변경을 활성화하려면 로그아웃/로그인해야 합니다.
 
-Install the MoveIt IKFast package either from Debian packages or from source.
+Debian 패키지 혹은 소스 코드에서 MoveIt IKFast 패키지를 설치하세요.
 
-**Binary Install**: ::
+**Binary 설치**: ::
 
  sudo apt-get install ros-${ROS_DISTRO}-moveit-kinematics
 
-**Source**
+**소스**
 
-Inside your catkin workspace's ``./src`` directory: ::
+catkin 워크스페이스의 ``./src`` 디렉토리 내에서: ::
 
  git clone https://github.com/ros-planning/moveit.git
  rosdep install -y --from-paths . --ignore-src --rosdistro ${ROS_DISTRO}
  catkin build
 
-Creating the IKFast MoveIt plugin
+IKFast MoveIt plugin 생성하기
 ---------------------------------
 
-To facilitate copy-and-paste, we suggest to define the robot name as an environment variable: ::
+복사-붙여넣기를 용이하게 하기 위해, 로봇 이름을 환경 변수로 정의하는 것을 권장합니다.: ::
 
   export MYROBOT_NAME="panda_arm"
 
-OpenRAVE uses Collada instead of URDF to describe the robot. In order to automatically convert your robot's URDF to Collada, you need to provide the .urdf file.
-If your .urdf file is generated from `xacro <http://wiki.ros.org/xacro/>`_ files, you can generate the URDF using the following command: ::
+OpenRAVE는 로봇을 설명하기 위해 URDF 대신 Collada를 사용합니다. 로봇의 URDF를 자동으로 Collada로 변환하려면 .urdf 파일을 제공해야 합니다.
+.urdf 파일이 `xacro <http://wiki.ros.org/xacro/>`_ 파일에서 생성된 경우, 다음 명령을 사용하여 URDF를 생성할 수 있습니다.: ::
 
   rosrun xacro xacro -o $MYROBOT_NAME.urdf $MYROBOT_NAME.urdf.xacro
 
-Select IK Type
+IK Type 선택
 ^^^^^^^^^^^^^^
-You need to choose which type of IK you want to solve for. See `this page <http://openrave.org/docs/latest_stable/openravepy/ikfast/#ik-types>`_ for more info.
-The most common IK type is *transform6d*.
+IK 타입 선택에 관련하여 더 자세한 정보는 `이 페이지 <http://openrave.org/docs/latest_stable/openravepy/ikfast/#ik-types>`_ 를 참조하십시오.
+가장 일반적인 IK 타입은 *transform6d* 입니다.
 
-Choose Planning Group
+Planning Group 선택
 ^^^^^^^^^^^^^^^^^^^^^
-If your robot has more than one arm or "planning group" that you want to generate an IKFast solver for, you need to repeat the following process for each group.
-The following instructions will assume you have chosen one ``<planning_group_name>``. Furthermore, you need to know the names of the base link and the endeffector link of the chain to solve for.
+로봇 팔 또는 "planning group" 이 여러 개이고 각각에 대해 IKFast 솔버를 생성하고 싶다면 다음 과정을 각 그룹에 대해 반복해야 합니다.
+다음 설명은 여러분이 ``<planning_group_name>`` 을 선택했다고 가정합니다. 또한 솔루션을 구할 체인의 base link와 엔드 이펙터 링크의 이름을 알아야 합니다.
 
-Generate IKFast MoveIt plugin
+IKFast MoveIt plugin 생성하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To generate the IKFast MoveIt plugin, issue the following command: ::
+IKFast MoveIt 플러그인을 생성하려면 다음 명령을 실행하십시오.: ::
 
   rosrun moveit_kinematics auto_create_ikfast_moveit_plugin.sh --iktype Transform6D $MYROBOT_NAME.urdf <planning_group_name> <base_link> <eef_link>
 
-The speed and success of this process will depend on the complexity of your robot. A typical 6 DOF manipulator with 3 intersecting axes at the base or wrist will take only a few minutes to generate the solver code. For a detailed explanation of the creation procedure and additional tweaks of the process, see `Tweaking the creation process`_.
+이 프로세스의 속도와 성공 여부는 로봇의 복잡성에 따라 달라집니다. 일반적으로 base와 wrist에 3개의 교차 축을 가진 6 DOF manipulator는 솔버 코드를 생성하는 데 불과 몇 분밖에 걸리지 않습니다. 생성 절차에 대한 자세한 설명과 프로세스의 추가 조정은 `Tweaking the creation process`_ 을 참조하십시오.
 
-The command above creates a new ROS package named ``$MYROBOT_NAME_<planning_group_name>_ikfast_plugin`` within the current folder.
-Thus, you need to rebuild your workspace so the new package is detected: ::
+위 명령은 현재 폴더 내에 ``$MYROBOT_NAME_<planning_group_name>_ikfast_plugin`` 이라는 이름의 새로운 ROS 패키지를 생성합니다.
+따라서 새 패키지가 찾을 수 있도록 작업 공간을 다시 빌드해야 합니다.: ::
 
   catkin build
 
 Usage
 -----
-The IKFast plugin can be used as a drop-in replacement for the default KDL IK Solver, but with greatly increased performance. The MoveIt configuration file should be automatically edited by the generator script but in some cases this might fail. In this situation you can switch between the KDL and IKFast solvers using the *kinematics_solver* parameter in the robot's kinematics.yaml file: ::
+IKFast 플러그인은 기본 KDL IK 솔버를 대체하는 드롭인 방식으로 사용할 수 있지만 성능이 크게 향상됩니다. MoveIt 설정 파일은 생성 스크립트에 의해 자동으로 편집되지만 경우에 따라 실패할 수도 있습니다. 이 경우 로봇의 kinematics.yaml 파일에서 *kinematics_solver* 파라미터를 사용하여 KDL과 IKFast 솔버 간에 전환할 수 있습니다.: ::
 
   rosed "$MYROBOT_NAME"_moveit_config kinematics.yaml
 
@@ -108,32 +108,32 @@ Edit these parts: ::
  <planning_group>:
    kinematics_solver: <myrobot_name>_<planning_group>_ikfast_plugin/IKFastKinematicsPlugin
 
-Test the Plugin
-^^^^^^^^^^^^^^^
-Use the MoveIt RViz Motion Planning Plugin and use the interactive markers to see if correct IK Solutions are found.
+플러그인을 테스트
+^^^^^^^^^^^^^^^^^^^^^^
+MoveIt RViz Motion Planning 플러그인을 사용하여 대화형 마커를 통해 올바른 IK 솔루션을 찾았는지 확인하십시오.
 
-Updating the Plugin
+Plugin을 업데이트
 -------------------
 
-If any future changes occur with MoveIt or IKFast, you might need to re-generate this plugin using our scripts. To facilitate this, a bash script was automatically created in the root of your IKFast MoveIt package, named *update_ikfast_plugin.sh*. This regenerates the plugin from the OpenRAVE-generated .cpp solver file.
+IKFast 또는 MoveIt의 향후 변경 사항이 있을 경우, 제공된 스크립트를 사용하여 이 플러그인을 다시 생성해야 할 수도 있습니다. 이를 쉽게 하려면, IKFast MoveIt 패키지 루트에 자동으로 *update_ikfast_plugin.sh* 라는 bash 스크립트를 생성되도록 합니다. 이 스크립트는 OpenRAVE에서 생성된 .cpp 솔버 파일로부터의 플러그인을 다시 생성합니다.
 
 Tweaking the creation process
 -----------------------------
 
-The process of creating the IKFast MoveIt plugin comprises several steps, performed one-by-one by the creation script:
+IKFast MoveIt 플러그인을 생성 프로세스는 다음과 같은 몇 가지 단계로 구성되어 있으며, 생성 스크립트에 의해 하나씩 수행됩니다.:
 
-1. Downloading the docker image provided by `personalrobotics <https://hub.docker.com/r/personalrobotics/ros-openrave>`_
-2. Converting the ROS URDF file to Collada required for OpenRAVE: ::
+1. `personalrobotics <https://hub.docker.com/r/personalrobotics/ros-openrave>`_ 가 제공하는 docker 이미지 다운로드 받기
+2. ROS URDF 파일을 OpenRAVE에 필요한 Collada 형식으로 변환: ::
 
      rosrun collada_urdf urdf_to_collada $MYROBOT_NAME.urdf $MYROBOT_NAME.dae
 
-   Sometimes floating point issues arise in converting a URDF file to Collada, which prevents OpenRAVE to find IK solutions.
-   Using a utility script, one can easily round all numbers down to n decimal places in your .dae file.
-   From experience we recommend 5 decimal places, but if the OpenRave ikfast generator takes too long to find a solution (say more than an hour), lowering the accuracy should help. For example: ::
+   때때로 URDF 파일을 Collada로 변환하는 과정에서 부동 소수점 문제가 발생하여 OpenRAVE가 IK 솔루션을 찾지 못할 수 있습니다.
+   utility 스크립트를 사용하여 .dae 파일의 모든 숫자를 간편하게 n 자리 소수점 이하로 반올림할 수 있습니다.
+   경험상 5자리 소수점을 권장하지만, OpenRave ikfast 생성기가 솔루션을 찾는 데 너무 오랜 시간이 걸린다면 (예: 1시간 이상) 정확도를 낮추는 것이 도움이 될 것입니다. 예를 들어: ::
 
      rosrun moveit_kinematics round_collada_numbers.py $MYROBOT_NAME.dae $MYROBOT_NAME.rounded.dae 5
 
-3. Running the OpenRAVE IKFast tool to generate C++ solver code
-4. Creating the MoveIt IKFast plugin package wrapping the generated solver
+3. OpenRAVE IKFast 도구를 실행하여 C++ solver 코드 생성
+4. 생성된 solver를 래핑(wrapping)하는 MoveIt IKFast 플러그인 패키지 생성
 
-The ``auto_create_ikfast_moveit_plugin.sh`` script evaluates the file extension of the input file to determine which steps to run. To re-run the script from any intermediate step (e.g. after having tweaked the accuracy of the ``.dae`` file), simply provide the corresponding output from the previous step as input (``.dae`` or ``.cpp``) instead of the initial ``.urdf`` file.
+``auto_create_ikfast_moveit_plugin.sh`` 스크립트는 입력 파일의 확장자를 평가하여 실행할 단계를 결정합니다. 중간 단계 (예: ``.dae`` 파일의 정확도를 조정한 후)에서 스크립트를 다시 실행하려면, 이전 단계의 해당 출력 (``.dae`` 또는 ``.cpp``)을 초기 ``.urdf`` 파일 대신에 입력으로 제공하기만 하면 됩니다.
