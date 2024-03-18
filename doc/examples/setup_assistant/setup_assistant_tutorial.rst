@@ -200,38 +200,32 @@ Setup Assistant를 사용하면 로봇 설정에 사전 정의된 포즈를 추�
 
 * **Robot Poses** 창을 클릭합니다..
 
-* Click **Add Pose**. Choose a name for the pose. The robot will be
-  in the default pose, with all joints set to their zero values.
-  Move the individual joints around until you are happy and then
-  **Save** the pose. Note how poses are associated with particular
-  groups. You can save individual poses for each group.
+* **Add Pose** 를 클릭하세요. 포즈 이름을 선택하십시오. 로봇은 기본 포즈에 있을 것이며 모든 조인트는 0 값으로 설정됩니다. 원하는 위치까지 개별 조인트를 움직인 다음 **Save** 버튼을 클릭하여 포즈를 저장하십시오. 포즈가 특정 그룹과 연결되는 방식에 유의하십시오. 각 그룹에 대해 개별 포즈를 저장할 수 있습니다.
 
-* Select the ``panda_arm`` and define a ``ready`` pose for it with the following joint values ``{0.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785}``.
+* ``panda_arm`` 을 선택하고 다음 조인트 값 ``{0.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785}`` 을 사용하여 ``ready`` 포즈를 정의하십시오.
 
-* **IMPORTANT TIP**: Try to move all the joints around. If there is
-  something wrong with the joint limits in your URDF, you should be able
-  to see it immediately here.
+* **IMPORTANT TIP**: 모든 조인트를 움직여 보십시오. URDF에서 조인트 제한에 문제가 있으면 여기에서 즉시 확인할 수 있습니다.
 
 .. image:: predefined_poses/setup_assistant_panda_predefined_arm_pose.png
    :width: 700px
 
-Add open and close poses for the gripper
+그리퍼에 대해서 열기/닫기 포즈를 추가
 
-* Follow the same steps for defining a pose for the arm, but select the ``hand`` group.
+* arm에 대한 포즈를 정의하는 동일한 단계를 따르되 ``hand`` 그룹을 선택하십시오.
 
-* Add an ``open`` pose for the ``hand`` group with joint value ``0.035``.
+* ``open`` 포즈를 ``hand`` 그룹에 대해 조인트 값 ``0.035`` 로 추가하십시오.
 
 .. image:: predefined_poses/setup_assistant_panda_predefined_hand_open_pose.png
    :width: 700px
 
-* Add a ``close`` pose for the ``hand`` group with joint value ``0.0``.
+* ``close`` 포즈를 ``hand`` 그룹에 대해 조인트 값 ``0.0`` 으로 추가하십시오.
 
 .. image:: predefined_poses/setup_assistant_panda_predefined_hand_close_pose.png
    :width: 700px
 
 .. note:: Only ``panda_finger_joint1`` appears in the list as ``panda_finger_joint2`` mimics its values.
 
-After the previous steps, the following set of robot poses should be defined for the ``panda_arm`` and ``hand`` groups.
+위의 단계를 완료하면, ``panda_arm`` 및 ``hand`` 그룹에 대해 다음과 같은 로봇 포즈 세트가 정의되어야 합니다.
 
 .. image:: predefined_poses/setup_assistant_panda_predefined_poses_done.png
    :width: 700px
@@ -239,161 +233,155 @@ After the previous steps, the following set of robot poses should be defined for
 Step 6: Label End Effectors
 ---------------------------
 
-Now that we have added the hand of the Panda as a move group, we can designate it
-as an end effector. By designating a group as an end effector, MoveIt can perform certain special operations on it.
-For example, end effectors can be used for attaching objects to the arm while carrying out pick-and-place tasks.
+Panda 팔의 손을 move group으로 추가했으므로, 이제 End Effector로 지정할 수 있습니다.
+그룹을 end effector로 지정하면, MoveIt는 이 그룹에 대해 특정한 작업을 수행할 수 있습니다.
+예를 들어, end effector는 집어 올리기 및 놓기 태스크를 수행하는 동안 팔에 물체를 부착하는 데 사용할 수 있습니다.
 
-* Click on the **End Effectors** pane.
+* **End Effectors** 창을 클릭합니다.
 
-* Click **Add End Effector**.
+* **Add End Effector** 를 클릭합니다.
 
-* Choose ``hand`` as the **End Effector Name** for the gripper.
+* 그리퍼의 **End Effector Name** 으로 ``hand`` 를 선택합니다.
 
-* Select ``hand`` as the **End Effector Group**.
+* **End Effector Group** 으로 ``hand`` 를 선택합니다.
 
-* Select ``panda_link8`` as the **Parent Link** for this end-effector.
+* end-effector의 **Parent Link** 로 ``panda_link8`` 를 선택합니다.
 
-* Leave **Parent Group** blank.
+* **Parent Group** 를 비워두세요.
 
 .. image:: setup_assistant_panda_add_end_effector.png
    :width: 700px
 
-Step 7: Add Passive Joints
+Step 7: 패시브 조인트 추가
 --------------------------
 
-The **Passive Joints** pane is meant to allow specification of any passive
-joints that might exist in a robot. These are joints that are unactuated,
-meaning that they cannot be directly controlled. It's important to specify
-passive joints so that the planners are aware of their existence and can avoid
-planning for them. If the planners do not know about the passive joints, they
-might try to plan trajectories that involve moving the passive joints, which would
-result in invalid plans. The Panda robot arm does not have any passive joints so we will skip this step.
+**Passive Joints** 창은 로봇에 존재할 수 있는 패시브 조인트를 지정할 수 있도록 설계되었습니다.
+패시브 조인트는 구동 장치가 없는, 즉 직접 제어할 수 없는 조인트를 말합니다.
+모션 플래너가 패시브 조인트의 존재를 인지하고 해당 조인트를 사용하는 경로 계획을 피하기 위해서는 반드시 이를 지정하는 것이 중요합니다.
+플래너가 패시브 조인트를 인식하지 못하면, 패시브 조인트를 움직이는 경로를 계획하려고 시도할 수 있으며, 이는 유효하지 않은 계획을 초래합니다.
+Panda 로봇 팔은 패인트 조인트가 없으므로 이 단계는 건너뛸 수 있습니다.
 
-Step 8: ros2_control URDF Modification
+Step 8: ros2_control URDF 수정
 --------------------------------------
 
-The **ros2_control URDF Modification** pane helps modify the robot URDF to work with
-`ros2_control <https://control.ros.org/master/index.html>`_.
+**ros2_control URDF Modification** 창은 로봇의 URDF 파일을 `ros2_control <https://control.ros.org/master/index.html>`_ 과 함께 작동하도록 수정하는데 도움이 됩니다.
 
-.. note:: If your robot's URDF/xacro already includes a ``ros2_control.xacro``, you can skip this step.
+.. note:: 만약 로봇의 URDF/xacro 파일에 이미 ``ros2_control.xacro`` 태그가 포함되어 있다면, 이 단계는 건너뛸 수 있습니다.
 
-This modification adds tags for command and state interfaces for each joint in the defined move groups.
-The ``command_interface`` tags define the types of commands that can be sent to control the joint.
-The ``state_interface`` tags define the types of state information that can be read from the joint.
+이 수정은 정의된 move group의 각 조인트에 대한 명령 및 상태 인터페이스 태그를 추가합니다.
+``command_interface`` 태그는 조인트를 제어하는데 사용할 수 있는 명령의 종류를 정의합니다.
+``state_interface`` 태그는 조인트에서 읽을 수 있는 상태 정보의 종류를 정의합니다.
 
-By default the MoveIt Setup Assistant assumes **position** command interface
-and **position** and **velocity** state interfaces, and we will proceed with this setting.
+기본적으로 MoveIt Setup Assistant는 **position** 명령 인터페이스와 **position** 와 **velocity** 상태 인터페이스를 사용하며, 이 설정으로 진행합니다.
 
 .. image:: ros2_control/setup_assistant_ros2_control_tags.png
    :width: 700px
 
-If necessary, select the desired command or state interfaces for your robot joints and
-then click the **Add Interfaces** button.
+필요한 경우 로봇 조인트에 대한 원하는 명령 또는 상태 인터페이스를 선택한 다음 **Add Interfaces** 버튼을 클릭하십시오.
 
 Step 9: ROS 2 Controllers
 -------------------------
 
-ROS 2 Control is a framework for real-time control of robots,
-designed to manage and simplify the integration of new robot hardware.
-For more details, please look at `ros2_control <https://control.ros.org/master/index.html>`_ documentation.
+ROS 2 컨트롤은 로봇의 실시간 제어를 위한 프레임워크이며, 새로운 로봇 하드웨어의 통합을 관리하고 단순화하도록 설계되었습니다.
+보다 자세한 내용은 `ros2_control <https://control.ros.org/master/index.html>`_ 문서를 참조하십시오.
 
-**ROS 2 Controllers** pane can be used to auto generate simulated controllers to actuate the robot joints.
+**ROS 2 Controllers** 창을 사용하여 로봇 조인트을 구동하는 시뮬레이션 컨트롤러를 자동 생성할 수 있습니다.
 
 .. image:: ros2_controllers/setup_assistant_ros2_controllers.png
    :width: 700px
 
-Add the arm controllers
+arm 컨트롤러 추가
 
-* Click on the **ROS 2 Controllers** pane selector.
+* **ROS 2 Controllers** 창 선택기 클릭합니다.
 
-* Click on **Add Controller** and you should see the following screen:
+* **Add Controller** 를 클릭하면 다음과 같은 화면이 나타납니다.:
 
-* We will first add Panda arm joint trajectory controller.
+* 먼저 Panda arm 조인트 궤적 컨트롤러를 추가합니다.
 
-* Enter **Controller Name** as ``panda_arm_controller``.
+* **Controller Name** 에 ``panda_arm_controller`` 를 입력합니다.
 
-* Choose **joint_trajectory_controller/JointTrajectoryController** as the controller type
+* 컨트롤러 타입으로 **joint_trajectory_controller/JointTrajectoryController** 를 선택합니다.
 
 .. image:: ros2_controllers/setup_assistant_panda_arm_ros2_controller_type.png
    :width: 700px
 
-* Next, we need to choose the controller joints. Joints can be added individually or by move group.
+* 다음으로 컨트롤러 조인트를 선택해야 합니다. 조인트는 개별적으로 또는 move group별로 추가할 수 있습니다.
 
-* Now, click on **Add Planning Group Joints**.
+* 이제 **Add Planning Group Joints** 를 클릭합니다.
 
-* Choose the ``panda_arm`` group from the **Available Groups** tab and add it to the **Selected Groups**.
+* **Available Groups** 탭에서 ``panda_arm`` 그룹을 선택하여 **Selected Groups** 에 추가합니다.
 
-* Click **Save** to save the selected controller.
+* 선택한 컨트롤러를 저장하려면 **Save** 을 클릭합니다.
 
 .. image:: ros2_controllers/setup_assistant_panda_arm_ros2_controller_group.png
    :width: 700px
 
-Add the hand controllers
+hand 컨트롤러 추가
 
-* Follow the same steps for the arm, but choose **position_controllers/GripperActionController**
+* arm에 대한 것과 같은 단계를 따르지만, **position_controllers/GripperActionController** 을 선택합니다.
 
 .. image:: ros2_controllers/setup_assistant_hand_ros2_controller_type.png
    :width: 700px
 
-* Choose ``hand`` group from the **Available Groups** tab and add it to the **Selected Groups**.
+* **Available Groups** 탭에서 ``hand`` 그룹을 선택하여 **Selected Groups** 에 추가합니다.
 
-* Click **Save** to save the selected controller.
+* 선택한 컨트롤러를 저장하려면 **Save** 을 클릭합니다.
 
 .. image:: ros2_controllers/setup_assistant_hand_ros2_controller_group.png
    :width: 700px
 
-After selecting the arm and hand controllers, the controllers list should be as follows.
+arm과 hand 컨트롤러를 선택한 후에는, 컨트롤러 목록이 다음과 같이 나타납니다.
 
 .. image:: ros2_controllers/setup_assistant_ros2_controllers_done.png
    :width: 700px
 
-Step 10: MoveIt Controllers
+Step 10: MoveIt 컨트롤러들
 ---------------------------
 
-MoveIt requires trajectory controllers with a ``FollowJointTrajectoryAction`` interface for
-executing planned trajectories. This interface sends the generated trajectory to the robot ROS 2 Controllers.
+MoveIt은 계획된 궤적을 실행하기 위해 ``FollowJointTrajectoryAction`` 인터페이스를 가진 궤적 컨트롤러를 요구합니다.
+이 인터페이스는 생성된 궤적을 로봇 ROS 2 컨트롤러에게 보냅니다.
 
-The **MoveIt Controllers** pane can be used to auto-generate the controllers to be used by the MoveIt controller manager.
-Ensure that the controller names match those configured in the previous ROS 2 controller step.
-The user interface for this step is similar to the previous one.
+**MoveIt Controllers** 창을 사용하여 MoveIt controller manager가 사용할 컨트롤러를 자동 생성할 수 있습니다.
+이전 ROS 2 컨트롤러 설정 단계에서 설정한 컨트롤러 이름과 일치하는지 확인하십시오.
+이 단계의 사용자 인터페이스는 이전 단계와 유사합니다.
 
 .. image:: moveit_controllers/setup_assistant_moveit_controllers.png
    :width: 700px
 
-Add the arm MoveIt controllers
+arm MoveIt 컨트롤러 추가
 
-* Click on the **MoveIt Controllers** pane selector.
+* **MoveIt Controllers** 창 선택기를 클릭하십시오.
 
-* Click on **Add Controller** to create a new arm controller.
+* **Add Controller** 를 클릭하여 새로운 arm 컨트롤러를 생성하십시오.
 
-* Enter **Controller Name** as ``panda_arm_controller``.
+* **Controller Name** 에 ``panda_arm_controller`` 를 입력하십시오.
 
-* Choose **FollowJointTrajectory** Controller Type.
+* 컨트롤러 유형에서 **FollowJointTrajectory** 를 선택하십시오.
 
-* Choose the controller joints with the ``panda_arm`` planning group.
+* 컨트롤러 조인트에 ``panda_arm`` 플래닝 그룹의 선택하십시오.
 
-* Save the controller.
+* 컨트롤러를 저장합니다.
 
 .. image:: moveit_controllers/setup_assistant_panda_arm_moveit_controller_type.png
    :width: 700px
 
 
-Add the hand MoveIt controllers
+hand MoveIt 컨트롤러 추가
 
-* Click on **Add Controller** to create a new controller.
+* **Add Controller** 를 클릭하여 새로운 컨트롤러를 생성하십시오.
 
-* Enter **Controller Name** as ``hand_controller``.
+* **Controller Name**을 ``hand_controller`` 로 입력하십시오.
 
-* Choose **Gripper Command** Controller Type.
+* 컨트롤러 유형에서 **Gripper Command** 를 선택하십시오.
 
-* Choose the controller joints with the ``hand`` planning group.
+* 컨트롤러 조인트를 ``hand`` 플래닝 그룹으로 선택하십시오.
 
-* Save the controller.
+* 컨트롤러를 저장합니다.
 
 .. image:: moveit_controllers/setup_assistant_hand_moveit_controller_type_gripper.png
    :width: 700px
 
-After completing the previous steps, the MoveIt Controllers list for the arm and hand should appear as follows.
+이전 단계를 완료하면, arm과 hand에 대한 MoveIt 컨트롤러 목록이 다음과 같이 나타납니다.
 
 .. image:: moveit_controllers/setup_assistant_moveit_controllers_done_gripper.png
    :width: 700px
@@ -401,101 +389,85 @@ After completing the previous steps, the MoveIt Controllers list for the arm and
 Step 11: Perception
 -------------------
 
-The Perception tab in the Setup Assistant is used to configure the settings
-for 3D sensors used by the robot. These settings are saved in a YAML configuration file named **sensors_3d.yaml**.
+Setup Assistant의 "Perception" 탭은 로봇에서 사용하는 3D 센서 구성을 설정하는데 사용됩니다. 이 설정은 **sensors_3d.yaml** 이라는 YAML 설정 파일에 저장됩니다.
 
-In case of **sensors_3d.yaml** was not needed, choose **None** and proceed to the next step.
+**sensors_3d.yaml** 이 필요하지 않은 경우 **None** 을 선택하고 다음 단계로 진행하십시오.
 
 .. image:: perception/setup_assistant_panda_3d_perception.png
    :width: 700px
 
-To generate **point_cloud** configuration parameters, see the following example:
+**point_cloud** 구성 파라미터를 생성하려면 다음 예제를 참조하십시오.:
 
 .. note:: This configuration is not valid for the Panda robot arm because it does not have a ``head_mounted_kinect`` camera.
 
 .. image:: perception/setup_assistant_panda_3d_perception_point_cloud.png
    :width: 700px
 
-For more details about those parameters please refer to the :doc:`Perception Pipeline tutorial </doc/examples/perception_pipeline/perception_pipeline_tutorial>`.
+해당 매개변수에 대한 자세한 내용은 :doc:`Perception Pipeline tutorial </doc/examples/perception_pipeline/perception_pipeline_tutorial>` 을 참조하십시오.
 
-Step 12: Launch Files
+Step 12: Launch 파일
 ---------------------
 
-In the **Launch Files** pane, you can view the list of launch files that will be generated.
-The default options are usually sufficient, but if you have specific requirements for your application,
-you can make changes as necessary. Click on each of the files to view a summary of their functionality.
+**Launch Files** 창에서, 생성될 launch 파일 목록을 볼 수 있습니다.
+기본 옵션은 일반적으로 충분하지만, 응용 프로그램에 대한 특정 요구 사항이 있는 경우 필요에 따라 변경할 수 있습니다.
+각 파일을 클릭하여 해당 기능 요약을 확인하십시오.
 
 .. image:: setup_assistant_launch_files.png
    :width: 700px
 
-Step 13: Add Author Information
+Step 13: 작성자 정보 추가
 --------------------------------
 
-Colcon requires author information for publishing purposes.
+colcon은 공개 목적으로 작성자 정보를 요구합니다.
 
-* Click on the **Author Information** pane.
-* Enter your name and email address.
+* **Author Information** 창을 클릭하세요.
+* 이름과 이메일 주소를 입력합니다.
 
 
-Step 14: Generate Configuration Files
+Step 14: 설정 파일 생성
 --------------------------------------
 
-You are almost there. One last step - generating all the configuration
-files that you will need to start using MoveIt.
+거의 완성되었습니다. 마지막 단계 - MoveIt 사용을 시작하는 데 필요한 모든 설정 파일을 생성하는 것입니다.
 
-* Click on the **Configuration Files** pane. Choose a location and
-  name for the ROS 2 package that will be generated containing your new
-  set of configuration files. Click **Browse**, select a good
-  location (for example, your ROS 2 workspace's src directory), click **Create Folder**, call it
-  ``panda_moveit_config``, and click **Open**. All generated files will go directly into the
-  directory you have chosen.
+* **Configuration Files** 창을 클릭하십시오. 새롭게 설정 파일들을 포함해서 생성될 ROS 2 패키지의 위치와 이름을 선택하십시오. **Browse** 를 클릭하고 적절한 위치(예: ROS 2 워크스페이스의 src 디렉토리)를 선택한 다음 **Create Folder** 를 클릭하고 ``panda_moveit_config`` 라고 이름 짓고 **Open** 를 클릭하십시오. 생성된 모든 파일은 선택한 디렉토리로 직접 이동합니다.
 
-* Click on the **Generate Package** button. The Setup Assistant will
-  now generate a set of launch and config files into the
-  directory of your choice. All the generated files will appear in the
-  files to be generated tab and you can click on each of them for a
-  description of what they do. For more information on the generated files,
-  see :doc:`the Configuration section in the documentation </doc/examples/examples>`.
+* **Generate Package** 버튼을 클릭하십시오. 이제 Setup Assistant는 선택한 디렉토리에 일련의 launch 및 config 파일을 생성합니다. 생성된 모든 파일은 생성될 파일 탭에 나타나며 각 파일을 클릭하여 해당 기능에 대한 설명을 볼 수 있습니다. 생성된 파일에 대한 자세한 내용은 :doc:`the Configuration section in the documentation </doc/examples/examples>` 을 참조하십시오.
 
 .. image:: setup_assistant_done.png
    :width: 700px
 
-Congratulations! You are now done generating the configuration files you need for MoveIt.
+축하합니다! 이제 MoveIt에 필요한 설정 파일 생성을 완료했습니다.
 
-Build the panda_moveit_config package and run the demo
-------------------------------------------------------
-To build only the generated ``panda_moveit_config`` package and run the demo, follow these steps. ::
+panda_moveit_config 패키지를 빌드하고 데모 실행하기
+----------------------------------------------------------
+생성된 `panda_moveit_config`` 패키지만 빌드하고 데모를 실행하려면 다음 단계를 따르세요. ::
 
    cd ~/ws_moveit2
    colcon build --packages-select panda_moveit_config
    source install/setup.bash
 
-Start the MoveIt demo to interactively plan and execute motions for the robot in RViz. ::
+MoveIt 데모를 시작하여 RViz에서 로봇의 모션을 대화형으로 계획하고 실행합니다. ::
 
    ros2 launch moveit_resources_panda_moveit_config demo.launch.py
 
-Check out this `brief YouTube video <https://youtu.be/f__udZlnTdM>`_ for an example of how to
-command the robot to move to the pre-defined ``ready`` pose and execute ``open`` and ``close`` motions on the hand.
+사전 정의한 ``ready`` 포즈로 이동하도록 로봇에게 명령하고 손을 ``open`` 과 ``close`` 모션을 하도록 하는 방법의 예제를 보려면 이 `간단한 YouTube 비디오 <https://youtu.be/f__udZlnTdM>`_ 확인하세요.
 
 What's Next
 -----------
 
-Get Started with MoveIt Motion Planning using RViz
+RViz를 사용하여 MoveIt 모션 계획 시작하기
 
-* Learn how to use the generated configuration files to plan and visualize motion with MoveIt in RViz.
-  Check out the :doc:`MoveIt Quickstart in Rviz tutorial </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>` for a step-by-step guide.
+* 생성된 설정 파일을 사용하여 RViz에서 MoveIt으로 모션을 계획 및 시각화하는 방법을 배워보자.
+  :doc:`MoveIt Quickstart in Rviz tutorial </doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial>` 을 참고하세요.
 
-Write Your First C++ MoveIt Application
+첫 번째 C++ MoveIt 응용 프로그램 작성
 
-* Write your first C++ application using MoveIt with :doc:`this tutorial </doc/tutorials/your_first_project/your_first_project>`,
-  and familiarize yourself with the ``MoveGroupInterface`` and use it to plan, execute, and visualize motion plans for your robot from :doc:`this example </doc/examples/move_group_interface/move_group_interface_tutorial>`.
+* 이 튜토리얼(:doc:`this tutorial </doc/tutorials/your_first_project/your_first_project>` )을 사용하여 MoveIt을 사용하는 첫 번째 C++ 응용 프로그램을 작성하고, :doc:`this example </doc/examples/move_group_interface/move_group_interface_tutorial>` 에서 제공하는 ``MoveGroupInterface`` 에 익숙해지며 이를 사용하여 로봇의 모션 계획, 실행 및 시각화를 수행하세요.
 
-URDF vs SRDF: Understand the Differences
+URDF vs SRDF: 차이점 이해
 
-* See the :doc:`URDF and SRDF </doc/examples/urdf_srdf/urdf_srdf_tutorial>` page for more
-  details on the components of the URDF and SRDF mentioned in this tutorial.
+* 이 튜토리얼에서 언급된 URDF 및 SRDF 컴포넌트에 대한 자세한 내용은 :doc:`URDF and SRDF </doc/examples/urdf_srdf/urdf_srdf_tutorial>` 페이지를 참조하십시오.
 
-Explore available Inverse Kinematics Solvers
+사용 가능한 역 운동학 솔버 탐색
 
-* Alternative IK solvers to the default KDL solver are available.
-  For more information, refer to :doc:`IKFast </doc/examples/ikfast/ikfast_tutorial>` and `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_.
+* 기본 KDL 솔버 외에도 대체 IK 솔버를 사용할 수 있습니다. 자세한 내용은 :doc:`IKFast </doc/examples/ikfast/ikfast_tutorial>` 와 `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_ 를 참조하십시오.
