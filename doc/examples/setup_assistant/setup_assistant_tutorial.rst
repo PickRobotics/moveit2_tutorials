@@ -42,7 +42,7 @@ MoveIt 과 ROS 2
    :width: 700px
    :align: center
 
-* **Browse** 버튼을 클릭하고 다음 경로에 있는 ``moveit_resources_panda_description 패키지``의 ``panda.urdf`` 파일로 이동하십시오: ::
+* **Browse** 버튼을 클릭하고 다음 경로에 있는 ``moveit_resources_panda_description 패키지`` 의 ``panda.urdf`` 파일로 이동하십시오: ::
 
    ~/ws_moveit2/src/moveit_resources/panda_description/urdf/panda.urdf
 
@@ -111,7 +111,7 @@ move group은 로봇의 특정 운동학 체인(kinematic chain)에 해당하도
 Move groups은 또한 로봇에 관련된 링크 또는 조인트 세트로 표현될 수도 있습니다.
 예를 들어, Move groups은 로봇의 그리퍼(gripper)를 표현하도록 정의될 수 있으며, 이는 그리퍼의 열거나 닫는 모션을 실현하는 데 필요한 모든 링크 또는 조인트로 구성됩니다.
 
-* **Planning Groups** 창 선태기를 클릭하세요.
+* **Planning Groups** 창 선택기를 클릭하세요.
 
 * **Add Group** 을 클릭하면 다음과 같은 화면이 나타납니다.:
 
@@ -128,13 +128,13 @@ arm group 추가
   * 운동학 솔버(kinematics solver)에 MoveIt 기본값인 **kdl_kinematics_plugin/KDLKinematicsPlugin** 을 선택하세요.
     대안으로 :doc:`IKFast </doc/examples/ikfast/ikfast_tutorial>` 혹은 `pick_ik <https://github.com/PickNikRobotics/pick_ik>`_ 와 같은 다른 플러그인도 사용할 수 있습니다.
 
-  * **Kin. Search Resolution** and **Kin. Search Timeout** 은 기본값 그대로 유지하세요.
+  * **Kin. Search Resolution** 와 **Kin. Search Timeout** 은 기본값 그대로 유지하세요.
 
 .. image:: planning_groups/setup_assistant_panda_arm_group.png
    :width: 700px
    :align: center
 
-* 이제 **Add Joints** 버튼을 클립합니다. 왼쪽 창에는 모든 조인트 목록이 표시됩니다. 팔에 속하는 모든 조이트를 선택하여 오른쪽 창에 추가해야 합니다. 조인트는 내부 트리 구조에 저장된 순서대로 배열되어 있으므로, 직렬 연결(serial chain)의 조인트를 쉽게 선택할 수 있습니다.
+* 이제 **Add Joints** 버튼을 클립합니다. 왼쪽 창에는 모든 조인트 목록이 표시됩니다. 팔에 속하는 모든 조인트를 선택하여 오른쪽 창에 추가해야 합니다. 조인트는 내부 트리 구조에 저장된 순서대로 배열되어 있으므로, 직렬 연결(serial chain)의 조인트를 쉽게 선택할 수 있습니다.
 
   * ``virtual_joint`` 을 클릭하고, 키보드의 **Shift** 키를 누른 상태에서  ``panda_joint8`` 을 클릭하세요.  그 다음 **>** 버튼을 클릭하여 **Selected Joints** 의 목록(오른쪽)에 이 관절들을 추가하세요.
 
@@ -154,8 +154,8 @@ end-effector group 추가
    :width: 700px
    :align: center
 
-.. note:: The end effector is not made of links attached in a serial chain.
-   따라서 그룹의 **Kinematic Solver**는 **None** 으로 설정되어 있어야만 한다.
+.. note:: end effector는 직렬 체인으로 연결된 links로 구성되지 않습니다.
+   따라서 그룹의 **Kinematic Solver** 는 **None** 으로 설정되어 있어야만 한다.
 
 * 다음 단계를 수행합니다.
 
@@ -221,7 +221,7 @@ Setup Assistant를 사용하면 로봇 설정에 사전 정의된 포즈를 추�
 .. image:: predefined_poses/setup_assistant_panda_predefined_hand_close_pose.png
    :width: 700px
 
-.. note:: Only ``panda_finger_joint1`` appears in the list as ``panda_finger_joint2`` mimics its values.
+.. note:: ``panda_finger_joint1`` 만 목록에 나타나는 이유는 ``panda_finger_joint2`` 은 ``panda_finger_joint1`` 를 따라하기 때문입니다.
 
 위의 단계를 완료하면, ``panda_arm`` 및 ``hand`` 그룹에 대해 다음과 같은 로봇 포즈 세트가 정의되어야 합니다.
 
