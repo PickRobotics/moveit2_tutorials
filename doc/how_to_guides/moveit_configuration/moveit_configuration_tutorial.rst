@@ -73,7 +73,7 @@ URDF 파일 스펙을 사용하면 joint 위치 및 속도 제한을 설정할 �
 Inverse Kinematics (IK) Solver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-MoveIt의 많은 모션 계획 응용 프로그램은 inverse kinematics을 풀어야 합니다.풀 필요가 있습니다.
+MoveIt의 많은 모션 계획 응용 프로그램은 inverse kinematics을 풀어야 합니다.
 
 사용하는 IK solver 플러그인과 해당 매개 변수는 ``config/kinematics.yaml`` 파일을 통해 설정합니다.
 
