@@ -68,22 +68,17 @@ int main(int argc, char** argv)
   // Setup
   // ^^^^^
   //
-  // MoveIt operates on sets of joints called "planning groups" and stores them in an object called
-  // the ``JointModelGroup``. Throughout MoveIt, the terms "planning group" and "joint model group"
-  // are used interchangeably.
+  // MoveIt은 "planning groups"이라고 불리는 조인트 집합을 기반으로 동작하며 이를 ``JointModelGroup`` 이라는 객체에 저장합니다.
+  // MoveIt에서는 "planning group" 와 "joint model group" 은 같은 의미로 사용됩니다.
   static const std::string PLANNING_GROUP = "panda_arm";
 
-  // The
-  // :moveit_codedir:`MoveGroupInterface<moveit_ros/planning_interface/move_group_interface/include/moveit/move_group_interface/move_group_interface.h>`
-  // class can be easily set up using just the name of the planning group you would like to control and plan for.
+  // :moveit_codedir:`MoveGroupInterface<moveit_ros/planning_interface/move_group_interface/include/moveit/move_group_interface/move_group_interface.h>` 클래스는 제어 및 계획을 수행하고 싶은 플래닝 그룹의 이름만을 사용해서 쉽게 설정할 수 있습니다.
   moveit::planning_interface::MoveGroupInterface move_group(move_group_node, PLANNING_GROUP);
 
-  // We will use the
-  // :moveit_codedir:`PlanningSceneInterface<moveit_ros/planning_interface/planning_scene_interface/include/moveit/planning_scene_interface/planning_scene_interface.h>`
-  // class to add and remove collision objects in our "virtual world" scene
+  // :moveit_codedir:`PlanningSceneInterface<moveit_ros/planning_interface/planning_scene_interface/include/moveit/planning_scene_interface/planning_scene_interface.h>` 클래스를 사용하여 "virtual world" scene내에 충돌 객체를 추가 및 제거합니다.
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
-  // Raw pointers are frequently used to refer to the planning group for improved performance.
+  // 성능 향상을 위해 planning group을 참조하는 데 종종 원시 포인터가 사용됩니다.
   const moveit::core::JointModelGroup* joint_model_group =
       move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
 
@@ -99,24 +94,24 @@ int main(int argc, char** argv)
   /* via buttons and keyboard shortcuts in RViz */
   visual_tools.loadRemoteControl();
 
-  // RViz provides many types of markers, in this demo we will use text, cylinders, and spheres
+  // RViz에서는 다양한 종류의 마커를 제공합니다. 이 데모에서는 텍스트, cylinders, 구형 마커를 사용할 것입니다.
   Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.0;
   visual_tools.publishText(text_pose, "MoveGroupInterface_Demo", rvt::WHITE, rvt::XLARGE);
 
-  // Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations
+  // 대규모 시각화를 위한 RViz로 전송되는 메시지 수를 줄이기 위해 batch publishing이 사용됩니다.
   visual_tools.trigger();
 
   // Getting Basic Information
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
   //
-  // We can print the name of the reference frame for this robot.
+  // 이 robot의 reference frame 이름을 출력할 수 있습니다.
   RCLCPP_INFO(LOGGER, "Planning frame: %s", move_group.getPlanningFrame().c_str());
 
-  // We can also print the name of the end-effector link for this group.
+  // 이 group의 end-effector의 link 이름도 출력할 수 있습니다.
   RCLCPP_INFO(LOGGER, "End effector link: %s", move_group.getEndEffectorLink().c_str());
 
-  // We can get a list of all the groups in the robot:
+  // robot의 모든 group의 목록을 얻을 수 있습니다.:
   RCLCPP_INFO(LOGGER, "Available Planning Groups:");
   std::copy(move_group.getJointModelGroupNames().begin(), move_group.getJointModelGroupNames().end(),
             std::ostream_iterator<std::string>(std::cout, ", "));
@@ -129,8 +124,7 @@ int main(int argc, char** argv)
   //
   // Planning to a Pose goal
   // ^^^^^^^^^^^^^^^^^^^^^^^
-  // We can plan a motion for this group to a desired pose for the
-  // end-effector.
+  // 이 group의 end-effector가 원하는 자세로 이동하도록 모션을 계획할 수 있습니다.
   geometry_msgs::msg::Pose target_pose1;
   target_pose1.orientation.w = 1.0;
   target_pose1.position.x = 0.28;
@@ -138,9 +132,8 @@ int main(int argc, char** argv)
   target_pose1.position.z = 0.5;
   move_group.setPoseTarget(target_pose1);
 
-  // Now, we call the planner to compute the plan and visualize it.
-  // Note that we are just planning, not asking move_group
-  // to actually move the robot.
+  // 이제 계획을 계산하고 시각화하기 위해 planner를 호출합니다.
+  // 실제로 로봇을 이동하도록 move_group에게 명령하는 것이 아니라 단순히 계획만 수립하는 단계임을 유의하십시오.
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   bool success = (move_group.plan(my_plan) == moveit::core::MoveItErrorCode::SUCCESS);
@@ -149,7 +142,7 @@ int main(int argc, char** argv)
 
   // Visualizing plans
   // ^^^^^^^^^^^^^^^^^
-  // We can also visualize the plan as a line with markers in RViz.
+  // RViz내에서 계획을 마커가 있는 선분으로 시각화할 수도 있습니다.
   RCLCPP_INFO(LOGGER, "Visualizing plan 1 as trajectory line");
   visual_tools.publishAxisLabeled(target_pose1, "pose1");
   visual_tools.publishText(text_pose, "Pose_Goal", rvt::WHITE, rvt::XLARGE);
@@ -160,13 +153,8 @@ int main(int argc, char** argv)
   // Moving to a pose goal
   // ^^^^^^^^^^^^^^^^^^^^^
   //
-  // Moving to a pose goal is similar to the step above
-  // except we now use the ``move()`` function. Note that
-  // the pose goal we had set earlier is still active
-  // and so the robot will try to move to that goal. We will
-  // not use that function in this tutorial since it is
-  // a blocking function and requires a controller to be active
-  // and report success on execution of a trajectory.
+  // 포즈 목표 위치로 이동하는 것은 위의 단계와 유사합니다.
+  // 단, 이제 ``move()`` 함수를 사용합니다. 이전에 설정한 포즈 목표가 여전히 활성화되어 있으므로 로봇은 해당 목표 위치로 이동하려고 시도할 것입니다. 이 함수는 이 튜터리얼에서는 blocking 함수이고, 궤적 실행에 대한 성공을 보고하기 위해 컨트롤러가 활성화되어 있어야 하므로 사용하지 않습니다.
 
   /* Uncomment below line when working with a real robot */
   /* move_group.move(); */
@@ -174,18 +162,16 @@ int main(int argc, char** argv)
   // Planning to a joint-space goal
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   //
-  // Let's set a joint space goal and move towards it.  This will replace the
-  // pose target we set above.
+  // 조인트 공간 목표를 설정하고 그 방향으로 옮겨갑시다. 이는 앞서 설정했던 자세 목표를 대체하게 됩니다.
   //
-  // To start, we'll create an pointer that references the current robot's state.
-  // RobotState is the object that contains all the current position/velocity/acceleration data.
+  // 처음으로, 현재 robot의 state를 참조하는 포인터를 만들 것입니다. RobotState는 현재 위치/속도/가속도 데이터를 모두 포함하는 객체입니다.
   moveit::core::RobotStatePtr current_state = move_group.getCurrentState(10);
   //
-  // Next get the current set of joint values for the group.
+  // 다음으로 해당 group의 현재 조인트 값의 집합을 가져옵니다.
   std::vector<double> joint_group_positions;
   current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
 
-  // Now, let's modify one of the joints, plan to the new joint space goal, and visualize the plan.
+  // 이제, 조인트 중 하나를 수정하고, 새로운 조인트 공간 목표에 대한 계획 수립 후 시각화해 보겠습니다.
   joint_group_positions[0] = -1.0;  // radians
   bool within_bounds = move_group.setJointValueTarget(joint_group_positions);
   if (!within_bounds)
