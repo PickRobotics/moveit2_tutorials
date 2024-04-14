@@ -1,35 +1,32 @@
 Planning Scene
 ==================================
 
-The :moveit_codedir:`PlanningScene<moveit_core/planning_scene/include/moveit/planning_scene/planning_scene.h>` class provides the main interface that you will use
-for collision checking and constraint checking. In this tutorial, we
-will explore the C++ interface to this class.
+:moveit_codedir:`PlanningScene<moveit_core/planning_scene/include/moveit/planning_scene/planning_scene.h>` 클래스는 충돌 검사 및 제약 조건 검사를 위해 사용하는 주요 인터페이스를 제공합니다. 이번 튜토리얼에서는 이 클래스의 C++ 인터페이스에 대해 살펴보겠습니다.
 
-Getting Started
+시작하기
 ---------------
-If you haven't already done so, make sure you've completed the steps in :doc:`Getting Started </doc/tutorials/getting_started/getting_started>`.
+먼저 :doc:`Getting Started </doc/tutorials/getting_started/getting_started>` 를 완료하세요.
 
-The entire code
+전체 코드
 ---------------
-The entire code can be seen :codedir:`here in the MoveIt GitHub project<examples/planning_scene>`.
+전체 코드는 다음에서 볼 수 있습니다 :codedir:`here in the MoveIt GitHub project<examples/planning_scene>`.
 
 .. tutorial-formatter:: ./src/planning_scene_tutorial.cpp
 
-The launch file
+Launch 파일
 ---------------
-The entire launch file is :codedir:`here <examples/planning_scene/launch/planning_scene_tutorial.launch.py>` on GitHub. All the code in this tutorial can be compiled and run from the moveit_tutorials package.
+전체 launch 파일은 :codedir:`here <examples/planning_scene/launch/planning_scene_tutorial.launch.py>` Github에 있습니다. 이 튜터리얼의 모든 코드는 moveit_tutorials package에서 컴파일 및 실행할 수 있습니다.
 
-Running the code
+코드 실행하기
 ----------------
-Roslaunch the launch file to run the code directly from moveit_tutorials: ::
+moveit2_tutorials 패키지에서 직접 코드를 실행하기 위해서 launch 파일을 실행합니다.::
 
  ros2 launch moveit2_tutorials planning_scene_tutorial.launch.py
 
-Expected Output
+예상 출력
 ---------------
 
-The output should look something like this, though we are using random
-joint values so some things may be different. ::
+예상 출력은 다음과 같은 형식입니다. 랜덤 조인트 값을 사용하기 때문에 숫자는 일치하지 않을 것입니다.: ::
 
  moveit2_tutorials: Test 1: Current state is in self collision
  moveit2_tutorials: Test 2: Current state is not in self collision
@@ -46,4 +43,4 @@ joint values so some things may be different. ::
  moveit2_tutorials: Test 11: Random state is feasible
  moveit2_tutorials: Test 12: Random state is not valid
 
-**Note:** Don't worry if your output has different ROS console format. You can customize your ROS console logger by following :ros_documentation:`this tutorial <Tutorials/Logging-and-logger-configuration.html#console-output-formatting>`.
+**Note:** 출력형태가 다른 ROS 콘솔 포맷이더라도 신경쓰지마세요. ROS 콘솔 logger는 다음 문서를 보고 커스텀 가능합니다. :ros_documentation:`this tutorial <Tutorials/Logging-and-logger-configuration.html#console-output-formatting>`
